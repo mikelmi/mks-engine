@@ -15,10 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('user/inactive', function () {
-    return view('user.inactive');
-})->name('user.inactive');
-
 Route::group(
     [
         'prefix' => config('admin.url', 'admin'),

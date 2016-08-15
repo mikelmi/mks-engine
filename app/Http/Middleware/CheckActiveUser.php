@@ -15,8 +15,8 @@ class CheckActiveUser
 {
     public function handle(Request $request, \Closure $next, $guard = null)
     {
-        if (($user = $request->user()) && ($route = $request->route())) {
-            if (!$user->active && $route->getName() != 'user.inactive') {
+        if ($user = $request->user()) {
+            if (!$user->active) {
                 \Auth::logout();
 
                 $message = trans('user.blocked');
