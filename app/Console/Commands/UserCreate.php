@@ -17,7 +17,8 @@ class UserCreate extends Command
         {email : Email}
         {name : Name}
         {--P|password= : Password}
-        {--R|role=* : Roles}';
+        {--R|role=* : Roles}
+        {--A|active : Active}';
 
     /**
      * The console command description.
@@ -62,6 +63,11 @@ class UserCreate extends Command
             $user->email = $this->argument('email');
             $user->password = bcrypt($password);
             $user->name = $this->argument('name');
+
+            if ($this->option('active')) {
+                $user->active = true;
+            }
+
             $user->save();
 
             $rolesNames = $this->option('role');

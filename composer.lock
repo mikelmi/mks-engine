@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "243c96d795212b5ec08b6d4d8c0cdb25",
-    "content-hash": "459350ecb89afbed889aa676495066f1",
+    "hash": "99527ee4afe57055de61abbb2d1ecf30",
+    "content-hash": "7cc6e3a174d544dc5935bd83ba35dd5b",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -566,8 +566,14 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "/home/mike/www/local.lan/laravel2/packages/mikelmi/mks-admin",
-                "reference": "4ef1ad1977e8ed9a94a12db6062c6fe57aede73a"
+                "url": "https://github.com/mikelmi/mks-admin.git",
+                "reference": "56d490dda7fbbe8085ba6ec318cd8f10af42f159"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/56d490dda7fbbe8085ba6ec318cd8f10af42f159",
+                "reference": "56d490dda7fbbe8085ba6ec318cd8f10af42f159",
+                "shasum": ""
             },
             "require": {
                 "laravel/framework": "5.2.*",
@@ -579,6 +585,7 @@
                     "Mikelmi\\MksAdmin\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -589,15 +596,21 @@
                 }
             ],
             "description": "Simple Admin Panel for Laravel",
-            "time": "2016-08-15 12:30:32"
+            "time": "2016-08-15 15:38:42"
         },
         {
             "name": "mikelmi/mks-smart-table",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "/home/mike/www/local.lan/laravel2/packages/mikelmi/mks-smart-table",
-                "reference": "88f62925d69b8bc4dba3c8512fa2209fe611d3e5"
+                "url": "https://github.com/mikelmi/mks-smart-table.git",
+                "reference": "fcfbdc7940e08eb2eb274f6517eb3945378899ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mikelmi/mks-smart-table/zipball/fcfbdc7940e08eb2eb274f6517eb3945378899ae",
+                "reference": "fcfbdc7940e08eb2eb274f6517eb3945378899ae",
+                "shasum": ""
             },
             "require": {
                 "laravel/framework": "5.2.*",
@@ -609,6 +622,7 @@
                     "Mikelmi\\SmartTable\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -619,7 +633,7 @@
                 }
             ],
             "description": "Laravel Server-side processing for angular Smart-Table module",
-            "time": "2016-08-11 20:22:11"
+            "time": "2016-08-15 16:03:50"
         },
         {
             "name": "monolog/monolog",

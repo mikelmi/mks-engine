@@ -38,6 +38,9 @@
     <body>
         <div class="container">
             <div class="content">
+                @if(Session::has('error'))
+                    <div class="alert alert-danger">{{session('error')}}</div>
+                @endif
                 <div class="title">Laravel 5</div>
             </div>
         </div>

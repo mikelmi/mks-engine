@@ -19,7 +19,9 @@ class UserUpdate extends Command
         {--N|name= : Name}
         {--P|password= : Password}
         {--R|role=* : Roles}
-        {--U|unrole : Delete all roles}';
+        {--U|unrole : Delete all roles}
+        {--A|activate : Activate}
+        {--D|deactivate : Deactivate}';
 
     /**
      * The console command description.
@@ -69,6 +71,12 @@ class UserUpdate extends Command
 
             if ($password) {
                 $user->password = bcrypt($password);
+            }
+
+            if ($this->option('activate')) {
+                $user->active = true;
+            } elseif ($this->option('deactivate')) {
+                $user->active = false;
             }
 
             $user->save();

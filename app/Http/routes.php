@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('user/inactive', function () {
+    return view('user.inactive');
+})->name('user.inactive');
+
 Route::group(
     [
         'prefix' => config('admin.url', 'admin'),
@@ -30,6 +34,8 @@ Route::group(
         $router->get('user/edit/{id?}', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
         $router->post('user/save/{id?}', ['as' => 'user.save', 'uses' => 'UserController@save']);
         $router->get('user/roles/{id?}', ['as' => 'user.roles', 'uses' => 'UserController@roles']);
+        $router->post('user/toggle/{id?}', ['as' => 'user.toggle', 'uses' => 'UserController@toggle']);
+        $router->post('user/toggle-batch/{status}', ['as'=>'user.toggleBatch', 'uses'=>'UserController@toggleBatch']);
 
         //Roles
         $router->get('roles', ['as' => 'roles', 'uses' => 'RoleController@index']);

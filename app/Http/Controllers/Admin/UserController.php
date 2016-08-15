@@ -36,6 +36,7 @@ class UserController extends AdminController
             'users.id',
             'users.name',
             'users.email',
+            'users.active',
             'users.created_at',
             $rolesList,
         ])->leftJoin('role_user','users.id','=','role_user.user_id')
@@ -89,6 +90,10 @@ class UserController extends AdminController
             $model->password = bcrypt($password);
         }
 
+        if (!$model->is_current) {
+            $model->active = $request->input('active', false);
+        }
+
         $model->save();
 
         if (!$model->is_current) {
@@ -121,5 +126,44 @@ class UserController extends AdminController
         }
 
         return $all;
+    }
+
+    function toggle($id)
+    {
+        $model = User::notCurrent()->findOrFail($id);
+        $model->active = !$model->active;
+        $model->save();
+
+        return response()->json([
+            'model' => [
+                'active' => $model->active
+            ]
+        ]);
+    }
+
+    function toggleBatch(Request $request, $status)
+    {
+        $id = $request->get('id', []);
+
+        $res = User::notCurrent()->whereIn('id',$id)->update([
+            'active' => $status
+        ]);
+
+        if (!$res) {
+            app()->abort(402);
+        }
+
+        $data = [];
+        $models = User::notCurrent()->whereIn('id',$id)->get();
+
+        foreach($models as $model) {
+            $data[$model->id] = [
+                'active' => $model->active
+            ];
+        }
+
+        return response()->json([
+            'models' => $data
+        ]);
     }
 }
