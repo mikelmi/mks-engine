@@ -11,10 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+//Admin routes
 Route::group(
     [
         'prefix' => config('admin.url', 'admin'),
@@ -47,5 +44,19 @@ Route::group(
         $router->post('permission/delete/{id?}', ['as' => 'permission.delete', 'uses' => 'PermissionController@delete']);
         $router->get('permission/edit/{id?}', ['as' => 'permission.edit', 'uses' => 'PermissionController@edit']);
         $router->post('permission/save/{id?}', ['as' => 'permission.save', 'uses' => 'PermissionController@save']);
+    }
+);
+
+
+//Admin routes
+Route::group(
+    [
+        'middleware' => 'frontend'
+    ],
+
+    function (\Illuminate\Routing\Router $router) {
+        $router->get('/', function () {
+            return view('welcome');
+        });
     }
 );

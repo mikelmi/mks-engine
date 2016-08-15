@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\CheckActiveUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -15,7 +14,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+
     ];
 
     /**
@@ -30,12 +29,16 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
-            CheckActiveUser::class
+            \App\Http\Middleware\CheckActiveUser::class
         ],
 
         'api' => [
             'throttle:60,1',
         ],
+
+        'frontend' => [
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class
+        ]
     ];
 
     /**
