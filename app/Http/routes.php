@@ -44,6 +44,10 @@ Route::group(
         $router->post('permission/delete/{id?}', ['as' => 'permission.delete', 'uses' => 'PermissionController@delete']);
         $router->get('permission/edit/{id?}', ['as' => 'permission.edit', 'uses' => 'PermissionController@edit']);
         $router->post('permission/save/{id?}', ['as' => 'permission.save', 'uses' => 'PermissionController@save']);
+        
+        //Settings
+        $router->get('settings/{scope?}', ['as' => 'settings', 'uses' => 'SettingsController@index'])->where('scope', '[a-z]+');
+        $router->post('settings/{scope?}', ['as' => 'settings.save', 'uses' => 'SettingsController@save'])->where('scope', '[a-z]+');
     }
 );
 

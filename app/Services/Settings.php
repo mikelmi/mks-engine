@@ -111,4 +111,9 @@ class Settings extends Repository
     public function forget($key) {
         array_forget($this->items, $key);
     }
+
+    public function getRepository($key)
+    {
+        return new Repository((array) $this->get($key, []));
+    }
 }

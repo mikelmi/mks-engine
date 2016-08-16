@@ -20,5 +20,11 @@ return [
     'Display Name' => 'Display Name',
     'Display Title' => 'Display Title',
     'Description' => 'Description',
-    'Caption' => 'Caption'
+    'Caption' => 'Caption',
+    'Settings' => 'Settings',
+    'Site' => 'Site',
+    'Yes' => 'Yes',
+    'No' => 'No',
+    'Keywords' => 'Keywords',
+    'Site off' => 'Maintenance Mode',
 ];

@@ -8,6 +8,7 @@
 
 namespace App\Services;
 
+use App\Events\AdminMenuBuild;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
 use Mikelmi\MksAdmin\Contracts\MenuManagerContract;
@@ -33,6 +34,8 @@ class AdminMenu implements MenuManagerContract
             /** @var Builder $menu */
             $this->buildFromArray($menu, $items);
         });
+
+        event(new AdminMenuBuild($menu));
 
         return $this->menuToArray($menu);
     }

@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Listeners\SettingsScopesListener;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class EventServiceProvider extends ServiceProvider
+class AdminEventServiceProvider extends ServiceProvider
 {
     /**
      * The event listener mappings for the application.
@@ -27,4 +28,8 @@ class EventServiceProvider extends ServiceProvider
 
         //
     }
+
+    protected $subscribe = [
+        SettingsScopesListener::class,
+    ];
 }

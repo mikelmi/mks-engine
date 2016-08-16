@@ -24,6 +24,7 @@ return [
 
     'menu' => [
         ['title' => 'a.Home', 'href' => '#/home', 'hash' => 'home', 'icon'=>'home'],
+        ['title' => 'a.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
         [
             'title' => 'a.Users', 'href' => '#/users', 'hash'=>'user', 'icon'=>'users',
             'children' => [
