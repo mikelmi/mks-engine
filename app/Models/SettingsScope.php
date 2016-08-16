@@ -3,32 +3,34 @@
 namespace App\Models;
 
 
+use Illuminate\Config\Repository;
+
 class SettingsScope
 {
     /**
      * @var null|string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var null|string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $view;
+    protected $view;
 
     /**
      * @var array
      */
-    private $rules = [];
+    protected $rules = [];
 
     /**
      * @var array
      */
-    private $fields = [];
+    protected $fields = [];
 
     /**
      * SettingsScope constructor.
@@ -148,5 +150,19 @@ class SettingsScope
         if (method_exists($this, $method)) {
             $this->$method($value);
         }
+    }
+
+    public function afterSave(Repository $old, Repository $new)
+    {
+        
+    }
+
+    /**
+     * @param Repository $repository
+     * @return Repository
+     */
+    public function getModel(Repository $repository)
+    {
+        return $repository;
     }
 }

@@ -12,6 +12,7 @@ namespace App\Listeners;
 use App\Events\AdminMenuBuild;
 use App\Events\SettingsScopesCollect;
 use App\Models\SettingsScope;
+use App\Models\SiteSettings;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Collection;
 
@@ -26,8 +27,7 @@ class SettingsScopesListener
     
     public function onScopesCollect(SettingsScopesCollect $event)
     {
-        $site = new SettingsScope('site', trans('a.Site'));
-        $site->setFields(['title', 'description', 'keywords', 'off', 'off_message']);
+        $site = new SiteSettings();
         $event->scopes->put('site', $site);
 
         $users = new SettingsScope('users', trans('a.Users'));
@@ -42,7 +42,7 @@ class SettingsScopesListener
         if ($menuItem) {
             $scopes = new Collection();
             event(new SettingsScopesCollect($scopes));
-            
+
             foreach ($scopes as $scope) {
                 $menuItem->add($scope->title, ['href' => '#/settings/'.$scope->name, 'hash' => 'settings']);
             }

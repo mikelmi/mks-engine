@@ -50,6 +50,8 @@ class SettingsController extends AdminController
         }
 
         $model = $settings->getRepository($scope);
+        $scopeObject->getModel($model);
+        
         $view = $scopeObject->getView('admin.settings.'.$scope);
 
         return view($view, compact('model', 'scopes', 'scope', 'scopeObject'));
@@ -69,9 +71,13 @@ class SettingsController extends AdminController
             $this->validate($request, $rules);
         }
 
+        $old = $settings->getRepository($scope);
         $data = $request->only($scopeObject->getFields());
+
         $settings->set($scope, $data);
         $settings->save();
+
+        $scopeObject->afterSave($old, $settings->getRepository($scope));
 
         $this->flashSuccess(trans('a.Saved'));
 
