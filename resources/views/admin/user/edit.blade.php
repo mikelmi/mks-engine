@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="btn-group">
-        <a class="btn btn-secondary" href="#/users">Cancel</a>
+        <a class="btn btn-secondary" href="#/users">@lang('admin::messages.Cancel')</a>
     </div>
 @endsection
 

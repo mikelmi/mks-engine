@@ -21,7 +21,9 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  */
 class User extends Authenticatable
 {
-    use EntrustUserTrait;
+    use EntrustUserTrait {
+        can as entrustCan;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -65,5 +67,14 @@ class User extends Authenticatable
     public function scopeNotCurrent(Builder $query)
     {
         return $query->where('id', '!=', auth()->id());
+    }
+
+    public function can($ability, $arguments = [])
+    {
+        if (!parent::can($ability, $arguments)) {
+            return $this->entrustCan($ability, $arguments);
+        }
+
+        return true;
     }
 }

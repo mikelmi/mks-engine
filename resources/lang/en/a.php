@@ -27,4 +27,10 @@ return [
     'No' => 'No',
     'Keywords' => 'Keywords',
     'Site off' => 'Maintenance Mode',
+    'Pages' => 'Pages',
+    'Page' => 'Page',
+    'Params' => 'Parameters',
+    'Text' => 'Text',
+    'Show Title' => 'Show Title',
+    'Hide Title' => 'Hide Title',
 ];

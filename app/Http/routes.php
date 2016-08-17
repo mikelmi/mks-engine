@@ -48,6 +48,17 @@ Route::group(
         //Settings
         $router->get('settings/{scope?}', ['as' => 'settings', 'uses' => 'SettingsController@index'])->where('scope', '[a-z]+');
         $router->post('settings/{scope?}', ['as' => 'settings.save', 'uses' => 'SettingsController@save'])->where('scope', '[a-z]+');
+
+        //Page
+        $router->group(['prefix'=>'page', 'middleware' => ['permission:admin.page*']], function(\Illuminate\Routing\Router $router) {
+            $router->get('/{scope?}', ['as' => 'pages', 'uses' => 'PageController@index'])->where('scope', 'trash');
+            $router->get('data/{scope?}', ['as' => 'pages.data', 'uses' => 'PageController@data']);
+            $router->post('delete/{id?}', ['as' => 'page.delete', 'uses' => 'PageController@delete']);
+            $router->get('edit/{id?}', ['as' => 'page.edit', 'uses' => 'PageController@edit']);
+            $router->post('save/{id?}', ['as' => 'page.save', 'uses' => 'PageController@save']);
+            $router->post('trash/{id?}', ['as' => 'page.toTrash', 'uses' => 'PageController@toTrash']);
+            $router->post('restore/{id?}', ['as' => 'page.restore', 'uses' => 'PageController@restore']);
+        });
     }
 );
 
@@ -62,5 +73,8 @@ Route::group(
         $router->get('/', function () {
             return view('welcome');
         });
+
+        $router->get('/page/{id}', ['as' => 'page.id', 'uses' => 'PageController@getById'])->where('path', '\d+');
+        $router->get('/{path?}', ['as' => 'page', 'uses' => 'PageController@getByPath'])->where('path', '[a-zA-Z0-9-_]+');
     }
 );

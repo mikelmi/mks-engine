@@ -33,5 +33,13 @@ return [
                 ['title' => 'a.Permissions', 'href' => '#/permissions', 'hash' => 'permission'],
             ]
         ],
+        [
+            'title' => 'a.Pages', 'href' => '#/page', 'hash'=>'page', 'icon'=>'file',
+            'children' => [
+                ['title' => 'a.Pages', 'href' => '#/page', 'hash' => 'page'],
+                ['title' => 'a.Add', 'href' => '#/page/edit', 'hash' => 'page/edit'],
+                ['title' => 'a.Trash', 'href' => '#/page/trash', 'hash' => 'page/trash']
+            ]
+        ],
     ],
 ];

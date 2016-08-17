@@ -70,7 +70,7 @@
                     <td colspan="5">
                         <div class="pull-left text-muted">
                             {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
-                            @lang('Selected_s'): {[{ grid.hasSelected }]}
+                            @lang('a.Selected_s'): {[{ grid.hasSelected }]}
                         </div>
                         <div class="pull-right" st-pagination="" st-items-by-page="10"></div>
                         <div class="clearfix"></div>
