@@ -155,7 +155,8 @@ return [
          */
         Zizaco\Entrust\EntrustServiceProvider::class,
         Lavary\Menu\ServiceProvider::class,
-
+        Mikelmi\MksAdmin\Providers\AdminServiceProvider::class,
+        Mikelmi\SmartTable\SmartTableServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -164,8 +165,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Mikelmi\MksAdmin\Providers\AdminServiceProvider::class,
-        Mikelmi\SmartTable\SmartTableServiceProvider::class
 
     ],
 

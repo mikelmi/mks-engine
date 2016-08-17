@@ -95,7 +95,7 @@ class RoleController extends AdminController
         $this->flashSuccess(trans('a.Saved'));
 
         return $this->redirect([
-            'roles',
+            'role',
             'role/edit',
         ]);
     }

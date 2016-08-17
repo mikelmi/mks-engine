@@ -26,11 +26,11 @@ return [
         ['title' => 'a.Home', 'href' => '#/home', 'hash' => 'home', 'icon'=>'home'],
         ['title' => 'a.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
         [
-            'title' => 'a.Users', 'href' => '#/users', 'hash'=>'user', 'icon'=>'users',
+            'title' => 'a.Users', 'href' => '#/user', 'hash'=>'user', 'icon'=>'users',
             'children' => [
-                ['title' => 'a.Users', 'href' => '#/users', 'hash' => 'user'],
-                ['title' => 'a.Roles', 'href' => '#/roles', 'hash' => 'role'],
-                ['title' => 'a.Permissions', 'href' => '#/permissions', 'hash' => 'permission'],
+                ['title' => 'a.Users', 'href' => '#/user', 'hash' => 'user'],
+                ['title' => 'a.Roles', 'href' => '#/role', 'hash' => 'role'],
+                ['title' => 'a.Permissions', 'href' => '#/permission', 'hash' => 'permission'],
             ]
         ],
         [

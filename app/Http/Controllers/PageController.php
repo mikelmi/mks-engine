@@ -15,7 +15,13 @@ class PageController extends Controller
 {
     public function getById($id)
     {
-        return $this->show(Page::find($id));
+        $page = Page::find($id);
+
+        if (!$page) {
+            abort(404);
+        }
+
+        return $this->show($page);
     }
 
     public function getByPath($path = null)
@@ -24,7 +30,13 @@ class PageController extends Controller
             return $this->home();
         }
 
-        return $this->show(Page::where('path', $path)->first());
+        $page = Page::where('path', $path)->first();
+
+        if (!$page) {
+            abort(404);
+        }
+
+        return $this->show($page);
     }
 
     public function show(Page $page)

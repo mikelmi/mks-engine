@@ -18,7 +18,7 @@
             <th mst-select-all-rows="grid.rows"> </th>
             <th st-sort="id" class="st-sortable">#</th>
             <th st-sort="title" class="st-sortable">@lang('a.Title')</th>
-            <th st-sort="path" class="st-sortable">@lang('a.Path')</th>
+            <th st-sort="path" class="st-sortable">URL</th>
             <th st-sort="created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
             <th> </th>
         </tr>

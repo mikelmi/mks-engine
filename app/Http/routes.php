@@ -21,29 +21,35 @@ Route::group(
 
     function (\Illuminate\Routing\Router $router) {
         //Users
-        $router->get('users', ['as' => 'users', 'uses' => 'UserController@index']);
-        $router->get('users/data.json', ['as' => 'users.data', 'uses' => 'UserController@data']);
-        $router->post('user/delete/{id?}', ['as' => 'user.delete', 'uses' => 'UserController@delete']);
-        $router->get('user/edit/{id?}', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
-        $router->post('user/save/{id?}', ['as' => 'user.save', 'uses' => 'UserController@save']);
-        $router->get('user/roles/{id?}', ['as' => 'user.roles', 'uses' => 'UserController@roles']);
-        $router->post('user/toggle/{id?}', ['as' => 'user.toggle', 'uses' => 'UserController@toggle']);
-        $router->post('user/toggle-batch/{status}', ['as'=>'user.toggleBatch', 'uses'=>'UserController@toggleBatch']);
+        $router->group(['prefix'=>'user', 'middleware' => ['permission:admin.user*']], function(\Illuminate\Routing\Router $router) {
+            $router->get('/', ['as' => 'users', 'uses' => 'UserController@index']);
+            $router->get('data.json', ['as' => 'users.data', 'uses' => 'UserController@data']);
+            $router->post('delete/{id?}', ['as' => 'user.delete', 'uses' => 'UserController@delete']);
+            $router->get('edit/{id?}', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
+            $router->post('save/{id?}', ['as' => 'user.save', 'uses' => 'UserController@save']);
+            $router->get('roles/{id?}', ['as' => 'user.roles', 'uses' => 'UserController@roles']);
+            $router->post('toggle/{id?}', ['as' => 'user.toggle', 'uses' => 'UserController@toggle']);
+            $router->post('toggle-batch/{status}', ['as'=>'user.toggleBatch', 'uses'=>'UserController@toggleBatch']);
+        });
 
         //Roles
-        $router->get('roles', ['as' => 'roles', 'uses' => 'RoleController@index']);
-        $router->get('roles/data.json', ['as' => 'roles.data', 'uses' => 'RoleController@data']);
-        $router->post('role/delete/{id?}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
-        $router->get('role/edit/{id?}', ['as' => 'role.edit', 'uses' => 'RoleController@edit']);
-        $router->post('role/save/{id?}', ['as' => 'role.save', 'uses' => 'RoleController@save']);
-        $router->get('role/permissions/{id?}', ['as' => 'role.permissions', 'uses' => 'RoleController@permissions']);
+        $router->group(['prefix'=>'role', 'middleware' => ['permission:admin.role*']], function(\Illuminate\Routing\Router $router) {
+            $router->get('/', ['as' => 'roles', 'uses' => 'RoleController@index']);
+            $router->get('data.json', ['as' => 'roles.data', 'uses' => 'RoleController@data']);
+            $router->post('delete/{id?}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
+            $router->get('edit/{id?}', ['as' => 'role.edit', 'uses' => 'RoleController@edit']);
+            $router->post('save/{id?}', ['as' => 'role.save', 'uses' => 'RoleController@save']);
+            $router->get('permissions/{id?}', ['as' => 'role.permissions', 'uses' => 'RoleController@permissions']);
+        });
 
         //Permissions
-        $router->get('permissions', ['as' => 'permissions', 'uses' => 'PermissionController@index']);
-        $router->get('permissions/data.json', ['as' => 'permissions.data', 'uses' => 'PermissionController@data']);
-        $router->post('permission/delete/{id?}', ['as' => 'permission.delete', 'uses' => 'PermissionController@delete']);
-        $router->get('permission/edit/{id?}', ['as' => 'permission.edit', 'uses' => 'PermissionController@edit']);
-        $router->post('permission/save/{id?}', ['as' => 'permission.save', 'uses' => 'PermissionController@save']);
+        $router->group(['prefix'=>'permission', 'middleware' => ['permission:admin.permission*']], function(\Illuminate\Routing\Router $router) {
+            $router->get('/', ['as' => 'permissions', 'uses' => 'PermissionController@index']);
+            $router->get('data.json', ['as' => 'permissions.data', 'uses' => 'PermissionController@data']);
+            $router->post('delete/{id?}', ['as' => 'permission.delete', 'uses' => 'PermissionController@delete']);
+            $router->get('edit/{id?}', ['as' => 'permission.edit', 'uses' => 'PermissionController@edit']);
+            $router->post('save/{id?}', ['as' => 'permission.save', 'uses' => 'PermissionController@save']);
+        });
         
         //Settings
         $router->get('settings/{scope?}', ['as' => 'settings', 'uses' => 'SettingsController@index'])->where('scope', '[a-z]+');
@@ -63,7 +69,7 @@ Route::group(
 );
 
 
-//Admin routes
+//Frontend routes
 Route::group(
     [
         'middleware' => 'frontend'
@@ -74,7 +80,7 @@ Route::group(
             return view('welcome');
         });
 
-        $router->get('/page/{id}', ['as' => 'page.id', 'uses' => 'PageController@getById'])->where('path', '\d+');
-        $router->get('/{path?}', ['as' => 'page', 'uses' => 'PageController@getByPath'])->where('path', '[a-zA-Z0-9-_]+');
+        $router->get('page/{id}', ['as' => 'page.id', 'uses' => 'PageController@getById'])->where('path', '\d+');
+        $router->get('{path?}', ['as' => 'page', 'uses' => 'PageController@getByPath'])->where('path', '[A-Za-z0-0-_]+');
     }
 );

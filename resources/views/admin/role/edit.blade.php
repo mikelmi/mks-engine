@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="breadcrumb">
-        <a href="#/roles" class="breadcrumb-item">@lang('a.Roles')</a>
+        <a href="#/role" class="breadcrumb-item">@lang('a.Roles')</a>
         <span class="breadcrumb-item">
             {{  trans('admin::messages.' . ($model->id ? 'Edit' : 'Add')) }}
         </span>
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="btn-group">
-        <a class="btn btn-secondary" href="#/roles">@lang('admin::messages.Cancel')</a>
+        <a class="btn btn-secondary" href="#/role">@lang('admin::messages.Cancel')</a>
     </div>
 @endsection
 

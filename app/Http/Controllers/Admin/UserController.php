@@ -105,7 +105,7 @@ class UserController extends AdminController
         $this->flashSuccess(trans('a.Saved'));
 
         return $this->redirect([
-            'users',
+            'user',
             'user/edit',
         ]);
     }
