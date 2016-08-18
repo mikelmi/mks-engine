@@ -13,11 +13,13 @@ return [
     'search_form' => false,
 
     'scripts' => [
-        'vendor/mikelmi/mks-smart-table/js/mks-smart-table.js'
+        'vendor/mikelmi/mks-smart-table/js/mks-smart-table.js',
+        'js/mks-admin-ext.js',
     ],
 
     'appModules' => [
-        'mks-smart-table'
+        'mks-smart-table',
+        'mks-admin-ext'
     ],
 
     'menu_manager' => \App\Services\AdminMenu::class,

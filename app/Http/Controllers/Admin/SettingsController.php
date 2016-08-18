@@ -81,6 +81,6 @@ class SettingsController extends AdminController
 
         $this->flashSuccess(trans('a.Saved'));
 
-        return $this->redirect('settings/' . $scope);
+        return $this->redirect('/settings/' . $scope);
     }
 }

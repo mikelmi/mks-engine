@@ -65,6 +65,19 @@ Route::group(
             $router->post('trash/{id?}', ['as' => 'page.toTrash', 'uses' => 'PageController@toTrash']);
             $router->post('restore/{id?}', ['as' => 'page.restore', 'uses' => 'PageController@restore']);
         });
+
+        //Routes
+        $router->group(['prefix'=>'route'], function(\Illuminate\Routing\Router $router) {
+            $router->get('/', ['as' => 'routes', 'uses' => 'RouteController@all']);
+            $router->get('/params/{name?}', ['as' => 'route.params', 'uses' => 'RouteController@params']);
+        });
+
+        //Angular Templates
+        $router->group(['prefix'=>'templates', 'middleware' => ['admin', 'admin.locale']], function(\Illuminate\Routing\Router $router) {
+            $router->get('link-selector.html', function() {
+                return view('admin._partial.link-selector');
+            });
+        });
     }
 );
 
@@ -76,11 +89,12 @@ Route::group(
     ],
 
     function (\Illuminate\Routing\Router $router) {
-        $router->get('/', function () {
-            return view('welcome');
-        });
+        $router->get('/', ['as' => 'home', 'uses' => 'PageController@home']);
 
         $router->get('page/{id}', ['as' => 'page.id', 'uses' => 'PageController@getById'])->where('path', '\d+');
         $router->get('{path?}', ['as' => 'page', 'uses' => 'PageController@getByPath'])->where('path', '[A-Za-z0-0-_]+');
+
+        $router->get('testik/{pick}', function(){})->name('testik');
+        $router->get('testik2', function(){})->name('testik2');
     }
 );

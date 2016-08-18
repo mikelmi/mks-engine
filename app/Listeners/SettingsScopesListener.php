@@ -12,6 +12,7 @@ namespace App\Listeners;
 use App\Events\AdminMenuBuild;
 use App\Events\SettingsScopesCollect;
 use App\Models\SettingsScope;
+use App\Models\SitePages;
 use App\Models\SiteSettings;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Collection;
@@ -33,6 +34,9 @@ class SettingsScopesListener
         $users = new SettingsScope('users', trans('a.Users'));
         $users->setFields(['registration', 'auth']);
         $event->scopes->put('users', $users);
+
+        $pages = new SitePages();
+        $event->scopes->put('page', $pages);
     }
     
     public function onAdminMenu(AdminMenuBuild $event)

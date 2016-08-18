@@ -10,6 +10,9 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Page;
+use App\Services\Settings;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 
 class PageController extends Controller
 {
@@ -44,9 +47,20 @@ class PageController extends Controller
         return view('page.show', compact('page'));
     }
 
-    public function home()
+    public function home(Request $request, Settings $settings, Router $router)
     {
-        //TODO: Show home page from settings
+        $routeName = $settings->get('page.home.route');
+
+        if ($routeName) {
+            $params = json_decode($settings->get('page.home.params'), true);
+
+            if ($params) {
+                $uri = route($routeName, $params, false);
+                $newRequest = $request->create($uri);
+                return $router->dispatch($newRequest);
+            }
+        }
+
         return 'Home page';
     }
 }

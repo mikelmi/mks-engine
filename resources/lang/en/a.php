@@ -33,4 +33,7 @@ return [
     'Text' => 'Text',
     'Show Title' => 'Show Title',
     'Hide Title' => 'Hide Title',
+    'Select' => 'Select',
+    'Error page' => 'Error Page',
+    'Offline page' => 'Offline Page',
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\RouteConfigService;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -55,6 +56,15 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace, 'middleware' => 'web',
         ], function ($router) {
             require app_path('Http/routes.php');
+        });
+    }
+
+    public function register()
+    {
+        parent::register();
+
+        $this->app->singleton(RouteConfigService::class, function($app) {
+            return new RouteConfigService($app['router']);
         });
     }
 }

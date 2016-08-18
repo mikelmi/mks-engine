@@ -567,12 +567,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikelmi/mks-admin.git",
-                "reference": "7e7bfaf9536255b645f37e576e6e9ed7e1c01e39"
+                "reference": "26beceaa0bda50144cee377c7acd8534b958d920"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/7e7bfaf9536255b645f37e576e6e9ed7e1c01e39",
-                "reference": "7e7bfaf9536255b645f37e576e6e9ed7e1c01e39",
+                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/26beceaa0bda50144cee377c7acd8534b958d920",
+                "reference": "26beceaa0bda50144cee377c7acd8534b958d920",
                 "shasum": ""
             },
             "require": {
@@ -596,7 +596,7 @@
                 }
             ],
             "description": "Simple Admin Panel for Laravel",
-            "time": "2016-08-17 11:45:29"
+            "time": "2016-08-18 07:55:47"
         },
         {
             "name": "mikelmi/mks-smart-table",

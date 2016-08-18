@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\RoutesCollectListener;
 use App\Listeners\SettingsScopesListener;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -31,5 +32,6 @@ class AdminEventServiceProvider extends ServiceProvider
 
     protected $subscribe = [
         SettingsScopesListener::class,
+        RoutesCollectListener::class
     ];
 }
