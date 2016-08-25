@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\PermissionCreate;
 use App\Console\Commands\RoleCreate;
 use App\Console\Commands\RoleRemove;
 use App\Console\Commands\RoleUpdate;
@@ -20,7 +19,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Commands\Inspire::class,
         RoleCreate::class,
         RoleUpdate::class,
         RoleRemove::class,
@@ -39,5 +37,15 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+    }
+
+    /**
+     * Register the Closure based commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        require base_path('routes/console.php');
     }
 }

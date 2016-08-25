@@ -43,7 +43,7 @@ class RoutesCollectListener
             $pages->where('title', 'like', '%'.$search.'%');
         }
 
-        $pagination = $pages->paginate(2)->toArray();
+        $pagination = $pages->paginate(10)->toArray();
 
         $data->put('items', $pagination['data']);
 
