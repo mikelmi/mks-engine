@@ -34,14 +34,15 @@ trait Parametrized
     /**
      * Get parameter(s)
      * 
-     * @param null $key
+     * @param null|string $key
+     * @param null|string $default
      * @return Collection|mixed
      */
-    public function param($key = null)
+    public function param($key = null, $default = null)
     {
         $params = $this->getAttribute($this->params_field);
 
-        return $key === null ? $params : $params->get($key);
+        return $key === null ? $params : $params->get($key, $default);
     }
 
     /**

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mike
- * Date: 17.08.16
- * Time: 15:03
- */
 
 namespace App\Http\Controllers;
 
@@ -14,7 +8,7 @@ use App\Services\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 
-class PageController extends Controller
+class PageController extends SiteController
 {
     public function getById($id)
     {
@@ -44,6 +38,20 @@ class PageController extends Controller
 
     public function show(Page $page)
     {
+        $title = $page->meta_title ?: $page->title;
+
+        if ($title) {
+            $this->seo()->setTitle($title);
+        }
+
+        if ($description = $page->meta_description) {
+            $this->seo()->setDescription($description);
+        }
+
+        if ($keywords = $page->meta_keywords) {
+            $this->seo()->metatags()->setKeywords($keywords);
+        }
+
         return view('page.show', compact('page'));
     }
 
@@ -57,6 +65,7 @@ class PageController extends Controller
             if ($params) {
                 $uri = route($routeName, $params, false);
                 $newRequest = $request->create($uri);
+
                 return $router->dispatch($newRequest);
             }
         }

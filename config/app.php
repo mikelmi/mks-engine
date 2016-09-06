@@ -170,6 +170,7 @@ return [
         Lavary\Menu\ServiceProvider::class,
         Mikelmi\MksAdmin\Providers\AdminServiceProvider::class,
         Mikelmi\SmartTable\SmartTableServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
         /*
          * Application Service Providers...
