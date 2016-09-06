@@ -13,7 +13,17 @@ require('laravel-elixir-vue');
  |
  */
 
-elixir(mix => {
-    mix.sass('app.scss')
-       .webpack('app.js');
+var path = {
+    node: 'node_modules/',
+    node_js: '../../../node_modules/'
+};
+
+elixir(function(mix) {
+    mix.sass('bootstrap.scss');
+
+    mix.scripts([
+        path.node_js + 'jquery/dist/jquery.js',
+        path.node_js + 'tether/dist/js/tether.js',
+        path.node_js + 'bootstrap/dist/js/bootstrap.js'
+    ], 'public/js/bootstrap.js');
 });
