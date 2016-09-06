@@ -80,9 +80,9 @@
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.page_text}">
-                    <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Text') </label>
-                    <div class="col-sm-10">
-                        <textarea name="page_text" class="form-control" rows="5">{{ old('page_text', $model->page_text) }}</textarea>
+                    <label class="col-sm-12 col-form-label form-control-label"> @lang('a.Text') </label>
+                    <div class="col-sm-12">
+                        <textarea name="page_text" class="form-control" rows="5" mks-editor>{{ old('page_text', $model->page_text) }}</textarea>
                         <small class="form-control-feedback" ng-show="page.errors.page_text">{[{page.errors.page_text[0]}]}</small>
                     </div>
                 </div>

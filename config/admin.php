@@ -13,6 +13,7 @@ return [
     'search_form' => false,
 
     'scripts' => [
+        'vendor/ckeditor/ckeditor.js',
         'vendor/mikelmi/mks-smart-table/js/mks-smart-table.js',
         'js/mks-admin-ext.js',
     ],

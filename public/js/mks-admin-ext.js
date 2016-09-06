@@ -207,4 +207,25 @@
         }
     }]);
 
+    app.directive('mksEditor', ['AppConfig', function (AppConfig) {
+        return {
+            restrict: 'A',
+            link: function (scope, elem, attrs) {
+                if (typeof CKEDITOR !== 'undefined') {
+                    var opt = {
+                        removePlugins: 'forms,audio,Audio,allmedias',
+                        language: AppConfig.getLang('en')
+                    };
+                    if (attrs.mksEditor) {
+                        try {
+                            angular.extend(opt, scope.$eval(attrs.mksEditor));
+                        } catch (err) {
+                        }
+                    }
+                    CKEDITOR.replace(elem[0], opt);
+                }
+            }
+        };
+    }]);
+
 })(window.angular);
