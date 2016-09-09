@@ -1,10 +1,11 @@
 <div class="row">
     <div class="col-sm-6">
         <select class="form-control" ng-model="routeItem" name="{[{fieldRoute}]}" ng-options="item.text for item in items track by item.id" ng-value="item.id">
-            <option value=""></option>
+            <option value="">{[{ emptyTitle }]}</option>
         </select>
     </div>
     <div class="col-sm-6">
+        <input class="form-control" placeholder="URL" ng-if="rawEnabled && !routeItem" type="text" name="{[{ fieldRaw }]}" ng-model="modelRaw" />
         <div class="input-group" ng-hide="!routeItem.hasParams">
             <input type="text" class="form-control" ng-value="routes[route].title" readonly />
             <span class="input-group-btn">

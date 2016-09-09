@@ -44,14 +44,19 @@
             scope: {
                 url: '@url',
                 paramsUrl: '@paramsUrl',
-                route: '@route'
+                route: '@route',
+                rawEnabled: '@rawEnabled',
+                emptyTitle: '@emptyTitle'
             },
             templateUrl: UrlBuilder.get('templates/link-selector.html'),
             link: function(scope, elem, attr) {
                 scope.fieldRoute = attr.fieldRoute || 'route_name';
                 scope.fieldParams = attr.fieldParams || 'route_params';
+                scope.fieldRaw = attr.fieldRaw || '_raw';
 
-                scope.routeItem = {};
+                scope.modelRaw = attr.rawValue || '';
+
+                scope.routeItem = null;
 
                 scope.$watch('routeItem', function(val) {
                     if (val && typeof(val['id']) != 'undefined') {

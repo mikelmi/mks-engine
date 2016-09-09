@@ -36,4 +36,12 @@ return [
     'Select' => 'Select',
     'Error page' => 'Error Page',
     'Offline page' => 'Offline Page',
+    'Menu' => 'Menu',
+    'Position' => 'Position',
+    'Add Menu' => 'Add Menu',
+    'Edit Menu' => 'Edit Menu',
+    'Add Menu Item' => 'Add Menu Item',
+    'Edit Menu Item' => 'Edit Menu Item',
+    'Homepage' => 'Home page',
+    'Link' => 'Link',
 ];

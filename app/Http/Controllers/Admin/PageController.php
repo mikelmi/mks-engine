@@ -104,7 +104,7 @@ class PageController extends AdminController
             $model->restore();
         }
 
-        $this->flashSuccess('Saved');
+        $this->flashSuccess(trans('a.Saved'));
 
         return $this->redirect([
             '/page' . ($model->trashed() ? '/trash' : ''),

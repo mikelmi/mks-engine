@@ -15,12 +15,17 @@ return [
     'scripts' => [
         'vendor/ckeditor/ckeditor.js',
         'vendor/mikelmi/mks-smart-table/js/mks-smart-table.js',
-        'js/mks-admin-ext.js',
+        'admin/js/admin.js',
+    ],
+
+    'styles' => [
+        'admin/css/admin.css'
     ],
 
     'appModules' => [
         'mks-smart-table',
-        'mks-admin-ext'
+        'mks-admin-ext',
+        'mks-menu-manager'
     ],
 
     'menu_manager' => \App\Services\AdminMenu::class,
@@ -44,5 +49,6 @@ return [
                 ['title' => 'a.Trash', 'href' => '#/page/trash', 'hash' => 'page/trash']
             ]
         ],
+        ['title' => 'a.Menu', 'href' => '#/menuman', 'hash' => 'menuman', 'icon'=>'list-ul', 'nickname'=>'menu'],
     ],
 ];

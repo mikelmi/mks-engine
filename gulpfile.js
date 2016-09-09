@@ -26,4 +26,15 @@ elixir(function(mix) {
         path.node_js + 'tether/dist/js/tether.js',
         path.node_js + 'bootstrap/dist/js/bootstrap.js'
     ], 'public/js/bootstrap.js');
+
+    /** Backend **/
+    mix.styles([
+        path.node_js + 'angular-ui-tree/dist/angular-ui-tree.css',
+        'admin/*.css'
+    ], 'public/admin/css/admin.css');
+
+    mix.scripts([
+        path.node_js + 'angular-ui-tree/dist/angular-ui-tree.js',
+        'admin/*.js'
+    ], 'public/admin/js/admin.js');
 });

@@ -2,7 +2,7 @@
 
 @section('form')
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label form-control-label">@lang('Homepage')</label>
+        <label class="col-sm-2 col-form-label form-control-label">@lang('a.Homepage')</label>
         <div class="col-sm-10">
             <mks-link-select url="{{route('admin::routes')}}" params-url="{{route('admin::route.params')}}"
                              field-route="home[route]"
