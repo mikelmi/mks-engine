@@ -44,4 +44,10 @@ return [
     'Edit Menu Item' => 'Редагувати пункт меню',
     'Homepage' => 'Головна сторінка',
     'Link' => 'Посилання',
+    'Widget' => 'Віджет',
+    'Widgets' => 'Віджети',
+    'Order' => 'Порядок',
+    'Type' => 'Тип',
+    'TextWidget' => 'Текст/Код',
+    'HtmlWidget' => 'HTML',
 ];

@@ -50,5 +50,6 @@ return [
             ]
         ],
         ['title' => 'a.Menu', 'href' => '#/menuman', 'hash' => 'menuman', 'icon'=>'list-ul', 'nickname'=>'menu'],
+        ['title' => 'a.Widgets', 'href' => '#/widget', 'hash' => 'widget', 'icon'=>'th-large', 'nickname'=>'widget'],
     ],
 ];

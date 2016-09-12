@@ -89,3 +89,16 @@ $router->group(['prefix'=>'menuman', 'middleware' => ['permission:admin.menu*']]
 
     $router->get('/{scope?}', ['as' => 'menu', 'uses' => 'MenuController@index'])->where('scope', '\d+');
 });
+
+//Widgets
+$router->group(['prefix'=>'widget', 'middleware' => ['permission:admin.widget*']], function(\Illuminate\Routing\Router $router) {
+    $router->get('/', ['as' => 'widgets', 'uses' => 'WidgetController@index']);
+    $router->get('data.json', ['as' => 'widgets.data', 'uses' => 'WidgetController@data']);
+    $router->post('delete/{id?}', ['as' => 'widget.delete', 'uses' => 'WidgetController@delete']);
+    $router->get('/add/{class}', ['as' => 'widgets.add', 'uses' => 'WidgetController@add'])->where('class', '.+');
+    $router->get('edit/{id}', ['as' => 'widget.edit', 'uses' => 'WidgetController@edit']);
+    $router->post('save/{id?}', ['as' => 'widget.save', 'uses' => 'WidgetController@save']);
+    $router->post('toggle/{id?}', ['as' => 'widget.toggle', 'uses' => 'WidgetController@toggle']);
+    $router->post('toggle-batch/{status}', ['as'=>'widget.toggleBatch', 'uses'=>'WidgetController@toggleBatch']);
+    $router->post('move/{id?}/{down?}', ['as' => 'widget.move', 'uses' => 'WidgetController@move']);
+});

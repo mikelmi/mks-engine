@@ -44,4 +44,10 @@ return [
     'Edit Menu Item' => 'Edit Menu Item',
     'Homepage' => 'Home page',
     'Link' => 'Link',
+    'Widget' => 'Widget',
+    'Widgets' => 'Widgets',
+    'Order' => 'Order',
+    'Type' => 'Type',
+    'TextWidget' => 'Text/Code',
+    'HtmlWidget' => 'HTML',
 ];
