@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Permission;
 use App\Models\Widget;
+use App\Models\WidgetRoutes;
 use App\Services\WidgetManager;
-use App\Widgets\WidgetInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\SmartTable\SmartTable;
 
@@ -107,9 +107,70 @@ class WidgetController extends AdminController
         }
         
         $widget->setModel($model);
+
+        \DB::beginTransaction();
+
         $widget->beforeSave($request);
 
         $model->save();
+
+        $showing = $model->param('showing');
+
+        if (!$showing) {
+            $model->routes()->delete();
+        } else {
+            $routes = $request->input('routes', []);
+            $routeModels = [];
+
+            if (is_array($routes)) {
+
+                /** @var Collection $exists */
+                $exists = $model->routes->mapWithKeys(function($item) {
+                    //TODO: remove slash in key when the issue #15409 will be fixed
+                    // see: https://github.com/laravel/framework/issues/15409
+                   return ['_'.$item->id => $item];
+                });
+
+                $exists_keys = [];
+
+                foreach ($routes as $i => $name) {
+                    if (!$name) {
+                        continue;
+                    }
+
+                    $params = $request->input('route_params.' . $i);
+
+                    //TODO: remove slash in key when the issue #15409 will be fixed
+                    // see: https://github.com/laravel/framework/issues/15409
+                    $key = '_' . $request->input('route_ids.' . $i);
+
+                    if ($exists->has($key)) {
+                        $exists[$key]->route = $name;
+                        $exists[$key]->params = $params;
+                        $routeModels[] = $exists->get($key);
+
+                        //$exists_keys[] = $id;
+                    } else {
+                        $routeModels[] = new WidgetRoutes([
+                            'route' => $name,
+                            'params' => $params
+                        ]);
+                    }
+                }
+
+                if ($routeModels) {
+                    $model->routes()->saveMany($routeModels);
+                }
+
+                $toDelete = array_diff($exists->pluck('id')->all(), $request->input('route_ids', []));
+
+                if ($toDelete) {
+                    $model->routes()->whereIn('id', $toDelete)->delete();
+                }
+            }
+        }
+
+        \DB::commit();
 
         $this->flashSuccess(trans('a.Saved'));
 
@@ -172,5 +233,21 @@ class WidgetController extends AdminController
                 'ordering' => $model->ordering
             ]
         ]);
+    }
+
+    function routes($id = null)
+    {
+        $model = $id ? Widget::findOrFail($id) : new Widget();
+
+        /** @var Collection $items */
+        $items = $model->routes()->get();
+
+        return $items->map(function($item) {
+            return [
+                'id' => $item->route,
+                'params' => $item->params,
+                'model_id' => $item->id
+            ];
+        });
     }
 }

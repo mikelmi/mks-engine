@@ -4,12 +4,11 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label form-control-label">@lang('a.Homepage')</label>
         <div class="col-sm-10">
-            <mks-link-select url="{{route('admin::routes')}}" params-url="{{route('admin::route.params')}}"
-                             field-route="home[route]"
-                             field-params="home[params]"
-                             route="{{$model->get('home.route')}}"
-                             params="{{$model->get('home.params')}}"
-                             data-title="{{$model->get('home.params')}}"
+            <mks-link-select field-route="home[route]"
+                              field-params="home[params]"
+                              route="{{$model->get('home.route')}}"
+                              params="{{$model->get('home.params')}}"
+                              data-title="{{$model->get('home.params')}}"
             >
             </mks-link-select>
         </div>

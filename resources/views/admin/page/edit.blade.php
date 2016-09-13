@@ -121,7 +121,7 @@
                                 <input type="radio" name="params[hide_title]" autocomplete="off" value="1"@if (old('hide_title', $model->param('hide_title'))) checked @endif >
                                 @lang('a.Yes')
                             </label>
-                            <label class="btn btn-outline-danger @if (!old('show_title', $model->param('hide_title'))) active @endif">
+                            <label class="btn btn-outline-danger @if (!old('params.hide_title', $model->param('hide_title'))) active @endif">
                                 <input type="radio" name="params[hide_title]" autocomplete="off" value="0"@if (!old('hide_title', $model->param('hide_title'))) checked @endif >
                                 @lang('a.No')
                             </label>

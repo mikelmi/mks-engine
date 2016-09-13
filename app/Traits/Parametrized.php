@@ -51,7 +51,7 @@ trait Parametrized
 
         if (is_null($this->paramsDecoded)) {
             $params = parent::getAttribute($key);
-            $this->paramsDecoded = $params instanceof Collection ? $params : collect();
+            $this->paramsDecoded = $params instanceof Collection ? $params : collect($params);
         }
 
         return $this->paramsDecoded;
@@ -59,13 +59,19 @@ trait Parametrized
 
     public function setAttribute($key, $value)
     {
-        $self = parent::setAttribute($key, $value);
-
         if ($key === $this->params_field) {
+            if (is_string($value)) {
+                $value = $this->fromJson($value);
+            }
+
+            $self = parent::setAttribute($key, $value);
+
             $params = $this->getAttribute($this->params_field);
-            $this->paramsDecoded = $params instanceof Collection ? $params : collect();
+            $this->paramsDecoded = $params instanceof Collection ? $params : collect($params);
+
+            return $self;
         }
 
-        return $self;
+        return parent::setAttribute($key, $value);
     }
 }

@@ -1,13 +1,13 @@
 (function(){
     var app = angular.module('mks-admin-ext', []);
 
-    app.factory('mksLinkService', ['$q', '$http', function($q, $http) {
-        this.getParamsData = function(url, params) {
+    app.factory('mksLinkService', ['$q', '$http', 'UrlBuilder', function($q, $http, UrlBuilder) {
+        this.getParamsData = function(params) {
             var canceler = $q.defer();
 
             var request = $http({
                 method: "get",
-                url: url,
+                url: UrlBuilder.get('route/params'),
                 params: params,
                 timeout: canceler.promise
             });
@@ -35,6 +35,14 @@
             return promise;
         };
 
+        var _routesPromise = $http.get(UrlBuilder.get('route')).then(function(r) {
+            return r.data;
+        });
+
+        this.getRoutes = function () {
+            return _routesPromise;
+        };
+
         return this;
     }]);
 
@@ -42,50 +50,59 @@
         return {
             restrict: 'E',
             scope: {
-                url: '@url',
-                paramsUrl: '@paramsUrl',
-                route: '@route',
+                model: '@model',
                 rawEnabled: '@rawEnabled',
                 emptyTitle: '@emptyTitle'
             },
             templateUrl: UrlBuilder.get('templates/link-selector.html'),
             link: function(scope, elem, attr) {
-                scope.fieldRoute = attr.fieldRoute || 'route_name';
-                scope.fieldParams = attr.fieldParams || 'route_params';
-                scope.fieldRaw = attr.fieldRaw || '_raw';
+                scope.field = {
+                    route: attr.fieldRoute || 'route[name]',
+                    params: attr.fieldParams || 'route[params]',
+                    raw: attr.fieldRaw || 'route[raw]'
+                };
 
-                scope.modelRaw = attr.rawValue || '';
+                scope.items = [];
+                scope.routeOption = null;
+                scope.routes = {};
 
-                scope.routeItem = null;
+                function selectRouteOption (id) {
+                    angular.forEach(scope.items, function (i) {
+                        if (i.id == id) {
+                            scope.routeOption = i;
+                        }
+                    });
+                };
 
-                scope.$watch('routeItem', function(val) {
-                    if (val && typeof(val['id']) != 'undefined') {
-                        scope.route = val.id;
-                    }
-                });
-
-                if (scope.url) {
-                    $http.get(scope.url).then(function(r) {
-                        scope.items = r.data;
-                        if (scope.route) {
-                            angular.forEach(scope.items, function(i) {
-                                if (i.id == scope.route) {
-                                    scope.routeItem = i;
-                                }
-                            });
+                if (scope.model) {
+                    scope.$watch(scope.model, function(val) {
+                        if (val && typeof val['id'] != 'undefined') {
+                            scope.route = val;
                         }
                     });
                 }
 
-                scope.routes = {};
-
-                if (scope.route) {
-                    scope.routes[scope.route] = {
-                        title: attr.title,
-                        params: typeof attr.params == 'string' && attr.params ? angular.fromJson(attr.params) : attr.params
+                scope.$watch(function() {return scope.route; }, function(val) {
+                    if (val && typeof val['id'] != 'undefined' && typeof scope.routes[val.id] == 'undefined') {
+                        scope.routes[val.id] = val;
+                        selectRouteOption(val.id);
                     }
-                }
-                
+                });
+
+                scope.route = {
+                    id: attr.route,
+                    title: attr.title,
+                    params: attr.params,
+                    raw: attr.rawValue
+                };
+
+                mksLinkService.getRoutes().then(function(items) {
+                    scope.items = items;
+                    if (scope.route.id) {
+                        selectRouteOption(scope.route.id);
+                    }
+                });
+
                 scope.modal = {
                     id: 'modal-' + (new Date()).getTime(),
                     loading: false
@@ -96,19 +113,23 @@
                 var currentPage = 1;
 
                 function loadItems() {
+                    if (!scope.routeOption) {
+                        return;
+                    }
+
                     if (paramsRequest && paramsRequest.abort) {
                         paramsRequest.abort();
                     }
 
                     scope.modal.loading = true;
 
-                    (paramsRequest = mksLinkService.getParamsData(scope.paramsUrl, {
-                        name: scope.route,
+                    (paramsRequest = mksLinkService.getParamsData({
+                        name: scope.routeOption.id,
                         page: scope.modal.current_page || null,
                         q: scope.modal.searchQuery || null
                     })).then(function (data) {
                         scope.modal.data = data;
-                        currentRoute = scope.route;
+                        currentRoute = scope.routeOption.id;
                         currentPage = data.pagination ? data.pagination.current_page : 1;
                         scope.modal.current_page = currentPage;
                     }).finally(function () {
@@ -117,15 +138,15 @@
                 }
 
                 scope.modal.open = function() {
-                    if (scope.route) {
-                        if (scope.routeItem.extended) {
-                            if (currentRoute != scope.route) {
+                    if (scope.routeOption) {
+                        if (scope.routeOption.extended) {
+                            if (currentRoute != scope.routeOption.id) {
                                 scope.modal.searchQuery = '';
                                 loadItems();
                             }
                         } else {
-                            if (typeof scope.routes[scope.route] != 'undefined') {
-                                scope.modal.form = scope.routes[scope.route].params;
+                            if (typeof scope.routes[scope.routeOption.id] != 'undefined') {
+                                scope.modal.form = scope.routes[scope.routeOption.id].params;
                             }
                         }
 
@@ -138,12 +159,12 @@
                 };
 
                 scope.modal.select = function(item) {
-                    if (scope.modal.data.params && scope.route) {
+                    if (scope.modal.data.params && scope.routeOption) {
                         var params = {};
                         angular.forEach(scope.modal.data.params, function(p) {
                             params[p] = item[p];
                         });
-                        scope.routes[scope.route] = {
+                        scope.routes[scope.routeOption.id] = {
                             title: item.title,
                             params: params
                         };
@@ -152,8 +173,8 @@
                 };
 
                 scope.modal.save = function() {
-                    if (scope.modal.form && scope.route) {
-                        scope.routes[scope.route] = {
+                    if (scope.modal.form && scope.routeOption) {
+                        scope.routes[scope.routeOption.id] = {
                             title: scope.paramsEncoded(scope.modal.form),
                             params: scope.modal.form
                         };
@@ -194,6 +215,17 @@
                         return angular.toJson(params);
                     }
                     return params;
+                };
+
+                scope.paramsVisible = function(data) {
+                    if (data) {
+                        if (data.title) {
+                            return data.title;
+                        }
+
+                        return scope.paramsEncoded(data.params);
+                    }
+                    return '';
                 }
             }
         };

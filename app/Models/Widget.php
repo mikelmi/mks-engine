@@ -34,4 +34,12 @@ class Widget extends Model
     {
         return app(WidgetManager::class)->title($this->class, 'Opack');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function routes()
+    {
+        return $this->hasMany(WidgetRoutes::class);
+    }
 }

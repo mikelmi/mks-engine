@@ -103,7 +103,7 @@
 
                 </div>
 
-                <div class="tab-pane" id="tab-params" role="tabpanel">
+                <div class="tab-pane" id="tab-params" role="tabpanel" ng-controller="WidgetRoutesCtrl" ng-init="init({{$model->id}})">
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Hide Title') </label>
                         <div class="col-sm-9">
@@ -112,11 +112,41 @@
                                     <input type="radio" name="params[hide_title]" autocomplete="off" value="1"@if (old('hide_title', $model->param('hide_title'))) checked @endif >
                                     @lang('a.Yes')
                                 </label>
-                                <label class="btn btn-outline-danger @if (!old('show_title', $model->param('hide_title'))) active @endif">
+                                <label class="btn btn-outline-danger @if (!old('params.hide_title', $model->param('hide_title'))) active @endif">
                                     <input type="radio" name="params[hide_title]" autocomplete="off" value="0"@if (!old('hide_title', $model->param('hide_title'))) checked @endif >
                                     @lang('a.No')
                                 </label>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Showing') </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="params[showing]" ng-model="paramShowing" ng-init="paramShowing='{{old('params.showing', $model->param('showing'))}}'">
+                                <option value="">@lang('a.Show on all')</option>
+                                <option value="1">@lang('a.Show for'):</option>
+                                <option value="2">@lang('a.Hide for'):</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" ng-hide="!paramShowing">
+                        <div class="col-sm-9 offset-sm-3">
+                            <div class="form-group" ng-repeat="route in routes track by $index">
+                                <button type="button" class="pull-xs-left btn btn-outline-danger btn-sm" ng-click="removeChoice(route)">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                                <mks-link-select field-route="routes[{[{ $index }]}]"
+                                                 field-params="route_params[{[{ $index }]}]"
+                                                 model="$parent.routes[{[{ $index }]}]"
+                                                 routes="{[{ routes[$index] }]}"
+                                >
+                                </mks-link-select>
+                                <input type="hidden" name="route_ids[{[{ $index }]}]" ng-value="route.model_id" />
+                            </div>
+                            <button type="button" class="btn btn-outline-primary" ng-click="addChoice()">
+                                @lang('admin::messages.Add')
+                            </button>
                         </div>
                     </div>
                 </div>

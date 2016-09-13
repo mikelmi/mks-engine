@@ -50,4 +50,9 @@ return [
     'Type' => 'Тип',
     'TextWidget' => 'Текст/Код',
     'HtmlWidget' => 'HTML',
+    'Parent Item' => 'Батьківський елемент',
+    'Showing' => 'Показ',
+    'Show on all' => 'Показувати на всіх сторінках',
+    'Show for' => 'Показувати для',
+    'Hide for' => 'Приховати для',
 ];

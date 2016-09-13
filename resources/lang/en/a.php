@@ -50,4 +50,9 @@ return [
     'Type' => 'Type',
     'TextWidget' => 'Text/Code',
     'HtmlWidget' => 'HTML',
+    'Showing' => 'Showing',
+    'Show on all' => 'Show on all pages',
+    'Show for' => 'Show for',
+    'Hide for' => 'Hide for',
+    'Parent Item' => 'Parent',
 ];

@@ -49,8 +49,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label form-control-label">@lang('a.Link')</label>
             <div class="col-sm-10">
-                <mks-link-select url="{{route('admin::routes')}}" params-url="{{route('admin::route.params')}}"
-                                 field-route="route"
+                <mks-link-select field-route="route"
                                  field-params="params"
                                  route="{{old('route', $model->route)}}"
                                  params="{{old('params', $model->params)}}"
