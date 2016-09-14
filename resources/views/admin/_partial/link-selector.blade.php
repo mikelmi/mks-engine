@@ -41,14 +41,12 @@
                     <table class="table table-hover table-sm">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>@lang('a.Title')</th>
+                            <th ng-repeat="(name, title) in modal.data.columns">{[{ title }]}</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="item in modal.data.items" ng-click="modal.select(item)" style="cursor:pointer">
-                            <td>{[{ item.id }]}</td>
-                            <td>{[{ item.title }]}</td>
+                            <td ng-repeat="(key, title) in modal.data.columns">{[{ item[key] }]}</td>
                         </tr>
                         </tbody>
                     </table>

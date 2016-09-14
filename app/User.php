@@ -2,10 +2,12 @@
 
 namespace App;
 
+use Illuminate\Cache\TaggableStore;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Cache;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -25,6 +27,7 @@ class User extends Authenticatable
     use Notifiable;
     use EntrustUserTrait {
         can as entrustCan;
+        cachedRoles as entrustCachedRoles;
     }
 
     /**
@@ -78,5 +81,15 @@ class User extends Authenticatable
         }
 
         return true;
+    }
+
+    public function cachedRoles()
+    {
+        if(Cache::getStore() instanceof TaggableStore) {
+            return $this->entrustCachedRoles();
+        }
+
+        //fix create new query for each method's call
+        return $this->roles;
     }
 }

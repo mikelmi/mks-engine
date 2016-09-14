@@ -21,6 +21,7 @@
 
             <div class="col-sm-3">
                 Sidebar
+                @widgets(top)
                 @yield('left')
             </div>
 

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\Settings;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         require_once __DIR__.'/../helpers.php';
+
+        \Blade::directive('widgets', function($position) {
+            return "<?php app(\App\Services\WidgetManager::class)->render('$position'); ?>";
+        });
     }
 
     /**

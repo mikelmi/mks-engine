@@ -10,7 +10,10 @@ namespace App\Services;
 
 
 use App\Events\WidgetTypesCollect;
+use App\Models\Widget;
+use App\User;
 use App\Widgets\WidgetInterface;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 
 class WidgetManager
@@ -19,6 +22,11 @@ class WidgetManager
      * @var Collection
      */
     private $types;
+
+    /**
+     * @var Collection
+     */
+    private $loaded;
 
     /**
      * @return Collection
@@ -74,5 +82,91 @@ class WidgetManager
     public function title($type, $default = null)
     {
         return $this->getTypes()->get($type, $default);
+    }
+
+    protected function load()
+    {
+        if ($this->loaded) {
+            return $this->loaded;
+        }
+
+        $this->loaded = collect();
+
+        $all = Widget::with(['roles', 'routes'])->where('status', true)->orderBy('position')->get();
+
+        /** @var User|null $user */
+        $user = auth()->user();
+
+        $route = \Route::current();
+
+        /** @var Widget $widget */
+        foreach ($all as $widget) {
+
+            // filter by roles
+            if (!$this->checkForRoles($widget, $user)) {
+                continue;
+            }
+
+            //filter by route
+            if (!$this->checkForRoutes($widget, $route)) {
+                continue;
+            }
+
+            $position = $widget->position ? $widget->position : '-';
+            if (!$this->loaded->has($position)) {
+                $this->loaded->put($position, collect([$widget]));
+            } else {
+                $this->loaded[$position]->push($widget);
+            }
+        }
+
+        return $this->loaded;
+    }
+
+    protected function checkForRoles(Widget $widget, User $user = null)
+    {
+        $rolesShow = $widget->param('roles');
+
+        if ($rolesShow) {
+            if (!$user) {
+                return false;
+            }
+
+            $hasRoles = $user->hasRole($widget->roles->pluck('name')->all());
+            if ($rolesShow == '-1') {
+                if ($hasRoles) {
+                    return false;
+                }
+            } else if($rolesShow == '2' && !$hasRoles) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function checkForRoutes(Widget $widget, Route $route)
+    {
+        $routeShow = $widget->param('showing');
+        if ($routeShow) {
+            $routes = $widget->routes->pluck('params', 'route')->toArray();
+            $hasRoute = false;
+            foreach ($routes as $name => $params) {
+                if ($route->getName() == $name && (!$params || $route->parameters() == $params)) {
+                    $hasRoute = true;
+                }
+            }
+
+            return $routeShow == '1' ? $hasRoute : !$hasRoute;
+        }
+
+        return true;
+    }
+
+    public function render($position) {
+        $this->load();
+        $items = $this->loaded->get($position);
+        //dd($items);
+        echo 'Opacha: '. ($items ? $items->count() : 0);
     }
 }
