@@ -33,7 +33,7 @@
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs pull-xs-left">
                 <li class="nav-item" ng-repeat="item in menu">
-                    <a class="nav-link" ng-class="{'active': item.id==currentMenu.id || item.id==menuModel.id, 'text-strike': !item.active}" href="#" ng-click="selectMenu(item)">{[{ item.name }]}</a>
+                    <a class="nav-link" ng-class="{'active': item.id==currentMenu.id || item.id==menuModel.id}" href="#" ng-click="selectMenu(item)">{[{ item.name }]}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" ng-class="{'active': menuModel && !menuModel.id}" href="#" title="@lang('admin::messages.Add')" ng-click="addMenu()">

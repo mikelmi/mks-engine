@@ -37,8 +37,6 @@ class MenuController extends AdminController
         ]);
 
         $model->name = $request->input('name');
-        $model->position = $request->input('position', '');
-        $model->active = $request->input('active', false);
         $model->save();
 
         return $model;

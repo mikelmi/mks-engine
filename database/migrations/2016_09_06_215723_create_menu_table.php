@@ -16,10 +16,6 @@ class CreateMenuTable extends Migration
         Schema::create('menu', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('lang',10)->nullable()->default(null);
-            $table->string('position', 255)->default('');
-            $table->boolean('active')->default(true);
-            $table->json('params')->nullable();
         });
     }
 
