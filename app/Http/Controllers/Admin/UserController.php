@@ -18,7 +18,7 @@ class UserController extends AdminController
 
     public function data(SmartTable $smartTable)
     {
-        $conn = \DB::getDefaultConnection();
+        $conn = \DB::getName();
 
         if ($conn == 'sqlite') {
             $rolesList = \DB::raw('GROUP_CONCAT('.(\DB::getTablePrefix()).'roles.name, \', \') as rolesList');

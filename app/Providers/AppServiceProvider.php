@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\PagePathChanged;
+use App\Models\Page;
 use App\Services\Settings;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
-use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +22,14 @@ class AppServiceProvider extends ServiceProvider
 
         \Blade::directive('widgets', function($position) {
             return "<?php app(\App\Services\WidgetManager::class)->render('$position'); ?>";
+        });
+
+        Page::saved(function(Page $page) {
+            $oldPath = $page->getOriginal('path');
+            $newPath = $page->getAttribute('path');
+            if ($oldPath != $newPath) {
+                event(new PagePathChanged($oldPath, $newPath));
+            }
         });
     }
 

@@ -18,6 +18,12 @@ class SitePages extends SettingsScope
         $pages = Page::orderBy('title')->pluck('title', 'id')->toArray();
         $repository->set('pages', $pages);
 
+        $params = $repository->get('home.params');
+
+        if (!is_string($params)) {
+            $repository->set('home.params', json_encode($params));
+        }
+
         return parent::getModel($repository);
     }
 }
