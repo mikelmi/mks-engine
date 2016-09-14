@@ -45,8 +45,8 @@ return [
             'title' => 'a.Pages', 'href' => '#/page', 'hash'=>'page', 'icon'=>'file',
             'children' => [
                 ['title' => 'a.Pages', 'href' => '#/page', 'hash' => 'page'],
-                ['title' => 'a.Add', 'href' => '#/page/edit', 'hash' => 'page/edit'],
-                ['title' => 'a.Trash', 'href' => '#/page/trash', 'hash' => 'page/trash']
+                ['title' => 'admin::messages.Add', 'href' => '#/page/edit', 'hash' => 'page/edit'],
+                ['title' => 'admin::messages.Trash', 'href' => '#/page/trash', 'hash' => 'page/trash']
             ]
         ],
         ['title' => 'a.Menu', 'href' => '#/menuman', 'hash' => 'menuman', 'icon'=>'list-ul', 'nickname'=>'menu'],
