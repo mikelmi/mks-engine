@@ -42,4 +42,12 @@ class Widget extends Model
     {
         return $this->hasMany(WidgetRoutes::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function roles()
+    {
+        return $this->morphToMany(Role::class, 'model', 'model_role');
+    }
 }

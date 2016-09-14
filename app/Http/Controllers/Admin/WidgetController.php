@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Role;
 use App\Models\Widget;
 use App\Models\WidgetRoutes;
 use App\Services\WidgetManager;
@@ -170,6 +171,14 @@ class WidgetController extends AdminController
             }
         }
 
+        $rolesShowing = $model->param('roles');
+
+        if (!$rolesShowing || $rolesShowing == '1') {
+            $model->roles()->detach();
+        } else {
+            $model->roles()->sync((array)$request->input('roles'));
+        }
+
         \DB::commit();
 
         $this->flashSuccess(trans('a.Saved'));
@@ -249,5 +258,23 @@ class WidgetController extends AdminController
                 'model_id' => $item->id
             ];
         });
+    }
+
+    public function roles($widgetId = null)
+    {
+        /** @var Collection $all */
+        $all = Role::select('id', 'name as text')->get();
+
+        if ($widgetId) {
+            $ids = Widget::find($widgetId)->roles()->pluck('id')->toArray();
+
+            if ($ids) {
+                $all->each(function ($item) use ($ids) {
+                    $item->selected = in_array($item->id, $ids);
+                });
+            }
+        }
+
+        return $all;
     }
 }

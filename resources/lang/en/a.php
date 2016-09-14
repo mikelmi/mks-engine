@@ -55,4 +55,8 @@ return [
     'Show for' => 'Show for',
     'Hide for' => 'Hide for',
     'Parent Item' => 'Parent',
+    'Show for all' => 'Show for all',
+    'Show for registered' => 'Show for registered',
+    'Show for roles' => 'Show for roles',
+    'Hide for roles' => 'Hide for roles',
 ];

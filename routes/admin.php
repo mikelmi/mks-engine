@@ -102,4 +102,5 @@ $router->group(['prefix'=>'widget', 'middleware' => ['permission:admin.widget*']
     $router->post('toggle-batch/{status}', ['as'=>'widget.toggleBatch', 'uses'=>'WidgetController@toggleBatch']);
     $router->post('move/{id?}/{down?}', ['as' => 'widget.move', 'uses' => 'WidgetController@move']);
     $router->get('routes/{id?}', ['as' => 'widgets.routes', 'uses' => 'WidgetController@routes']);
+    $router->get('roles/{id?}', ['as' => 'widget.roles', 'uses' => 'WidgetController@roles']);
 });

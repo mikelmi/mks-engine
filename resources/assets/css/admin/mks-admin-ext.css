@@ -54,3 +54,7 @@
 .text-strike {
     text-decoration: line-through !important;
 }
+
+.row-block > .select2-container--bootstrap {
+    width: auto !important;
+}
