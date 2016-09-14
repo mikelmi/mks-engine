@@ -128,6 +128,23 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Roles') </label>
+                    <div class="col-sm-9">
+                        <select class="form-control" name="params[roles]" ng-model="paramRoles" ng-init="paramRoles='{{old('params.roles', $model->param('roles'))}}'">
+                            <option value="">@lang('a.Show for all')</option>
+                            <option value="1">@lang('a.Show for registered')</option>
+                            <option value="2">@lang('a.Show for roles'):</option>
+                            <option value="-1">@lang('a.Hide for roles'):</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" ng-hide="!paramRoles || paramRoles==1">
+                    <div class="col-sm-9 offset-sm-3 row-block">
+                        <select multiple class="form-control form-block" name="roles[]" mks-select data-url="{{route('admin::page.roles', $model->id)}}"></select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

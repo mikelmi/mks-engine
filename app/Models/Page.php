@@ -23,4 +23,12 @@ class Page extends Model
 {
     use SoftDeletes;
     use Parametrized;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function roles()
+    {
+        return $this->morphToMany(Role::class, 'model', 'model_role');
+    }
 }

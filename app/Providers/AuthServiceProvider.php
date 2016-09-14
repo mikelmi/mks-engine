@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Page;
+use App\Policies\PagePolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -14,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Page::class => PagePolicy::class,
     ];
 
     /**
@@ -27,7 +29,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::before(function(Authenticatable $user, $ability) {
-            return $user->isAdmin();
+            if ($user->isAdmin()) {
+                return true;
+            }
+            
+            return null;
         });
     }
 }

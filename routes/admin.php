@@ -47,6 +47,7 @@ $router->group(['prefix'=>'page', 'middleware' => ['permission:admin.page*']], f
     $router->post('save/{id?}', ['as' => 'page.save', 'uses' => 'PageController@save']);
     $router->post('trash/{id?}', ['as' => 'page.toTrash', 'uses' => 'PageController@toTrash']);
     $router->post('restore/{id?}', ['as' => 'page.restore', 'uses' => 'PageController@restore']);
+    $router->get('roles/{id?}', ['as' => 'page.roles', 'uses' => 'PageController@roles']);
 });
 
 //Routes

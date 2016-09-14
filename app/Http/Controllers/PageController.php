@@ -38,6 +38,10 @@ class PageController extends SiteController
 
     public function show(Page $page)
     {
+        if ($page->param('roles')) {
+            $this->authorize('view', $page);
+        }
+
         $title = $page->meta_title ?: $page->title;
 
         if ($title) {

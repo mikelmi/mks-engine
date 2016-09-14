@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\Page;
+use App\Models\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\SmartTable\SmartTable;
 
@@ -98,11 +100,23 @@ class PageController extends AdminController
         $model->meta_keywords = $request->input('meta_keywords');
         $model->meta_description = $request->input('meta_description');
 
+        \DB::beginTransaction();
+
         $model->save();
+
+        $rolesShowing = $model->param('roles');
+
+        if (!$rolesShowing || $rolesShowing == '1') {
+            $model->roles()->detach();
+        } else {
+            $model->roles()->sync((array)$request->input('roles'));
+        }
 
         if ($request->header('X-Submit-Flag') == 2) {
             $model->restore();
         }
+
+        \DB::commit();
 
         $this->flashSuccess(trans('a.Saved'));
 
@@ -153,5 +167,23 @@ class PageController extends AdminController
             'pages_count' => $this->getCount(),
             'trash_count' => $this->getCount('trash')
         ]));
+    }
+
+    public function roles($pageId = null)
+    {
+        /** @var Collection $all */
+        $all = Role::select('id', 'name as text')->get();
+
+        if ($pageId) {
+            $ids = Page::withTrashed()->find($pageId)->roles()->pluck('id')->toArray();
+
+            if ($ids) {
+                $all->each(function ($item) use ($ids) {
+                    $item->selected = in_array($item->id, $ids);
+                });
+            }
+        }
+
+        return $all;
     }
 }
