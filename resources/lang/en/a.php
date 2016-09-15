@@ -59,4 +59,10 @@ return [
     'Show for registered' => 'Show for registered',
     'Show for roles' => 'Show for roles',
     'Hide for roles' => 'Hide for roles',
+    'Template' => 'Template',
+    'Empty' => 'Empty',
+    'Block' => 'Block',
+    'Vertical' => 'Vertical',
+    'Vertical2' => 'Vertical 2',
+    'Horizontal' => 'Horizontal',
 ];

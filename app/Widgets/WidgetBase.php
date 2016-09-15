@@ -30,4 +30,31 @@ abstract class WidgetBase implements WidgetInterface
     }
 
     abstract public function beforeSave(Request $request);
+
+    public function render()
+    {
+        return '';
+    }
+
+    public function view($name, array $data = [])
+    {
+        $vars = array_merge([
+            'model' => $this->model,
+            'template' => $this->model->param('template', 'empty'),
+        ], $data);
+
+        if (!$vars['template'] || !\View::exists('widget.'.$vars['template'])) {
+            $vars['template'] = 'empty';
+        }
+
+        return view($name, $vars);
+    }
+
+    public function getTemplates()
+    {
+        return [
+            '' => trans('a.Empty'),
+            'block' => trans('a.Block'),
+        ];
+    }
 }

@@ -104,6 +104,22 @@
                 </div>
 
                 <div class="tab-pane" id="tab-params" role="tabpanel" ng-controller="WidgetRoutesCtrl" ng-init="init({{$model->id}})">
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Template') </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="params[template]">
+                                @foreach($widget->getTemplates() as $key => $title)
+                                    <option value="{{$key}}"
+                                            @if($key == old('params.template', $model->param('template')))
+                                            selected
+                                            @endif
+                                    >{{$title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Hide Title') </label>
                         <div class="col-sm-9">

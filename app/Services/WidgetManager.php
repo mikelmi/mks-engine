@@ -92,7 +92,7 @@ class WidgetManager
 
         $this->loaded = collect();
 
-        $all = Widget::with(['roles', 'routes'])->where('status', true)->orderBy('position')->get();
+        $all = Widget::with(['roles', 'routes'])->where('status', true)->orderBy('ordering')->get();
 
         /** @var User|null $user */
         $user = auth()->user();
@@ -166,7 +166,22 @@ class WidgetManager
     public function render($position) {
         $this->load();
         $items = $this->loaded->get($position);
-        //dd($items);
-        echo 'Opacha: '. ($items ? $items->count() : 0);
+
+        $content = '';
+
+        if ($items) {
+            foreach ($items as $item) {
+                //try {
+                    $widget = self::make($item->class);
+                //} catch(\Exception $e) {
+                    //continue;
+                //}
+
+                $widget->setModel($item);
+                $content .= $widget->render() . "\n";
+            }
+        }
+
+        return $content;
     }
 }

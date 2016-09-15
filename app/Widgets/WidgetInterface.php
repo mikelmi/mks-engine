@@ -35,4 +35,14 @@ interface WidgetInterface
      * @return mixed
      */
     public function beforeSave(Request $request);
+
+    /**
+     * @return string
+     */
+    public function render();
+
+    /**
+     * @return array
+     */
+    public function getTemplates();
 }

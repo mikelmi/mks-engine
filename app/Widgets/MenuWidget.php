@@ -41,4 +41,26 @@ class MenuWidget extends WidgetBase implements WidgetInterface
     {
         $this->model->content = $request->input('content');
     }
+
+    public function getTemplates()
+    {
+        $result = []; //parent::getTemplates();
+
+        $result['horizontal'] = trans('a.Horizontal');
+        $result['vertical'] = trans('a.Vertical');
+        $result['vertical2'] = trans('a.Vertical2');
+
+        return $result;
+    }
+    
+    public function render()
+    {
+        $template = $this->model->param('template');
+
+        if (!$template || !in_array($template, $this->getTemplates())) {
+            $template = 'horizontal';
+        }
+
+        return $this->view('widget.menu.'.$template)->render();
+    }
 }

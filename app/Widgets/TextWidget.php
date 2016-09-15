@@ -25,4 +25,9 @@ class TextWidget extends WidgetBase implements WidgetInterface
     {
         $this->model->content = $request->input('content');
     }
+
+    public function render()
+    {
+        return $this->view('widget.html')->render();
+    }
 }

@@ -59,4 +59,10 @@ return [
     'Show for registered' => 'Показувати для зареєстрованих',
     'Show for roles' => 'Показувати для груп',
     'Hide for roles' => 'Приховати для груп',
+    'Template' => 'Шаблон',
+    'Empty' => 'Порожній',
+    'Block' => 'Блок',
+    'Vertical' => 'Вертикальний',
+    'Vertical2' => 'Вертикальний 2',
+    'Horizontal' => 'Горизонтальний',
 ];

@@ -1,6 +1,7 @@
 @extends('base')
 
 @section('body')
+    @widgets(top)
     <nav class="navbar navbar-fixed-top navbar-light bg-faded">
         <a class="navbar-brand" href="#">{{settings('site.title')}}</a>
         <ul class="nav navbar-nav">
@@ -20,12 +21,12 @@
         <div class="row">
 
             <div class="col-sm-3">
-                Sidebar
-                @widgets(top)
+                @widgets(left)
                 @yield('left')
             </div>
 
             <div class="col-sm-9">
+                @widgets(page)
                 @yield('content')
             </div>
 

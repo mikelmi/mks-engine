@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
         require_once __DIR__.'/../helpers.php';
 
         \Blade::directive('widgets', function($position) {
-            return "<?php app(\App\Services\WidgetManager::class)->render('$position'); ?>";
+            return "<?php echo app(\App\Services\WidgetManager::class)->render('$position'); ?>";
         });
 
         Page::saved(function(Page $page) {
