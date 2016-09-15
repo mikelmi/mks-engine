@@ -126,13 +126,7 @@ class WidgetController extends AdminController
             if (is_array($routes)) {
 
                 /** @var Collection $exists */
-                $exists = $model->routes->mapWithKeys(function($item) {
-                    //TODO: remove slash in key when the issue #15409 will be fixed
-                    // see: https://github.com/laravel/framework/issues/15409
-                   return ['_'.$item->id => $item];
-                });
-
-                $exists_keys = [];
+                $exists = $model->routes->keyBy('id');
 
                 foreach ($routes as $i => $name) {
                     if (!$name) {
@@ -141,16 +135,12 @@ class WidgetController extends AdminController
 
                     $params = $request->input('route_params.' . $i);
 
-                    //TODO: remove slash in key when the issue #15409 will be fixed
-                    // see: https://github.com/laravel/framework/issues/15409
-                    $key = '_' . $request->input('route_ids.' . $i);
+                    $key = $request->input('route_ids.' . $i);
 
                     if ($exists->has($key)) {
                         $exists[$key]->route = $name;
                         $exists[$key]->params = $params;
                         $routeModels[] = $exists->get($key);
-
-                        //$exists_keys[] = $id;
                     } else {
                         $routeModels[] = new WidgetRoutes([
                             'route' => $name,
@@ -163,7 +153,7 @@ class WidgetController extends AdminController
                     $model->routes()->saveMany($routeModels);
                 }
 
-                $toDelete = array_diff($exists->pluck('id')->all(), $request->input('route_ids', []));
+                $toDelete = array_diff($exists->keys()->all(), $request->input('route_ids', []));
 
                 if ($toDelete) {
                     $model->routes()->whereIn('id', $toDelete)->delete();
