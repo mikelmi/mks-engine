@@ -168,22 +168,4 @@ class PageController extends AdminController
             'trash_count' => $this->getCount('trash')
         ]));
     }
-
-    public function roles($pageId = null)
-    {
-        /** @var Collection $all */
-        $all = Role::select('id', 'name as text')->get();
-
-        if ($pageId) {
-            $ids = Page::withTrashed()->find($pageId)->roles()->pluck('id')->toArray();
-
-            if ($ids) {
-                $all->each(function ($item) use ($ids) {
-                    $item->selected = in_array($item->id, $ids);
-                });
-            }
-        }
-
-        return $all;
-    }
 }

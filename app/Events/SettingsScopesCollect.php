@@ -1,4 +1,7 @@
 <?php
+/**
+ * Event fired on collecting settings scopes (Settings pages in Admin Panel)
+ */
 
 namespace App\Events;
 
@@ -12,6 +15,10 @@ class SettingsScopesCollect extends Event
      */
     public $scopes;
 
+    /**
+     * SettingsScopesCollect constructor.
+     * @param Collection $collection
+     */
     public function __construct(Collection $collection)
     {
         $this->scopes = $collection;

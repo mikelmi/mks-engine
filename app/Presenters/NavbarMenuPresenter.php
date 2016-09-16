@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mike
- * Date: 15.09.16
- * Time: 20:15
- */
 
 namespace App\Presenters;
 

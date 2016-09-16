@@ -1,4 +1,7 @@
 <?php
+/**
+ * Event fired on Admin menu builds
+ */
 
 namespace App\Events;
 
@@ -12,6 +15,10 @@ class AdminMenuBuild extends Event
      */
     public $menu;
 
+    /**
+     * AdminMenuBuild constructor.
+     * @param Builder $menu
+     */
     public function __construct(Builder $menu)
     {
         $this->menu = $menu;

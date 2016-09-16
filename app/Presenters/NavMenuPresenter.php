@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\Collection;
 class NavMenuPresenter implements MenuPresenterInterface
 {
 
-    public $class_ul = 'nav';
-    public $class_li = 'nav-item';
-    public $class_li_deep = 'dropdown-item';
-    public $class_li_current = 'active';
-    public $class_a = 'nav-link';
-    public $class_li_children = 'nav-item dropdown';
-    public $class_a_children = 'dropdown-toggle';
-    public $class_sub_ul = 'dropdown-menu';
+    public $class_ul = 'nav'; // class for <ul>
+    public $class_li = 'nav-item'; //class for ul->li
+    public $class_li_deep = 'dropdown-item'; //class for li->ul->li
+    public $class_li_current = 'active'; //class for current menu item
+    public $class_a = 'nav-link'; //class for li->a
+    public $class_li_children = 'nav-item dropdown'; //class for <li> which has children
+    public $class_a_children = 'dropdown-toggle'; //class for <a> which has children
+    public $class_sub_ul = 'dropdown-menu'; //class for li->ul
 
     /**
      * @param Collection $items

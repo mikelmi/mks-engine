@@ -35,7 +35,7 @@ class RoutesCollectListener
 
     private function collectParams(Collection $data, array $columns)
     {
-        $pages = Page::orderBy('title')->select($columns);
+        $pages = Page::ordered()->select($columns);
         $search = request('q');
 
         if ($search) {

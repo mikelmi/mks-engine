@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Event fired on collecting route's parameters (for select in Admin panel)
+ */
 namespace App\Events;
 
 
@@ -17,6 +19,11 @@ class RouteParamsCollect extends Event
      */
     public $info;
 
+    /**
+     * RouteParamsCollect constructor.
+     * @param Collection $collection
+     * @param Collection $info
+     */
     public function __construct(Collection $collection, Collection $info)
     {
         $this->items = $collection;

@@ -31,4 +31,9 @@ class Page extends Model
     {
         return $this->morphToMany(Role::class, 'model', 'model_role');
     }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('title');
+    }
 }

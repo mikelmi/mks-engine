@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Permission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\SmartTable\SmartTable;
 

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mike
- * Date: 07.09.16
- * Time: 2:35
- */
 
 namespace App\Http\Controllers\Admin;
 
@@ -23,7 +17,7 @@ class MenuController extends AdminController
 
     public function all()
     {
-        return Menu::all();
+        return Menu::ordered()->get();
     }
 
     public function save(Request $request)
@@ -41,7 +35,7 @@ class MenuController extends AdminController
 
         return $model;
     }
-    
+
     public function delete(Request $request)
     {
         return Menu::destroy($request->input('id'));
@@ -49,12 +43,12 @@ class MenuController extends AdminController
 
     public function items($scope)
     {
-        return MenuItem::scoped(['menu_id' => $scope])->defaultOrder()->get()->toTree();
+        return MenuItem::getTree($scope);
     }
-    
+
     public function moveItem(Request $request, $scope, $id)
     {
-        $item = MenuItem::scoped(['menu_id' => $scope])->find($id);
+        $item = MenuItem::ofMenu($scope)->find($id);
 
         $this->validate($request, [
             'old.index' => 'required|integer',
@@ -66,7 +60,7 @@ class MenuController extends AdminController
 
         if ($newParent != $oldParent) {
             if ($newParent) {
-                $parent = MenuItem::scoped(['menu_id' => $scope])->find($newParent);
+                $parent = MenuItem::ofMenu($scope)->find($newParent);
                 $parent->appendNode($item);
             } else {
                 $item->saveAsRoot();
@@ -88,7 +82,7 @@ class MenuController extends AdminController
         return $item;
     }
 
-    public function deleteItem(Request $request, $id)
+    public function deleteItem($id)
     {
         $item = MenuItem::find($id);
 
@@ -101,7 +95,7 @@ class MenuController extends AdminController
     {
         $menu = Menu::find($scope);
 
-        $model = $id ? $item = MenuItem::scoped(['menu_id' => $scope])->find($id) : new MenuItem();
+        $model = $id ? $item = MenuItem::ofMenu($scope)->find($id) : new MenuItem();
 
         $model->menu()->associate($menu);
 
@@ -112,12 +106,12 @@ class MenuController extends AdminController
     {
         $menu = Menu::find($scope);
 
-        $model = $id ? $item = MenuItem::scoped(['menu_id' => $scope])->find($id) : new MenuItem();
+        $model = $id ? $item = MenuItem::ofMenu($scope)->find($id) : new MenuItem();
 
         $this->validate($request, [
             'title' => 'required|min:3|max:255',
         ]);
-        
+
         $model->menu()->associate($menu);
 
         $model->title = $request->input('title');
@@ -133,7 +127,7 @@ class MenuController extends AdminController
                     $model->makeRoot();
                 }
             } else {
-                $parent = MenuItem::scoped(['menu_id' => $scope])->find($parent_id);
+                $parent = MenuItem::ofMenu($scope)->find($parent_id);
                 if (!$model->isChildOf($parent)) {
                     $model->appendToNode($parent);
                 }
@@ -146,32 +140,32 @@ class MenuController extends AdminController
 
         return $this->redirect([
             '/menuman/' . $scope,
-            '/menuman/items/' . $scope. '/edit'
+            '/menuman/items/' . $scope . '/edit'
         ]);
     }
 
     public function treeOptions($scope, $id = null)
     {
-        $items = MenuItem::scoped(['menu_id' => $scope])->defaultOrder()->get()->toTree();
+        $items = MenuItem::getTree($scope);
 
         $result = [];
 
         $current = null;
 
         if ($id) {
-            $current = MenuItem::scoped(['menu_id' => $scope])->find($id);
+            $current = MenuItem::ofMenu($scope)->find($id);
         }
 
         $traverse = function ($items, $prefix = '-') use (&$traverse, &$result, $current) {
             foreach ($items as $item) {
                 $result[] = [
                     'id' => $item->id,
-                    'text' => $prefix.' '.$item->title,
+                    'text' => $prefix . ' ' . $item->title,
                     'disabled' => $current && $item->isDescendantOf($current),
                     'selected' => $current && $current->parent_id == $item->id,
                 ];
 
-                $traverse($item->children, $prefix.'-');
+                $traverse($item->children, $prefix . '-');
             }
         };
 

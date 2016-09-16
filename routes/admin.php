@@ -23,6 +23,7 @@ $router->group(['prefix'=>'role', 'middleware' => ['permission:admin.role*']], f
     $router->get('edit/{id?}', ['as' => 'role.edit', 'uses' => 'RoleController@edit']);
     $router->post('save/{id?}', ['as' => 'role.save', 'uses' => 'RoleController@save']);
     $router->get('permissions/{id?}', ['as' => 'role.permissions', 'uses' => 'RoleController@permissions']);
+    $router->get('for-model/{model?}/{id?}', ['as' => 'roles.forModel', 'uses' => 'RoleController@listForModel']);
 });
 
 //Permissions
@@ -47,7 +48,6 @@ $router->group(['prefix'=>'page', 'middleware' => ['permission:admin.page*']], f
     $router->post('save/{id?}', ['as' => 'page.save', 'uses' => 'PageController@save']);
     $router->post('trash/{id?}', ['as' => 'page.toTrash', 'uses' => 'PageController@toTrash']);
     $router->post('restore/{id?}', ['as' => 'page.restore', 'uses' => 'PageController@restore']);
-    $router->get('roles/{id?}', ['as' => 'page.roles', 'uses' => 'PageController@roles']);
 });
 
 //Routes
@@ -103,5 +103,4 @@ $router->group(['prefix'=>'widget', 'middleware' => ['permission:admin.widget*']
     $router->post('toggle-batch/{status}', ['as'=>'widget.toggleBatch', 'uses'=>'WidgetController@toggleBatch']);
     $router->post('move/{id?}/{down?}', ['as' => 'widget.move', 'uses' => 'WidgetController@move']);
     $router->get('routes/{id?}', ['as' => 'widgets.routes', 'uses' => 'WidgetController@routes']);
-    $router->get('roles/{id?}', ['as' => 'widget.roles', 'uses' => 'WidgetController@roles']);
 });

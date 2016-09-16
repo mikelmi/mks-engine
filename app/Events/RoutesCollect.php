@@ -1,4 +1,7 @@
 <?php
+/**
+ * Event fired on collecting application routes (for select in Admin panel)
+ */
 
 namespace App\Events;
 

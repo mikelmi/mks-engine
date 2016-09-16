@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mike
- * Date: 12.09.16
- * Time: 11:49
- */
 
 namespace App\Widgets;
 
@@ -53,7 +47,7 @@ class MenuWidget extends WidgetBase implements WidgetInterface
 
     public function form()
     {
-        $menu = Menu::orderBy('name')->get();
+        $menu = Menu::ordered()->get();
 
         return view('admin.widget.form.menu', [
             'model' => $this->model,
@@ -84,11 +78,7 @@ class MenuWidget extends WidgetBase implements WidgetInterface
 
         $presenter = $this->makePresenter($type);
 
-        $items = MenuItem::scoped(['menu_id' => $this->model->content])
-            ->defaultOrder()
-            ->withDepth()
-            ->get()
-            ->toTree();
+        $items = MenuItem::getTree($this->model->content);
 
         $items = $presenter->render($items, ['class' => $this->model->param('css_class')]);
 

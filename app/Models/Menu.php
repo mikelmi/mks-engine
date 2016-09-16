@@ -37,6 +37,11 @@ class Menu extends Model
         return $query->where('active', $active);
     }
 
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('name');
+    }
+
     public function getActiveAttribute($value)
     {
         return boolval($value);

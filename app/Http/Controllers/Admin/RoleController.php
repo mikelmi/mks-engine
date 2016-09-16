@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Permission;
 use App\Models\Role;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
@@ -97,7 +98,7 @@ class RoleController extends AdminController
     public function permissions($roleId = null)
     {
         /** @var Collection $all */
-        $all = Permission::select('id', 'name as text')->get();
+        $all = Permission::ordered()->select('id', 'name as text')->get();
 
         if ($roleId) {
             $ids = Role::find($roleId)->perms()->pluck('id')->toArray();
@@ -110,5 +111,41 @@ class RoleController extends AdminController
         }
 
         return $all;
+    }
+
+    public function listForModel($modelType = null, $modelId = null)
+    {
+        /** @var Collection $list */
+        $list = Role::ordered()->select('id', 'name as text')->get();
+
+        if ($modelId) {
+            if (!class_exists($modelType)) {
+                abort(500, 'Class "' . $modelType . '" not found');
+            }
+
+            $ref = new \ReflectionClass($modelType);
+
+            if (!$ref->isSubclassOf(Model::class) || !$ref->hasMethod('roles')) {
+                abort(500, 'Class "' . $modelType . '" has no roles association');
+            }
+
+            /** @var Model $model */
+            $model = $ref->newInstance();
+            $idKey = $model->getKeyName();
+
+            if ($ref->hasMethod('bootSoftDeletes')) {
+                $model = $model->withTrashed();
+            }
+
+            $ids = $model->find($modelId)->roles()->pluck($idKey)->toArray();
+
+            if ($ids) {
+                $list->each(function ($item) use ($ids) {
+                    $item->selected = in_array($item->id, $ids);
+                });
+            }
+        }
+
+        return $list;
     }
 }

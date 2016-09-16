@@ -36,4 +36,9 @@ class Role extends EntrustRole
     {
         return $this->perms();
     }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('name');
+    }
 }

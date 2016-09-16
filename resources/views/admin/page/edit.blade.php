@@ -142,7 +142,7 @@
                 </div>
                 <div class="form-group row" ng-hide="!paramRoles || paramRoles==1">
                     <div class="col-sm-9 offset-sm-3 row-block">
-                        <select multiple class="form-control form-block" name="roles[]" mks-select data-url="{{route('admin::page.roles', $model->id)}}"></select>
+                        <select multiple class="form-control form-block" name="roles[]" mks-select data-url="{{route('admin::roles.forModel', [get_class($model), $model->id])}}"></select>
                     </div>
                 </div>
             </div>

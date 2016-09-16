@@ -15,7 +15,7 @@ class SitePages extends SettingsScope
 
     public function getModel(Repository $repository)
     {
-        $pages = Page::orderBy('title')->pluck('title', 'id')->toArray();
+        $pages = Page::ordered()->pluck('title', 'id')->toArray();
         $repository->set('pages', $pages);
 
         $params = $repository->get('home.params');

@@ -107,7 +107,7 @@ class UserController extends AdminController
     public function roles($userId = null)
     {
         /** @var Collection $all */
-        $all = Role::select('id', 'name as text')->get();
+        $all = Role::ordered()->select('id', 'name as text')->get();
 
         if ($userId) {
             $ids = User::find($userId)->roles()->pluck('id')->toArray();
