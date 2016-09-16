@@ -1,7 +1,8 @@
 (function(){
     var app = angular.module('mks-menu-manager', ['ui.tree']);
 
-    app.controller('MenuController', ['$scope', '$http', 'UrlBuilder', function($scope, $http, UrlBuilder) {
+    app.controller('MenuController', ['$scope', '$http', 'UrlBuilder', '$location',
+        function($scope, $http, UrlBuilder, $location) {
 
         $scope.menu = [];
         $scope.currentMenu = null;
@@ -104,7 +105,9 @@
             if (item.id && confirm(msg||'Delete?')) {
                 $http.post(UrlBuilder.get('menuman/delete'), {id: item.id}).then(function(r) {
                     $scope.menu.splice(self.getMenuIndex(item.id), 1);
-                    if ($scope.menu.length) {
+                    if ($location.path() == '/menuman/' + item.id) {
+                        $location.path('/menuman');
+                    } else if ($scope.menu.length) {
                         $scope.selectMenu($scope.menu[0]);
                     }
                 });
