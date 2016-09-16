@@ -1,20 +1,9 @@
 @extends('base')
 
 @section('body')
-    @widgets(top)
     <nav class="navbar navbar-fixed-top navbar-light bg-faded">
         <a class="navbar-brand" href="#">{{settings('site.title')}}</a>
-        <ul class="nav navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
-            </li>
-        </ul>
+        @widget(mainmenu)
     </nav>
 
     <div class="container-fluid top-pad">

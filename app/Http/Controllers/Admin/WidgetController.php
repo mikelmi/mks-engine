@@ -60,6 +60,8 @@ class WidgetController extends AdminController
 
         $widget->setModel($model);
 
+        $model->status = true;
+
         return view('admin.widget.edit', compact('model', 'widget'));
     }
 

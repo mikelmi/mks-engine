@@ -63,6 +63,5 @@ return [
     'Empty' => 'Empty',
     'Block' => 'Block',
     'Vertical' => 'Vertical',
-    'Vertical2' => 'Vertical 2',
     'Horizontal' => 'Horizontal',
 ];

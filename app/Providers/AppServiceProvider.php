@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\PagePathChanged;
 use App\Models\Page;
 use App\Services\Settings;
+use App\Services\WidgetManager;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
 
         \Blade::directive('widgets', function($position) {
             return "<?php echo app(\App\Services\WidgetManager::class)->render('$position'); ?>";
+        });
+
+        \Blade::directive('widget', function($name) {
+            return "<?php echo app(\App\Services\WidgetManager::class)->renderOne('$name'); ?>";
         });
 
         Page::saved(function(Page $page) {
@@ -57,5 +62,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(Settings::class, 'settings');
+
+        $this->app->singleton(WidgetManager::class, function() {
+            return new WidgetManager();
+        });
     }
 }

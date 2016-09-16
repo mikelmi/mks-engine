@@ -10,10 +10,38 @@ namespace App\Widgets;
 
 
 use App\Models\Menu;
+use App\Models\MenuItem;
+use App\Presenters\ListMenuPresenter;
+use App\Presenters\MenuPresenterInterface;
+use App\Presenters\NavbarMenuPresenter;
+use App\Presenters\NavInlineMenuPresenter;
+use App\Presenters\NavMenuPresenter;
+use App\Presenters\PillsMenuPresenter;
+use App\Presenters\PillsStackedMenuPresenter;
+use App\Presenters\TabsMenuPresenter;
 use Illuminate\Http\Request;
 
 class MenuWidget extends WidgetBase implements WidgetInterface
 {
+    protected $presenters = [
+        'nav' => NavMenuPresenter::class,
+        'navbar' => NavbarMenuPresenter::class,
+        'nav-inline' => NavInlineMenuPresenter::class,
+        'nav-tabs' => TabsMenuPresenter::class,
+        'pills' => PillsMenuPresenter::class,
+        'pills-stacked' => PillsStackedMenuPresenter::class,
+        'list' => ListMenuPresenter::class,
+    ];
+
+    public function getPresentersList()
+    {
+        /**
+         * @var MenuPresenterInterface $class
+         */
+        foreach ($this->presenters as $key => $class) {
+           yield $key => $class::title();
+        }
+    }
 
     /**
      * @return string
@@ -27,7 +55,11 @@ class MenuWidget extends WidgetBase implements WidgetInterface
     {
         $menu = Menu::orderBy('name')->get();
 
-        return view('admin.widget.form.menu', ['model' => $this->model, 'menu' => $menu]);
+        return view('admin.widget.form.menu', [
+            'model' => $this->model,
+            'menu' => $menu,
+            'presenters' => $this->getPresentersList()
+        ]);
     }
 
     public function rules()
@@ -41,26 +73,48 @@ class MenuWidget extends WidgetBase implements WidgetInterface
     {
         $this->model->content = $request->input('content');
     }
-
-    public function getTemplates()
-    {
-        $result = []; //parent::getTemplates();
-
-        $result['horizontal'] = trans('a.Horizontal');
-        $result['vertical'] = trans('a.Vertical');
-        $result['vertical2'] = trans('a.Vertical2');
-
-        return $result;
-    }
     
     public function render()
     {
-        $template = $this->model->param('template');
-
-        if (!$template || !in_array($template, $this->getTemplates())) {
-            $template = 'horizontal';
+        if (!$this->model->content) {
+            return;
         }
 
-        return $this->view('widget.menu.'.$template)->render();
+        $type = array_get($this->presenters, $this->model->param('type', ''));
+
+        $presenter = $this->makePresenter($type);
+
+        $items = MenuItem::scoped(['menu_id' => $this->model->content])
+            ->defaultOrder()
+            ->withDepth()
+            ->get()
+            ->toTree();
+
+        $items = $presenter->render($items, ['class' => $this->model->param('css_class')]);
+
+        return $this->view('widget.menu', [
+            'items' => $items
+        ])->render();
+    }
+
+    /**
+     * @param string $className
+     * @return MenuPresenterInterface
+     * @throws \InvalidArgumentException
+     */
+    protected function makePresenter($className)
+    {
+        if (!$className) {
+            $className = NavMenuPresenter::class;
+        }
+
+        if (class_exists($className)) {
+            $presenter = new $className();
+            if ($presenter instanceof MenuPresenterInterface) {
+                return $presenter;
+            }
+        }
+
+        throw new \InvalidArgumentException('Invalid Menu Presenter "' . $className . '"');
     }
 }

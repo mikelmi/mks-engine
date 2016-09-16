@@ -121,6 +121,13 @@
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-3 col-form-label form-control-label"> Css Class </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="params[css_class]" value="{{$model->param('css_class')}}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Hide Title') </label>
                         <div class="col-sm-9">
                             <div class="btn-group" data-toggle="buttons">

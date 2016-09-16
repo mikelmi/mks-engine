@@ -163,6 +163,25 @@ class WidgetManager
         return true;
     }
 
+    /**
+     * @param $name
+     * @return Widget|null
+     */
+    protected function getByName($name)
+    {
+        $this->load();
+
+        foreach ($this->loaded as $position => $items) {
+            foreach ($items as $item) {
+                if ($name == $item->name) {
+                    return $item;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function render($position) {
         $this->load();
         $items = $this->loaded->get($position);
@@ -171,17 +190,41 @@ class WidgetManager
 
         if ($items) {
             foreach ($items as $item) {
-                //try {
+                try {
                     $widget = self::make($item->class);
-                //} catch(\Exception $e) {
-                    //continue;
-                //}
-
-                $widget->setModel($item);
-                $content .= $widget->render() . "\n";
+                    $widget->setModel($item);
+                    $content .= $widget->render() . "\n";
+                } catch(\Exception $e) {
+                    if (config('app.debug')) {
+                        throw $e;
+                    }
+                    \Log::error($e->getMessage(), [$e]);
+                    continue;
+                }
             }
         }
 
         return $content;
+    }
+
+    public function renderOne($name)
+    {
+        $model = $this->getByName($name);
+
+        if (!$model) {
+            return null;
+        }
+
+        try {
+            $widget = self::make($model->class);
+            $widget->setModel($model);
+            return $widget->render();
+        } catch(\Exception $e) {
+            if (config('app.debug')) {
+                throw $e;
+            }
+            \Log::error($e->getMessage(), [$e]);
+        }
+
     }
 }
