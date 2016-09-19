@@ -45,7 +45,7 @@ class SettingsScopesListener
             event(new SettingsScopesCollect($scopes));
 
             foreach ($scopes as $scope) {
-                $menuItem->add($scope->title, ['href' => '#/settings/'.$scope->name, 'hash' => 'settings']);
+                $menuItem->add($scope->title, ['href' => '#/settings/'.$scope->name, 'hash' => 'settings/'.$scope->name]);
             }
         }
     }

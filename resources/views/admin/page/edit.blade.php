@@ -54,21 +54,21 @@
             <div class="tab-pane active" id="tab-page" role="tabpanel">
                 @if($model->id)
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label form-control-label"> ID </label>
+                        <label class="col-sm-2 col-form-label text-sm-right"> ID </label>
                         <div class="col-sm-10">
                             <p class="form-control-static">{{$model->id}}</p>
                         </div>
                     </div>
                 @endif
                 <div class="form-group row" ng-class="{'has-danger':page.errors.title}">
-                    <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Title') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
                     <div class="col-sm-10">
                         <input type="text" name="title" value="{{ old('title', $model->title) }}" class="form-control" />
                         <small class="form-control-feedback" ng-show="page.errors.title">{[{page.errors.title[0]}]}</small>
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.path}">
-                    <label class="col-sm-2 col-form-label form-control-label"> URL </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> URL </label>
                     <div class="col-sm-10">
                         <div class="input-group" mv-checked-input>
                             <span class="input-group-addon">
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.page_text}">
-                    <label class="col-sm-12 col-form-label form-control-label"> @lang('a.Text') </label>
+                    <label class="col-sm-12 col-form-label"> @lang('a.Text') </label>
                     <div class="col-sm-12">
                         <textarea name="page_text" class="form-control" rows="5" mks-editor>{{ old('page_text', $model->page_text) }}</textarea>
                         <small class="form-control-feedback" ng-show="page.errors.page_text">{[{page.errors.page_text[0]}]}</small>
@@ -90,21 +90,21 @@
 
             <div class="tab-pane" id="tab-seo" role="tabpanel">
                 <div class="form-group row" ng-class="{'has-danger':page.errors.meta_title}">
-                    <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Title') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
                     <div class="col-sm-10">
                         <input type="text" name="meta_title" value="{{ old('meta_title', $model->meta_title) }}" class="form-control" />
                         <small class="form-control-feedback" ng-show="page.errors.meta_title">{[{page.errors.meta_title[0]}]}</small>
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.meta_description}">
-                    <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Description') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Description') </label>
                     <div class="col-sm-10">
                         <textarea name="meta_description" class="form-control">{{ old('meta_description', $model['meta_description']) }}</textarea>
                         <small class="form-control-feedback" ng-show="page.errors.meta_description">{[{page.errors.meta_description[0]}]}</small>
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.meta_keywords}">
-                    <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Keywords') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Keywords') </label>
                     <div class="col-sm-10">
                         <input type="text" name="meta_keywords" value="{{ old('meta_keywords', $model['meta_keywords']) }}" class="form-control" />
                         <small class="form-control-feedback" ng-show="page.errors.meta_keywords">{[{page.errors.meta_keywords[0]}]}</small>
@@ -114,7 +114,7 @@
 
             <div class="tab-pane" id="tab-params" role="tabpanel">
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Hide Title') </label>
+                    <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Hide Title') </label>
                     <div class="col-sm-9">
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-outline-success @if (old('params.hide_title', $model->param('hide_title'))) active @endif">
@@ -130,7 +130,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Roles') </label>
+                    <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Roles') </label>
                     <div class="col-sm-9">
                         <select class="form-control" name="params[roles]" ng-model="paramRoles" ng-init="paramRoles='{{old('params.roles', $model->param('roles'))}}'">
                             <option value="">@lang('a.Show for all')</option>

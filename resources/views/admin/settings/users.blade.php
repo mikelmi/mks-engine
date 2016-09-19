@@ -2,7 +2,7 @@
 
 @section('form')
     <div class="form-group row">
-        <label class="col-sm-3 col-form-label form-control-label"> @lang('user.Enable Registration') </label>
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('user.Enable Registration') </label>
         <div class="col-sm-9">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-outline-success @if (old('registration',$model['registration'])) active @endif">
@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-3 col-form-label form-control-label"> @lang('user.Enable Auth') </label>
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('user.Enable Auth') </label>
         <div class="col-sm-9">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-outline-success @if (old('auth',$model['auth'])) active @endif">

@@ -36,14 +36,14 @@
                 <div class="tab-pane active" id="tab-widget" role="tabpanel">
                     @if($model->id)
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label form-control-label">ID</label>
+                            <label class="col-sm-2 col-form-label text-sm-right">ID</label>
                             <div class="col-sm-10">
                                 <p class="form-control-static">{{$model->id}}</p>
                             </div>
                         </div>
                     @endif
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label form-control-label">@lang('a.Type')</label>
+                        <label class="col-sm-2 col-form-label text-sm-right">@lang('a.Type')</label>
                         <div class="col-sm-10">
                             <p class="form-control-static">{{$widget->title()}}</p>
                             <input type="hidden" name="class" value="{{get_class($widget)}}" />
@@ -51,14 +51,14 @@
                     </div>
 
                     <div class="form-group row" ng-class="{'has-danger':page.errors.title}">
-                        <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Title') </label>
+                        <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
                         <div class="col-sm-10">
                             <input type="text" name="title" value="{{ old('title', $model->title) }}" class="form-control" />
                             <small class="form-control-feedback" ng-show="page.errors.title">{[{page.errors.title[0]}]}</small>
                         </div>
                     </div>
                     <div class="form-group row" ng-class="{'has-danger':page.errors.path}">
-                        <label class="col-sm-2 col-form-label form-control-label">@lang('a.Name')</label>
+                        <label class="col-sm-2 col-form-label text-sm-right">@lang('a.Name')</label>
                         <div class="col-sm-10">
                             <div class="input-group" mv-checked-input>
                             <span class="input-group-addon">
@@ -70,21 +70,21 @@
                         </div>
                     </div>
                     <div class="form-group row" ng-class="{'has-danger':page.errors.position}">
-                        <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Position') </label>
+                        <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Position') </label>
                         <div class="col-sm-10">
                             <input type="text" name="position" value="{{ old('position', $model->position) }}" class="form-control" />
                             <small class="form-control-feedback" ng-show="page.errors.position">{[{page.errors.position[0]}]}</small>
                         </div>
                     </div>
                     <div class="form-group row" ng-class="{'has-danger':page.errors.ordering}">
-                        <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Order') </label>
+                        <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Order') </label>
                         <div class="col-sm-10">
                             <input type="number" name="ordering" value="{{ old('ordering', $model->ordering) }}" class="form-control" />
                             <small class="form-control-feedback" ng-show="page.errors.ordering">{[{page.errors.ordering[0]}]}</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label form-control-label">@lang('admin::messages.Status')</label>
+                        <label class="col-sm-2 col-form-label text-sm-right">@lang('admin::messages.Status')</label>
                         <div class="col-sm-10">
                             <div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-outline-success @if (old('status',$model->status)) active @endif">
@@ -106,7 +106,7 @@
                 <div class="tab-pane" id="tab-params" role="tabpanel" ng-controller="WidgetRoutesCtrl" ng-init="init({{$model->id}})">
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Template') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Template') </label>
                         <div class="col-sm-9">
                             <select class="form-control" name="params[template]">
                                 @foreach($widget->getTemplates() as $key => $title)
@@ -121,14 +121,14 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label form-control-label"> Css Class </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> Css Class </label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="params[css_class]" value="{{$model->param('css_class')}}" />
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Hide Title') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Hide Title') </label>
                         <div class="col-sm-9">
                             <div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-outline-success @if (old('params.hide_title', $model->param('hide_title'))) active @endif">
@@ -144,7 +144,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Showing') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Showing') </label>
                         <div class="col-sm-9">
                             <select class="form-control" name="params[showing]" ng-model="paramShowing" ng-init="paramShowing='{{old('params.showing', $model->param('showing'))}}'">
                                 <option value="">@lang('a.Show on all')</option>
@@ -174,7 +174,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label form-control-label"> @lang('a.Roles') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Roles') </label>
                         <div class="col-sm-9">
                             <select class="form-control" name="params[roles]" ng-model="paramRoles" ng-init="paramRoles='{{old('params.roles', $model->param('roles'))}}'">
                                 <option value="">@lang('a.Show for all')</option>

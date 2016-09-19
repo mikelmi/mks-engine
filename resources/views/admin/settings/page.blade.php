@@ -2,8 +2,8 @@
 
 @section('form')
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label form-control-label">@lang('a.Homepage')</label>
-        <div class="col-sm-10">
+        <label class="col-sm-3 col-form-label text-sm-right">@lang('a.Homepage')</label>
+        <div class="col-sm-9">
             <mks-link-select field-route="home[route]"
                               field-params="home[params]"
                               route="{{$model->get('home.route')}}"
@@ -14,8 +14,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label form-control-label">404</label>
-        <div class="col-sm-10">
+        <label class="col-sm-3 col-form-label text-sm-right">404</label>
+        <div class="col-sm-9">
             <select name="404" class="form-control" mks-select>
                 <option value=""> - </option>
                 @foreach($model->get('pages') as $id => $title)
@@ -25,8 +25,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label form-control-label">@lang('a.Error page')</label>
-        <div class="col-sm-10">
+        <label class="col-sm-3 col-form-label text-sm-right">@lang('a.Error page')</label>
+        <div class="col-sm-9">
             <select name="500" class="form-control" mks-select>
                 <option value=""> - </option>
                 @foreach($model->get('pages') as $id => $title)
@@ -36,8 +36,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label form-control-label">@lang('a.Offline page')</label>
-        <div class="col-sm-10">
+        <label class="col-sm-3 col-form-label text-sm-right">@lang('a.Offline page')</label>
+        <div class="col-sm-9">
             <select name="503" class="form-control" mks-select>
                 <option value=""> - </option>
                 @foreach($model->get('pages') as $id => $title)

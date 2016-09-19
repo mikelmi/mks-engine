@@ -31,7 +31,7 @@
 
         @if($model->id)
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label form-control-label"> ID </label>
+                <label class="col-sm-2 col-form-label text-sm-right"> ID </label>
                 <div class="col-sm-10">
                     <p class="form-control-static">{{$model->id}}</p>
                 </div>
@@ -39,14 +39,14 @@
         @endif
 
         <div class="form-group row" ng-class="{'has-danger':page.errors.name}">
-            <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Name') </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Name') </label>
             <div class="col-sm-10">
                 <input type="text" name="name" value="{{ old('name', $model->name) }}" class="form-control" />
                 <small class="form-control-feedback" ng-show="page.errors.name">{[{page.errors.name[0]}]}</small>
             </div>
         </div>
         <div class="form-group row" ng-class="{'has-danger':page.errors.email}">
-            <label class="col-sm-2 col-form-label form-control-label"> Email </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> Email </label>
             <div class="col-sm-10">
                 <input type="email" name="email" value="{{ old('email', $model->email) }}" class="form-control" />
                 <small class="form-control-feedback" ng-if="page.errors.email">{[{page.errors.email[0]}]}</small>
@@ -55,7 +55,7 @@
 
         @if (!$model->is_current)
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label form-control-label">@lang('admin::messages.Status')</label>
+                <label class="col-sm-2 col-form-label text-sm-right">@lang('admin::messages.Status')</label>
                 <div class="col-sm-10">
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-outline-success @if (old('active',$model->active)) active @endif">
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Roles') </label>
+                <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Roles') </label>
                 <div class="col-sm-10">
                     <select multiple class="form-control form-block" name="roles[]" mks-select data-url="{{route('admin::user.roles', $model->id)}}">
                     </select>
@@ -79,7 +79,7 @@
             </div>
         @else
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label form-control-label">@lang('admin::messages.Status')</label>
+                <label class="col-sm-2 col-form-label text-sm-right">@lang('admin::messages.Status')</label>
                 <div class="col-sm-10">
                     <h5 class="form-control-static">
                         @if ($model->active)
@@ -93,7 +93,7 @@
         @endif
 
         <div class="form-group row" ng-class="{'has-danger':page.errors.password}">
-            <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Password') </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Password') </label>
             <div class="col-sm-10">
                 <div class="input-group">
                 <span class="input-group-addon">
@@ -111,14 +111,14 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label form-control-label"> @lang('admin::messages.Created at') </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> @lang('admin::messages.Created at') </label>
             <div class="col-sm-10">
                 <p class="form-control-static">{{$model->created_at}}</p>
             </div>
         </div>
 
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label form-control-label"> @lang('admin::messages.Updated at') </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> @lang('admin::messages.Updated at') </label>
             <div class="col-sm-10">
                 <p class="form-control-static">{{$model->updated_at}}</p>
             </div>

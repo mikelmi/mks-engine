@@ -3,6 +3,7 @@
 return [
     'url' => env('ADMIN_URL', 'admin'),
     'site_url' => env('SITE_URL'),
+    'materialized' => true,
     'username' => 'email',
     'reset_enable' => false,
     'locale' => 'en',
@@ -28,10 +29,12 @@ return [
         'mks-menu-manager'
     ],
 
+    'home_button' => '<a class="lc-hide inline title" href="#/home"><i class="fa fa-wrench"></i> Admin</a>',
+
     'menu_manager' => \App\Services\AdminMenu::class,
 
     'menu' => [
-        ['title' => 'a.Home', 'href' => '#/home', 'hash' => 'home', 'icon'=>'home'],
+        //['title' => 'a.Home', 'href' => '#/home', 'hash' => 'home', 'icon'=>'home'],
         ['title' => 'a.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
         [
             'title' => 'a.Users', 'href' => '#/user', 'hash'=>'user', 'icon'=>'users',

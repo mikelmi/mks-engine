@@ -31,7 +31,7 @@
 
         @if($model->id)
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label form-control-label"> ID </label>
+                <label class="col-sm-2 col-form-label text-sm-right"> ID </label>
                 <div class="col-sm-10">
                     <p class="form-control-static">{{$model->id}}</p>
                 </div>
@@ -39,7 +39,7 @@
         @endif
 
         <div class="form-group row" ng-class="{'has-danger':page.errors.title}">
-            <label class="col-sm-2 col-form-label form-control-label"> @lang('a.Title') </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
             <div class="col-sm-10">
                 <input type="text" name="title" value="{{ old('title', $model->title) }}" class="form-control" />
                 <small class="form-control-feedback" ng-show="page.errors.title">{[{page.errors.title[0]}]}</small>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label form-control-label">@lang('a.Link')</label>
+            <label class="col-sm-2 col-form-label text-sm-right">@lang('a.Link')</label>
             <div class="col-sm-10">
                 <mks-link-select field-route="route"
                                  field-params="params"
@@ -63,7 +63,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label form-control-label">@lang('a.Parent Item')</label>
+            <label class="col-sm-2 col-form-label text-sm-right">@lang('a.Parent Item')</label>
             <div class="col-sm-10">
                 <select name="parent_id" class="form-control" mks-select data-url="{{route('admin::menu.tree.options', ['scope'=>$menu->id, 'id'=>$model->id])}}">
                     <option value=""> - </option>
