@@ -16,4 +16,30 @@ class SiteController extends Controller
         $this->seo()->setDescription($settings->get('site.description'));
         $this->seo()->metatags()->setKeywords($settings->get('site.keywords'));
     }
+
+    public function flashMessage($message, $type='info')
+    {
+        \Session::flash('message', $message);
+        \Session::flash('alert-class', $type == 'error' ? 'alert-danger' : 'alert-' . $type);
+    }
+
+    public function flashSuccess($message)
+    {
+        $this->flashMessage($message, 'success');
+    }
+
+    public function flashError($message)
+    {
+        $this->flashMessage($message, 'error');
+    }
+
+    public function flashInfo($message)
+    {
+        $this->flashMessage($message, 'info');
+    }
+
+    public function flashNotice($message)
+    {
+        $this->flashMessage($message, 'warning');
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Listeners\AuthenticatedListener;
+use App\Listeners\UserListener;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -28,4 +29,8 @@ class EventServiceProvider extends ServiceProvider
 
         //
     }
+
+    protected $subscribe = [
+        UserListener::class
+    ];
 }

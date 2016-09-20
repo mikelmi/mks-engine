@@ -27,4 +27,12 @@ return [
     'Access Denied' => 'Access Denied',
     
     'Register' => 'Register',
+    'register_thanks' => 'Thank you for registering at :site.',
+
+    'verification_info' => 'Thank you for registering at our site. Your account is created and must be verified before you can use it. We have e-mailed your verification link',
+    'verification_success' => 'Your account has been activated. You can now login at the site using the username and the password you chose while registering',
+
+    'subject_verification' => 'E-mail verification',
+    'mail_verification' => 'Your account is created and must be verified before you can use it. To verify the account click the following button',
+    'Verify' => 'Verify',
 ];

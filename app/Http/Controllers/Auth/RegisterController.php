@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\SiteController;
+use App\Notifications\EmailVerification;
+use App\Notifications\UserWelcome;
 use App\Services\Settings;
 use App\User;
 use Illuminate\Http\Request;
@@ -66,20 +69,59 @@ class RegisterController extends SiteController
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = new User([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'active' => true
+            'password' => bcrypt($data['password'])
         ]);
+
+        if (settings('users.verification')) {
+            $user->activation_token = $user->generateToken();
+            $user->active = false;
+        } else {
+            $user->active = true;
+        }
+
+        $user->save();
+
+        return $user;
     }
 
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
 
-        $this->guard()->login($this->create($request->all()));
+        $user = $this->create($request->all());
+        
+        $redirectPath = $this->redirectPath();
 
-        return redirect($this->redirectPath());
+        if (!settings('users.verification')) {
+            $this->guard()->login($user);
+        } else {
+            $this->flashNotice(trans('auth.verification_info'));
+        }
+
+        event(new UserRegistered($user));
+
+        return redirect($redirectPath);
+    }
+
+    public function activate($token)
+    {
+        $user = User::where('active', false)->where('activation_token', $token)->first();
+
+        if (!$user) {
+            abort(404, 'User not found');
+        }
+
+        $user->active = true;
+        $user->activation_token = null;
+        $user->save();
+
+        $user->notify(new UserWelcome($user));
+
+        $this->flashSuccess(trans('auth.verification_success'));
+
+        return redirect('/login');
     }
 }

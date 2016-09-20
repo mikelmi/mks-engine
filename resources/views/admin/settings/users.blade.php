@@ -31,4 +31,19 @@
             </div>
         </div>
     </div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('user.Email Verification') </label>
+        <div class="col-sm-9">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-outline-success @if (old('verification', $model['verification'])) active @endif">
+                    <input type="radio" name="verification" autocomplete="off" value="1"@if (old('verification', $model['verification'])) checked @endif >
+                    @lang('a.Yes')
+                </label>
+                <label class="btn btn-outline-danger @if (!old('verification', $model['verification'])) active @endif">
+                    <input type="radio" name="verification" autocomplete="off" value="0"@if (!old('verification', $model['verification'])) checked @endif >
+                    @lang('a.No')
+                </label>
+            </div>
+        </div>
+    </div>
 @endsection

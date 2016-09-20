@@ -23,6 +23,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property boolean active
  * @property \DateTime created_at
  * @property \DateTime updated_at
+ * @property string activation_token
  */
 class User extends Authenticatable
 {
@@ -76,6 +77,13 @@ class User extends Authenticatable
         return $query->where('id', '!=', auth()->id());
     }
 
+    public function scopeAdmins(Builder $query)
+    {
+        return $query->whereHas('roles', function($q) {
+            return $q->where('name', Role::ADMIN);
+        });
+    }
+
     public function can($ability, $arguments = [])
     {
         if (!parent::can($ability, $arguments)) {
@@ -102,5 +110,10 @@ class User extends Authenticatable
         }
 
         $this->notify(new ResetAdminPassword($token));
+    }
+
+    public function generateToken()
+    {
+        return hash_hmac('sha256', str_random(40), config('app.key'));
     }
 }
