@@ -1,8 +1,12 @@
 <ul class="nav navbar-nav pull-right">
     <!-- Authentication Links -->
     @if (Auth::guest())
-        <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">@lang('auth.Sign In')</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url('/register') }}">@lang('auth.Register')</a></li>
+        @if (settings('users.auth'))
+            <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">@lang('auth.Sign In')</a></li>
+        @endif
+        @if (settings('users.registration'))
+            <li class="nav-item"><a class="nav-link" href="{{ url('/register') }}">@lang('auth.Register')</a></li>
+        @endif
     @else
         <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

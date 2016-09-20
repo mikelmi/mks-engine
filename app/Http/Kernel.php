@@ -58,5 +58,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
+        'auth.ability' => \App\Http\Middleware\AuthAbility::class,
+        'register.ability' => \App\Http\Middleware\RegisterAbility::class,
     ];
 }

@@ -44,6 +44,7 @@ class RegisterController extends SiteController
         parent::__construct($settings);
 
         $this->middleware('guest');
+        $this->middleware('register.ability');
     }
 
     /**

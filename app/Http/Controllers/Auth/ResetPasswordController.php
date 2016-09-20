@@ -33,6 +33,7 @@ class ResetPasswordController extends SiteController
         parent::__construct($settings);
 
         $this->middleware('guest');
+        $this->middleware('auth.ability');
     }
 
     public function showResetForm(Request $request, $token = null)

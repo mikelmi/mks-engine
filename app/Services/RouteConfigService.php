@@ -13,9 +13,12 @@ class RouteConfigService
 
     private $router;
 
-    public function __construct(Router $router)
+    private $onlyNamed;
+
+    public function __construct(Router $router, $onlyNamed = false)
     {
         $this->router = $router;
+        $this->onlyNamed = $onlyNamed;
     }
 
     public function collect()
@@ -29,7 +32,11 @@ class RouteConfigService
         /** @var Route $route */
         foreach($routes as $route)
         {
-            if (!$route->getName() || starts_with($route->getUri(), $admin_prefix) || starts_with($route->getUri(), '_')) {
+            if ($this->onlyNamed && !$route->getName()) {
+                continue;
+            }
+
+            if (starts_with($route->getUri(), $admin_prefix) || starts_with($route->getUri(), '_')) {
                 continue;
             }
 

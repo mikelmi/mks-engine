@@ -38,6 +38,7 @@ class LoginController extends SiteController
         parent::__construct($settings);
 
         $this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('auth.ability', ['except' => 'logout']);
     }
 
     public function showLoginForm()
