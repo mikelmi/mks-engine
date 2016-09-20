@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{{ asset('favicon.ico') }}">
 
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     {!! app('seotools')->generate() !!}
 
     @section('css')
@@ -16,18 +19,10 @@
 
 <body @yield('bodyAttr')>
 
-    @section('notifications')
-        <div class="notifications">
-            @if (Session::has('message'))
-                <div class="alert {{ session('alert-class', 'alert-info') }} alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{ session('message') }}
-                </div>
-            @endif
-        </div>
-    @show
+    @section('body-wrap')
+        @include('_partials.notifications')
 
-    @section('body')
+        @yield('body')
     @show
 
     @section('js')

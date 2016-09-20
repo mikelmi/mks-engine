@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\SiteController;
+use App\Services\Settings;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
-class ForgotPasswordController extends Controller
+class ForgotPasswordController extends SiteController
 {
     /*
     |--------------------------------------------------------------------------
@@ -25,8 +26,17 @@ class ForgotPasswordController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Settings $settings)
     {
+        parent::__construct($settings);
+
         $this->middleware('guest');
+    }
+
+    public function showLinkRequestForm()
+    {
+        $this->seo()->setTitle(trans('auth.Reset Password'));
+
+        return view('auth.passwords.email');
     }
 }

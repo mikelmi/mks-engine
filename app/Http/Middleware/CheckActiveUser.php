@@ -14,7 +14,8 @@ class CheckActiveUser
                 \Auth::logout();
 
                 $message = trans('user.blocked');
-                $request->session()->flash('error', $message);
+                $request->session()->flash('message', $message);
+                $request->session()->flash('alert-class', 'alert-danger');
 
                 if ($request->ajax() || $request->wantsJson()) {
                     $response = response('Unauthorized.', 401);

@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Notifications\ResetPassword;
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Cache;
+use Mikelmi\MksAdmin\Notifications\ResetAdminPassword;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -36,7 +38,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'active'
     ];
 
     /**
@@ -91,5 +93,14 @@ class User extends Authenticatable
 
         //fix create new query for each method's call
         return $this->roles;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        if (!$this->isAdmin()) {
+            return $this->notify(new ResetPassword($token));
+        }
+
+        $this->notify(new ResetAdminPassword($token));
     }
 }

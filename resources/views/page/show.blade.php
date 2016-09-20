@@ -1,9 +1,9 @@
-@extends('main')
+@extends('layouts.main')
 
 @section('content')
 
     @if (!$page->param('hide_title'))
-        <h1>{{$page->title}}</h1>
+        <h1 class="page-title">{{$page->title}}</h1>
     @endif
 
     <div>

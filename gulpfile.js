@@ -27,6 +27,11 @@ elixir(function(mix) {
         path.node_js + 'bootstrap/dist/js/bootstrap.js'
     ], 'public/js/bootstrap.js');
 
+    //font-awesome
+    mix.copy([
+        path.node + 'font-awesome/fonts'
+    ], 'public/fonts');
+
     /** Backend **/
     mix.styles([
         path.node_js + 'angular-ui-tree/dist/angular-ui-tree.css',

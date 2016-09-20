@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 
-class ResetPasswordController extends Controller
+use App\Http\Controllers\SiteController;
+use App\Services\Settings;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
+
+class ResetPasswordController extends SiteController
 {
     /*
     |--------------------------------------------------------------------------
@@ -25,8 +28,19 @@ class ResetPasswordController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Settings $settings)
     {
+        parent::__construct($settings);
+
         $this->middleware('guest');
+    }
+
+    public function showResetForm(Request $request, $token = null)
+    {
+        $this->seo()->setTitle(trans('auth.Reset Password'));
+
+        return view('auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
     }
 }

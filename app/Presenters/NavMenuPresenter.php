@@ -60,9 +60,10 @@ class NavMenuPresenter implements MenuPresenterInterface
             $result .= $this->renderItem($item, $li_attr, $a_attr) . PHP_EOL;
 
             if ($hasChildren) {
-                $result .= '<ul class="'.$this->class_sub_ul.'">';
+                $el = $item->depth > 0 ? 'div' : 'ul';
+                $result .= '<' . $el . ' class="' . $this->class_sub_ul . '">';
                 $this->renderItems($item->children, $result);
-                $result .= '</ul>';
+                $result .= '</' . $el . '>';
             }
             $result .= '</li>';
         }
