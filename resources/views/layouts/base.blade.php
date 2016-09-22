@@ -27,6 +27,7 @@
 
     @section('js')
         <script src="{{ asset('js/bootstrap.js') }}"></script>
+        <script src="{{ asset('js/system.js') }}"></script>
     @show
 
 </body>

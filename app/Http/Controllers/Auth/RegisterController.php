@@ -6,6 +6,7 @@ use App\Events\UserRegistered;
 use App\Http\Controllers\SiteController;
 use App\Notifications\EmailVerification;
 use App\Notifications\UserWelcome;
+use App\Services\CaptchaManager;
 use App\Services\Settings;
 use App\User;
 use Illuminate\Http\Request;
@@ -55,11 +56,18 @@ class RegisterController extends SiteController
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        /** @var CaptchaManager $captcha */
+        $captcha = app(CaptchaManager::class);
+
+        $rules = [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
-        ]);
+        ];
+
+        $rules = array_merge($rules, $captcha->rules());
+
+        return Validator::make($data, $rules);
     }
 
     /**

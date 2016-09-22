@@ -64,4 +64,6 @@ return [
     'Block' => 'Block',
     'Vertical' => 'Vertical',
     'Horizontal' => 'Horizontal',
+    'SiteKey' => 'Site key',
+    'SecretKey' => 'Secret key',
 ];

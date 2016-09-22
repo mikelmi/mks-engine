@@ -6,6 +6,7 @@ namespace App\Listeners;
 use App\Events\AdminMenuBuild;
 use App\Events\PagePathChanged;
 use App\Events\SettingsScopesCollect;
+use App\Models\CaptchaSettings;
 use App\Models\SettingsScope;
 use App\Models\SitePages;
 use App\Models\SiteSettings;
@@ -34,6 +35,8 @@ class SettingsScopesListener
 
         $pages = new SitePages();
         $event->scopes->put('page', $pages);
+
+        $event->scopes->put('captcha', new CaptchaSettings());
     }
     
     public function onAdminMenu(AdminMenuBuild $event)

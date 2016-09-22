@@ -38,7 +38,7 @@
                 <input id="password" type="password" class="form-control" name="password" required>
 
                 @if ($errors->has('password'))
-                    <div class="form-control-feedback"><strong>{{ $errors->first('password') }}</strong></div>
+                    <div class="form-control-feedback">{{ $errors->first('password') }}</div>
                 @endif
             </div>
         </div>
@@ -54,6 +54,22 @@
                 @endif
             </div>
         </div>
+
+        @if (captcha_enabled())
+            <div class="form-group row{{ $errors->has(captcha_field_name()) ? ' has-danger' : '' }}">
+                <label class="col-md-4 col-form-label">
+                    @if (captcha_has_input())
+                        @lang('messages.Captcha')
+                    @endif
+                </label>
+                <div class="col-md-6">
+                    {!! captcha_display(true) !!}
+                    @if ($errors->has(captcha_field_name()))
+                        <div class="form-control-feedback">{{ $errors->first(captcha_field_name()) }}</div>
+                    @endif
+                </div>
+            </div>
+        @endif
 
         <div class="form-group row">
             <div class="col-md-6 offset-md-4">

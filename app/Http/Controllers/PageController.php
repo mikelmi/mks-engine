@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Page;
+use App\Services\CaptchaManager;
 use App\Services\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -75,5 +76,16 @@ class PageController extends SiteController
         }
 
         return 'Home page';
+    }
+
+    public function captchaImage(CaptchaManager $captchaManager)
+    {
+        $response = $captchaManager->getImage();
+
+        if (!$response) {
+            abort(404);
+        }
+
+        return $response;
     }
 }

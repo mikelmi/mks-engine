@@ -24,3 +24,28 @@ function html_attr($attributes)
         ''
     );
 }
+
+function captcha_enabled()
+{
+    return app('app.captcha')->enabled();
+}
+
+function captcha_display($withInput = false)
+{
+    return app('app.captcha')->display($withInput);
+}
+
+function captcha_input(array $attr = [])
+{
+    return app('app.captcha')->inputField($attr);
+}
+
+function captcha_has_input()
+{
+    return app('app.captcha')->hasInput();
+}
+
+function captcha_field_name()
+{
+    return app('app.captcha')->fieldName();
+}
