@@ -26,7 +26,8 @@ return [
     'appModules' => [
         'mks-smart-table',
         'mks-admin-ext',
-        'mks-menu-manager'
+        'mks-menu-manager',
+        'mks-dashboard'
     ],
 
     'home_button' => '<a class="lc-hide inline title" href="#/home"><i class="fa fa-wrench"></i> Admin</a>',

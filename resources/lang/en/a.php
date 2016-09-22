@@ -66,4 +66,10 @@ return [
     'Horizontal' => 'Horizontal',
     'SiteKey' => 'Site key',
     'SecretKey' => 'Secret key',
+    'Dashboard' => 'Dashboard',
+    'Last events' => 'Last events',
+    'Show more' => 'Show more',
+    'Delete read' => 'Delete read',
+    'Delete all' => 'Delete all',
+    'Statistics' => 'Statistics',
 ];

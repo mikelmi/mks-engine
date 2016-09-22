@@ -66,4 +66,10 @@ return [
     'Horizontal' => 'Горизонтальний',
     'SiteKey' => 'Ключ сайта',
     'SecretKey' => 'Секретний ключ',
+    'Dashboard' => 'Панель управління',
+    'Last events' => 'Останні події',
+    'Show more' => 'Показати більше',
+    'Delete read' => 'Видалити прочитані',
+    'Delete all' => 'Видалити всі',
+    'Statistics' => 'Статистика',
 ];

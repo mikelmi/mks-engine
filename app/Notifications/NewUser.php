@@ -5,9 +5,10 @@ namespace App\Notifications;
 
 use App\User;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 
-class NewUser extends Notification
+class NewUser extends Notification implements ReadableNotification
 {
     /**
      * @var User
@@ -25,7 +26,7 @@ class NewUser extends Notification
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     public function toMail()
@@ -36,5 +37,24 @@ class NewUser extends Notification
             ->line('Name: ' . $this->user->name)
             ->line('Email: ' . $this->user->email)
             ->line('ID: ' . $this->user->id);
+    }
+
+    public function toDatabase()
+    {
+        return [
+            'user_id' => $this->user->id,
+            'user_name' => $this->user->name,
+            'user_email' => $this->user->email
+        ];
+    }
+
+    public static function title($data)
+    {
+        return trans('events.new_user', ['name' => array_get($data, 'user_name')]);
+    }
+
+    public static function details($data)
+    {
+        return view('admin._partial.user-details', ['user' => User::find($data['user_id'])])->render();
     }
 }

@@ -265,4 +265,13 @@
         };
     }]);
 
+    app.run(['$rootScope', function($rootScope) {
+        //hide all modals when location changes
+        $rootScope.$on('$routeChangeStart', function(event, next, current) {
+            //$('.modal.in').modal('hide');
+            $('.modal.in').removeClass('in').hide();
+            $('.modal-backdrop').remove();
+        });
+    }]);
+
 })(window.angular);

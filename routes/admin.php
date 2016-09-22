@@ -3,6 +3,26 @@
 /** @var \Illuminate\Routing\Router $router */
 $router = app('router');
 
+//Dashboard
+$router->get('home', 'DashboardController@home');
+$router->group(['prefix'=>'dashboard', 'middleware' => ['permission:admin.dashboard*']], function(\Illuminate\Routing\Router $router) {
+    $router->get('notifications.json', ['as' => 'dashboard.notifications', 'uses' => 'DashboardController@notifications']);
+    $router->get('notification-details/{uid}', ['as' => 'dashboard.notification.details', 'uses' => 'DashboardController@notificationDetails']);
+    $router->post('notification-delete/{uid}', ['as' => 'dashboard.notification.delete', 'uses' => 'DashboardController@notificationDelete']);
+    $router->post('notifications-delete/{all?}', ['as' => 'dashboard.notifications.delete', 'uses' => 'DashboardController@notificationsDelete'])->where('all', 'all');
+    $router->get('statistics', ['as' => 'dashboard.statistics', 'uses' => 'DashboardController@statistics']);
+});
+
+$router->get('test', function() {
+    $users = \App\User::where('active', true)->get();
+
+    foreach ($users as $user) {
+        event(new \App\Events\UserRegistered($user));
+    }
+
+    return ['count' => $users->count()];
+});
+
 //Users
 $router->group(['prefix'=>'user', 'middleware' => ['permission:admin.user*']], function(\Illuminate\Routing\Router $router) {
     $router->get('/', ['as' => 'users', 'uses' => 'UserController@index']);
