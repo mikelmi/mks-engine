@@ -75,7 +75,7 @@ class PageController extends SiteController
             }
         }
 
-        return 'Home page';
+        return view('page.home');
     }
 
     public function captchaImage(CaptchaManager $captchaManager)
