@@ -2,14 +2,11 @@
 
 namespace App\Notifications;
 
-
 use App\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 
-class NewUser extends Notification implements ReadableNotification
+class UserActivated extends Notification implements ReadableNotification
 {
     use Queueable;
 
@@ -27,22 +24,25 @@ class NewUser extends Notification implements ReadableNotification
         $this->user = $user;
     }
 
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['database'];
     }
+    
 
-    public function toMail()
-    {
-        return (new MailMessage())
-            ->subject('New User')
-            ->greeting('New user details')
-            ->line('Name: ' . $this->user->name)
-            ->line('Email: ' . $this->user->email)
-            ->line('ID: ' . $this->user->id);
-    }
-
-    public function toDatabase()
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toDatabase($notifiable)
     {
         return [
             'user_id' => $this->user->id,
@@ -53,7 +53,7 @@ class NewUser extends Notification implements ReadableNotification
 
     public static function title($data)
     {
-        return trans('events.new_user', ['name' => array_get($data, 'user_name')]);
+        return trans('events.user_activated', ['name' => array_get($data, 'user_name')]);
     }
 
     public static function details($data)

@@ -24,16 +24,7 @@ class DashboardController extends AdminController
         /** @var LengthAwarePaginator $data */
         $data = $request->user()->notifications()->paginate(3);
 
-        $notifications = collect($data->items())->filter(function($item) {
-            if (!class_exists($item->type)) {
-                return false;
-            }
-
-            $ref = new \ReflectionClass($item->type);
-
-            return $ref->implementsInterface(ReadableNotification::class);
-
-        })->map(function($item) {
+        $notifications = collect($data->items())->map(function($item) {
             /** @var DatabaseNotification $item */
             $item->title = call_user_func([$item->type, 'title'], $item->data);
 

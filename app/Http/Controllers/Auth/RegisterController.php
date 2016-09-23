@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserActivated;
 use App\Events\UserRegistered;
 use App\Http\Controllers\SiteController;
-use App\Notifications\EmailVerification;
-use App\Notifications\UserWelcome;
 use App\Services\CaptchaManager;
 use App\Services\Settings;
 use App\User;
@@ -127,7 +126,7 @@ class RegisterController extends SiteController
         $user->activation_token = null;
         $user->save();
 
-        $user->notify(new UserWelcome($user));
+        event(new UserActivated($user));
 
         $this->flashSuccess(trans('auth.verification_success'));
 
