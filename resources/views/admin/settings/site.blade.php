@@ -22,6 +22,19 @@
             <small class="form-control-feedback" ng-show="page.errors.keywords">{[{page.errors.keywords[0]}]}</small>
         </div>
     </div>
+    <div class="form-group row" ng-class="{'has-danger':page.errors.theme}">
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Theme') </label>
+        <div class="col-sm-9">
+            <select name="theme" class="form-control">
+                <option value=""> </option>
+                @foreach($model->get('themes') as $name => $title)
+                    <option value="{{$name}}" @if($model['theme'] == $name) selected @endif>
+                        {{$title}}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     <div class="form-group row">
         <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Site off') </label>
         <div class="col-sm-9">

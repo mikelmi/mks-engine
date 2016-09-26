@@ -14,13 +14,8 @@ $router->group(['prefix'=>'dashboard', 'middleware' => ['permission:admin.dashbo
 });
 
 $router->get('test', function() {
-    $users = \App\User::where('active', true)->get();
-
-    foreach ($users as $user) {
-        event(new \App\Events\UserRegistered($user));
-    }
-
-    return ['count' => $users->count()];
+    $themes = \Theme::all();
+    dd($themes);
 });
 
 //Users

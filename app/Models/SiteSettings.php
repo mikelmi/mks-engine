@@ -11,7 +11,7 @@ class SiteSettings extends SettingsScope
     {
         parent::__construct('site', trans('a.Site'));
 
-        $this->setFields(['title', 'description', 'keywords', 'off', 'off_message']);
+        $this->setFields(['title', 'description', 'keywords', 'off', 'theme']);
     }
 
     public function afterSave(Repository $old, Repository $new)
@@ -27,6 +27,7 @@ class SiteSettings extends SettingsScope
     public function getModel(Repository $repository)
     {
         $repository->set('off', (int) app()->isDownForMaintenance());
+        $repository->set('themes', \Theme::all());
 
         return parent::getModel($repository);
     }

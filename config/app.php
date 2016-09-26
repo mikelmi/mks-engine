@@ -171,6 +171,7 @@ return [
         Mikelmi\MksAdmin\Providers\AdminServiceProvider::class,
         Mikelmi\SmartTable\SmartTableServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+        Mikelmi\MksTheme\Providers\MksThemeServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -229,6 +230,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Menu' => Lavary\Menu\Facade::class,
+        'Theme' => Mikelmi\MksTheme\Facades\Theme::class,
     ],
 
 ];

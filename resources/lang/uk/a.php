@@ -72,4 +72,5 @@ return [
     'Delete read' => 'Видалити прочитані',
     'Delete all' => 'Видалити всі',
     'Statistics' => 'Статистика',
+    'Theme' => 'Тема',
 ];

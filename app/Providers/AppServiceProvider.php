@@ -36,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
                 event(new PagePathChanged($oldPath, $newPath));
             }
         });
+
+        //set theme
+        if ($theme = $this->app[Settings::class]->get('site.theme')) {
+            $this->app['theme']->set($theme);
+        }
     }
 
     /**

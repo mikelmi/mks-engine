@@ -72,4 +72,5 @@ return [
     'Delete read' => 'Delete read',
     'Delete all' => 'Delete all',
     'Statistics' => 'Statistics',
+    'Theme' => 'Theme',
 ];

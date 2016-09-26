@@ -14,7 +14,8 @@
         "artesaos/seotools": "^0.9.2",
         "kalnoy/nestedset": "^4.1",
         "mews/captcha": "^2.1",
-        "anhskohbo/no-captcha": "^2.1"
+        "anhskohbo/no-captcha": "^2.1",
+        "mikelmi/mks-theme": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
