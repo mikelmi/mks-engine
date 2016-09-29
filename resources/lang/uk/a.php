@@ -73,4 +73,7 @@ return [
     'Delete all' => 'Видалити всі',
     'Statistics' => 'Статистика',
     'Theme' => 'Тема',
+    'Change' => 'Змінити',
+    'Current Password' => 'Поточний пароль',
+    'New Password' => 'Новий пароль',
 ];

@@ -73,4 +73,7 @@ return [
     'Delete all' => 'Delete all',
     'Statistics' => 'Statistics',
     'Theme' => 'Theme',
+    'Change' => 'Change',
+    'Current Password' => 'Current Password',
+    'New Password' => 'New Password',
 ];

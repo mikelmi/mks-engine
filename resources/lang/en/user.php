@@ -7,4 +7,5 @@ return [
     'Email Verification' => 'E-mail Verification',
     'Hello' => 'Hello, :name!',
     'mail_welcome' => 'You may now log in to the site using your username and password',
+    'Profile' => 'Profile',
 ];

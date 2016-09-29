@@ -84,13 +84,13 @@ class User extends Authenticatable
         });
     }
 
-    public function can($ability, $arguments = [])
+    public function can($ability, $arguments = false)
     {
-        if (!parent::can($ability, $arguments)) {
-            return $this->entrustCan($ability, $arguments);
+        if ($this->isAdmin()) {
+            return true;
         }
 
-        return true;
+        return $this->entrustCan($ability, $arguments);
     }
 
     public function cachedRoles()

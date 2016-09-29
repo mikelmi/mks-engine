@@ -14,6 +14,9 @@
             </a>
 
             <div class="dropdown-menu dropdown-menu-right" role="menu">
+                <a class="dropdown-item" href="{{ route('user.profile') }}">
+                    <i class="fa fa-newspaper-o"></i> @lang('user.Profile')
+                </a>
                 <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <i class="fa fa-power-off"></i> @lang('auth.Logout')
                 </a>

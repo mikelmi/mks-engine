@@ -13,11 +13,6 @@ $router->group(['prefix'=>'dashboard', 'middleware' => ['permission:admin.dashbo
     $router->get('statistics', ['as' => 'dashboard.statistics', 'uses' => 'DashboardController@statistics']);
 });
 
-$router->get('test', function() {
-    $themes = \Theme::all();
-    dd($themes);
-});
-
 //Users
 $router->group(['prefix'=>'user', 'middleware' => ['permission:admin.user*']], function(\Illuminate\Routing\Router $router) {
     $router->get('/', ['as' => 'users', 'uses' => 'UserController@index']);

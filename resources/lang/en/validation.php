@@ -84,6 +84,8 @@ return [
     
     'captcha' => 'Invalid code',
 
+    'ivalid_value'           => 'The :attribute has invalid value.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -112,6 +114,12 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => 'Name',
+        'email' => 'E-mail',
+        'password' => 'Password',
+        'password_current' => 'Current Password',
+        'password_new' => 'New Password',
+    ],
 
 ];
