@@ -13,33 +13,83 @@ require('laravel-elixir-vue');
  |
  */
 
-var path = {
-    node: 'node_modules/',
-    node_js: '../../../node_modules/'
-};
+function path_node(path) {
+    if (Object.prototype.toString.call(path) === '[object Array]') {
+        return path.map(path_node);
+    }
+
+    return 'node_modules/' + (path||'');
+}
+
+function path_node_rel(path) {
+    if (Object.prototype.toString.call(path) === '[object Array]') {
+        return path.map(path_node_rel);
+    }
+
+    return '../../../node_modules/' + (path||'');
+}
+
+function path_bower(path) {
+    if (Object.prototype.toString.call(path) === '[object Array]') {
+        return path.map(path_bower);
+    }
+
+    return 'bower_components/' + (path||'');
+}
+
+function path_bower_rel(path) {
+    if (Object.prototype.toString.call(path) === '[object Array]') {
+        return path.map(path_bower_rel);
+    }
+
+    return '../../../bower_components/' + (path||'');
+}
 
 elixir(function(mix) {
     mix.sass('bootstrap.scss');
 
-    mix.scripts([
-        path.node_js + 'jquery/dist/jquery.js',
-        path.node_js + 'tether/dist/js/tether.js',
-        path.node_js + 'bootstrap/dist/js/bootstrap.js'
-    ], 'public/js/bootstrap.js');
+    mix.scripts(path_node_rel(
+        [
+            'jquery/dist/jquery.js',
+            'tether/dist/js/tether.js',
+            'bootstrap/dist/js/bootstrap.js'
+        ]),
+        'public/js/bootstrap.js');
 
     //font-awesome
     mix.copy([
-        path.node + 'font-awesome/fonts'
+        path_node('font-awesome/fonts')
     ], 'public/fonts');
 
     /** Backend **/
     mix.styles([
-        path.node_js + 'angular-ui-tree/dist/angular-ui-tree.css',
+        path_node_rel('angular-ui-tree/dist/angular-ui-tree.css'),
         'admin/*.css'
     ], 'public/admin/css/admin.css');
 
     mix.scripts([
-        path.node_js + 'angular-ui-tree/dist/angular-ui-tree.js',
+        path_node_rel('angular-ui-tree/dist/angular-ui-tree.js'),
         'admin/*.js'
     ], 'public/admin/js/admin.js');
+
+    /** FileManager **/
+    mix.styles([
+        path_bower_rel('bootswatch/flatly/bootstrap.css'),
+        path_bower_rel('angular-filemanager/dist/angular-filemanager.min.css'),
+        'filemanager.css'
+    ], 'public/filemanager/css/app.css');
+
+    mix.scripts([
+        path_bower_rel('jquery/dist/jquery.js'),
+        path_bower_rel('bootstrap/dist/js/bootstrap.js'),
+        path_bower_rel('angular/angular.js'),
+        path_bower_rel('angular-translate/angular-translate.js'),
+        path_bower_rel('ng-file-upload/ng-file-upload.js'),
+        path_bower_rel('angular-filemanager/dist/angular-filemanager.min.js'),
+        'filemanager.js'
+    ], 'public/filemanager/js/app.js');
+
+    mix.copy([
+        path_bower('bootstrap/dist/fonts')
+    ], 'public/filemanager/fonts');
 });

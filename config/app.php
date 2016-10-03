@@ -172,6 +172,7 @@ return [
         Mikelmi\SmartTable\SmartTableServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Mikelmi\MksTheme\Providers\MksThemeServiceProvider::class,
+        App\Providers\FileManagerServiceProvider::class,
 
         /*
          * Application Service Providers...
