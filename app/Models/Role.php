@@ -14,7 +14,7 @@ class Role extends EntrustRole
 
     protected function systemNames()
     {
-        return [self::ADMIN, self::USER];
+        return [self::ADMIN];
     }
 
     public function getIsSystemAttribute()

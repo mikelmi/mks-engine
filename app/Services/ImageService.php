@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 use League\Glide\Responses\LaravelResponseFactory;
 use League\Glide\ServerFactory;
 
-class Image
+class ImageService
 {
     /**
-     * @var FileManager
+     * @var string
      */
-    private $fm;
+    private $root;
 
     /**
      * @var
@@ -30,14 +30,14 @@ class Image
     private $config;
 
     /**
-     * Image constructor.
-     * @param FileManager $fileManager
+     * ImageService constructor.
+     * @param string $root
      * @param array $config
      * @param $cachePath
      */
-    public function __construct(FileManager $fileManager, $cachePath, array $config = [])
+    public function __construct($root, $cachePath, array $config = [])
     {
-        $this->fm = $fileManager;
+        $this->root = $root;
         $this->cachePath = $cachePath;
         $this->config = $config;
     }
@@ -51,7 +51,7 @@ class Image
         if (!isset($this->server)) {
             $this->server = ServerFactory::create([
                 'response' => new LaravelResponseFactory($request),
-                'source' => $this->fm->getFilesystem(),
+                'source' => $this->root,
                 'cache' => $this->cachePath,
             ]);
 

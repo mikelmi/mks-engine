@@ -56,8 +56,9 @@ return [
 
         //FileManager
         'files' => [
-            'driver' => 'local',
+            'driver' => 'filemanager',
             'root'   => public_path('files'),
+            'url_prefix' => 'files'
         ],
 
         's3' => [

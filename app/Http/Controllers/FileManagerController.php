@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 
 use App\Services\FileManager;
-use App\Services\Image;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
-use League\Glide\Responses\LaravelResponseFactory;
-use League\Glide\ServerFactory;
 
 class FileManagerController extends Controller
 {
@@ -381,7 +379,7 @@ class FileManagerController extends Controller
         return response()->download($file, $filename)->deleteFileAfterSend(true);
     }
 
-    public function thumbnail(Request $request, Image $image, $path)
+    public function thumbnail(Request $request, ImageService $image, $path)
     {
         return $image->response(
             $request,

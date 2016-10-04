@@ -35,5 +35,15 @@ class AuthServiceProvider extends ServiceProvider
 
             return null;
         });
+
+        Gate::define('upload', function (Authenticatable $user) {
+            $mode = settings('files.upload');
+
+            if ($mode == '1') {
+                return !is_null($user->getAuthIdentifier());
+            }
+
+            return $user->can('files.upload');
+        });
     }
 }

@@ -21,23 +21,16 @@ class FileManager
     /**
      * @var string
      */
-    private $urlPrefix;
-
-    /**
-     * @var string
-     */
     private $thumbnailRoute;
 
     /**
      * FileManager constructor.
      * @param FilesystemAdapter $filesystem
-     * @param string $urlPrefix
      * @param null $thumbnailRoute
      */
-    public function __construct(FilesystemAdapter $filesystem, $urlPrefix = '', $thumbnailRoute = null)
+    public function __construct(FilesystemAdapter $filesystem, $thumbnailRoute = null)
     {
         $this->fs = $filesystem;
-        $this->urlPrefix = $urlPrefix;
         $this->thumbnailRoute = $thumbnailRoute;
     }
 
@@ -72,7 +65,8 @@ class FileManager
             $isDir = $file->isDir();
 
             if ($this->thumbnailRoute && !$isDir && in_array(strtolower($file->getExtension()), $image_extensions)) {
-                $thumbnail = route($this->thumbnailRoute, $this->getRelativePath($file));
+                $relativePath = $this->getRelativePath($file);
+                $thumbnail = route($this->thumbnailRoute, $this->getRelativeUrl($relativePath));
             }
 
             $data[] = [
@@ -381,7 +375,16 @@ class FileManager
      */
     public function getUrl($path)
     {
-        return $this->urlPrefix . $this->getRelativePath($path);
+        return $this->fs->url($path);
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    public function getRelativeUrl($path)
+    {
+        return $this->adapter()->getRelativeUrl($path);
     }
 
     /**
