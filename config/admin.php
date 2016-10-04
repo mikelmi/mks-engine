@@ -35,7 +35,6 @@ return [
     'menu_manager' => \App\Services\AdminMenu::class,
 
     'menu' => [
-        //['title' => 'a.Home', 'href' => '#/home', 'hash' => 'home', 'icon'=>'home'],
         ['title' => 'a.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
         [
             'title' => 'a.Users', 'href' => '#/user', 'hash'=>'user', 'icon'=>'users',
@@ -55,5 +54,6 @@ return [
         ],
         ['title' => 'a.Menu', 'href' => '#/menuman', 'hash' => 'menuman', 'icon'=>'list-ul', 'nickname'=>'menu'],
         ['title' => 'a.Widgets', 'href' => '#/widget', 'hash' => 'widget', 'icon'=>'th-large', 'nickname'=>'widget'],
+        ['title' => 'filemanager.page_title', 'href' => '#/file-manager', 'icon'=>'folder'],
     ],
 ];

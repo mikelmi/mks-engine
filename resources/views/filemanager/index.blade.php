@@ -11,9 +11,13 @@
     <link rel="stylesheet" href="{{ asset('filemanager/css/app.css') }}">
 </head>
 
-<body class="ng-cloak">
+<body class="ng-cloak light-theme">
 
     <angular-filemanager></angular-filemanager>
+
+    <script type="text/ng-template" id="src/templates/main.html">
+        @include('filemanager.templates.main')
+    </script>
 
     <script type="text/ng-template" id="src/templates/main-icons.html">
         @include('filemanager.templates.main-icons')
