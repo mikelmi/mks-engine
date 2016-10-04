@@ -244,14 +244,18 @@
         }
     }]);
 
-    app.directive('mksEditor', ['AppConfig', function (AppConfig) {
+    app.directive('mksEditor', ['AppConfig', 'UrlBuilder', function (AppConfig, UrlBuilder) {
         return {
             restrict: 'A',
             link: function (scope, elem, attrs) {
                 if (typeof CKEDITOR !== 'undefined') {
                     var opt = {
                         removePlugins: 'forms,audio,Audio,allmedias',
-                        language: AppConfig.getLang('en')
+                        language: AppConfig.getLang('en'),
+                        filebrowserBrowseUrl: UrlBuilder.get('file-manager'),
+                        filebrowserImageBrowseUrl: UrlBuilder.get('file-manager?type=images'),
+                        filebrowserFlashBrowseUrl: UrlBuilder.get('file-manager?type=flash'),
+                        filebrowserWindowWidth: '85%'
                     };
                     if (attrs.mksEditor) {
                         try {
@@ -261,6 +265,28 @@
                     }
                     CKEDITOR.replace(elem[0], opt);
                 }
+            }
+        };
+    }]);
+
+    app.directive('mksPageIframe', ['$window', function ($window) {
+        return {
+            restrict: 'A',
+            link: function (scope, elem, attrs) {
+                var $sidebar = angular.element('#sidebar');
+                if ($sidebar.length) {
+                    elem.height($sidebar.height());
+
+                    angular.element($window).on('resize.pageIframe', function() {
+                        elem.height($sidebar.height());
+                    });
+
+                    scope.$on('$destroy', function() {
+                        angular.element($window).off('resize.pageIframe');
+                    });
+                }
+
+                elem.parent().css({'padding-left': 0, 'padding-right': 0});
             }
         };
     }]);

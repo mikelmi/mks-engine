@@ -10,9 +10,15 @@ use Illuminate\Validation\ValidationException;
 
 class FileManagerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('filemanager.index');
+        $params = $request->only(['type']);
+
+        if ($lang = $request->get('langCode')) {
+            app()->setLocale($lang);
+        }
+
+        return view('filemanager.index', compact('params'));
     }
 
     /**
@@ -51,7 +57,7 @@ class FileManagerController extends Controller
             'path' => 'required'
         ]);
 
-        return $this->resultResponse($fm->getList($request->get('path')));
+        return $this->resultResponse($fm->getList($request->get('path'), $request->get('type')));
     }
 
     /**
@@ -286,16 +292,30 @@ class FileManagerController extends Controller
             'destination' => 'required',
         ];
 
+        $type = $request->get('type');
+
+        $extensions = $type ? $fileManager->getTypeExtensions($type, []) : [];
+        $maxSize = null;
+
         if (!$request->user()->isAdmin()) {
-            $filesCount = $request->files->count();
-            $extensions = settings('files.extensions');
+            if ($allowedExtensions = settings('files.extensions')) {
+                if (!is_array($allowedExtensions)) {
+                    $allowedExtensions = explode(',', $extensions);
+                }
+                $extensions = array_intersect($extensions, $allowedExtensions);
+            }
+
             $maxSize = settings('files.max_size');
-            $mimes = $extensions ? implode(',', $extensions) : null;
+        }
+
+        if ($extensions || $maxSize) {
+            $filesCount = $request->files->count();
+            $mimes = $extensions ? 'mimes:'.implode(',', $extensions) : null;
 
             for($i = 0; $i < $filesCount; $i++) {
-                $rule = $mimes ? 'mimes:'.$mimes : null;
+                $rule = $mimes;
                 if ($maxSize) {
-                    $rule = ($rule ? '|':'') . 'max:'.($maxSize*1024);
+                    $rule = ($rule ? $rule.'|':'') . 'max:'.($maxSize*1024);
                 }
 
                 if (!$rule) {

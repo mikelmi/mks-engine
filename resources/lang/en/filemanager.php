@@ -22,4 +22,7 @@ return [
     'upload_for_all' => 'For all registered users',
     'Extensions' => 'Extensions',
     'max_size' => 'Max file size',
+    
+    'page_title' => 'File manager',
+    'app_name' => 'Files',
 ];

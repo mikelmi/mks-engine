@@ -19,8 +19,23 @@
         @include('filemanager.templates.main-icons')
     </script>
 
+    <script type="text/ng-template" id="src/templates/navbar.html">
+        @include('filemanager.templates.navbar')
+    </script>
+
     <script type="text/javascript">
-        var handler_url = '{{ route('filemanager.handler') }}';
+        function getUrlParam( paramName ) {
+            var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' );
+            var match = window.location.search.match( reParam );
+
+            return ( match && match.length > 1 ) ? match[1] : null;
+        }
+
+        if (window.localStorage) {
+            window.localStorage.setItem('language', '{{ app()->getLocale() }}');
+        }
+
+        var handler_url = '{{ route('filemanager.handler', $params) }}';
 
         window.FM_CONFIG = {
             appName: '@lang('filemanager.app_name')',
@@ -33,23 +48,30 @@
             permissionsUrl: handler_url,
             compressUrl: handler_url,
             extractUrl: handler_url,
-            uploadUrl: '{{ route('filemanager.upload') }}',
+            uploadUrl: '{{ route('filemanager.upload', $params) }}',
             getContentUrl: handler_url,
             editUrl: handler_url,
             downloadFileUrl: '{{ route('filemanager.download') }}',
             downloadMultipleUrl: '{{ route('filemanager.downloadMulti') }}',
             multipleDownloadFileName: 'files.zip',
             pickCallback: function (item) {
-                var msg = 'Picked %s "%s" for external use'
-                        .replace('%s', item.type)
-                        .replace('%s', item.fullPath());
-                window.alert(msg);
-            },
+                if (!window.opener) {
+                    return;
+                }
+
+                if (typeof window.opener.CKEDITOR != 'undefined') {
+                    window.opener.CKEDITOR.tools.callFunction(getUrlParam('CKEditorFuncNum'), item.url);
+                } else if (typeof window.opener.onFileManagerSelect == 'function') {
+                    window.opener.onFileManagerSelect(item.url);
+                }
+                window.close();
+            }
         };
 
         window.FM_ACTIONS = {
-            pickFiles: true,
-            pickFolders: false
+            pickFiles: typeof window.opener != 'undefined' && window.opener !== null,
+            pickFolders: false,
+            compress: getUrlParam('type') != 'images'
         }
     </script>
 

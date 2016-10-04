@@ -23,6 +23,11 @@ class FileManager
      */
     private $thumbnailRoute;
 
+    private $mimeTypes = [
+        'images' => ['jpeg', 'jpg', 'png', 'gif', 'svg'],
+        'flash' => ['swf'],
+    ];
+
     /**
      * FileManager constructor.
      * @param FilesystemAdapter $filesystem
@@ -36,10 +41,11 @@ class FileManager
 
     /**
      * @param null|string $path
+     * @param $type
      * @return array
      * @throws FileNotFoundException
      */
-    public function getList($path = null)
+    public function getList($path = null, $type = null)
     {
         if ($path && $path != '/' && !$this->fs->exists($path)) {
             throw new FileNotFoundException($path);
@@ -47,7 +53,7 @@ class FileManager
 
         $data = [];
 
-        $image_extensions = ['jpeg', 'jpg', 'png', 'gif', 'svg'];
+        $image_extensions = $this->mimeTypes['images'];
 
         $finder = (new Finder())
             ->in($this->getPath($path))
@@ -58,15 +64,21 @@ class FileManager
             ->sortByName()
             ->sortByType();
 
+        if ($type) {
+            $this->filterByType($finder, $type);
+        }
+
+        $baseUrl = url()->getRequest()->getBaseUrl();
+
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $date = new \DateTime('@' . $file->getMTime());
             $thumbnail = null;
             $isDir = $file->isDir();
+            $relativeUrl = $this->getRelativeUrl($this->getRelativePath($file));
 
             if ($this->thumbnailRoute && !$isDir && in_array(strtolower($file->getExtension()), $image_extensions)) {
-                $relativePath = $this->getRelativePath($file);
-                $thumbnail = route($this->thumbnailRoute, $this->getRelativeUrl($relativePath));
+                $thumbnail = route($this->thumbnailRoute, $relativeUrl);
             }
 
             $data[] = [
@@ -75,7 +87,8 @@ class FileManager
                 'size' => $file->getSize(),
                 'date' => $date->format('Y-m-d H:i:s'),
                 'type' => $isDir ? 'dir' : 'file',
-                'thumbnail' => $thumbnail
+                'thumbnail' => $thumbnail,
+                'url' => $baseUrl . '/' . $relativeUrl,
             ];
         }
 
@@ -462,5 +475,24 @@ class FileManager
     public function getFilesystem()
     {
         return $this->fs->getDriver();
+    }
+
+    private function filterByType(Finder $finder, $type)
+    {
+        if ($extensions = $this->getTypeExtensions($type)) {
+
+            $finder->filter(function(SplFileInfo $file) use ($extensions) {
+                return $file->isDir() || in_array($file->getExtension(), $extensions);
+            });
+        }
+    }
+
+    /**
+     * @param $type
+     * @param null $default
+     * @return mixed
+     */
+    public function getTypeExtensions($type, $default = null) {
+        return array_get($this->mimeTypes, $type, $default);
     }
 }

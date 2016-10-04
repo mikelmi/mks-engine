@@ -114,3 +114,11 @@ $router->group(['prefix'=>'widget', 'middleware' => ['permission:admin.widget*']
     $router->post('move/{id?}/{down?}', ['as' => 'widget.move', 'uses' => 'WidgetController@move']);
     $router->get('routes/{id?}', ['as' => 'widgets.routes', 'uses' => 'WidgetController@routes']);
 });
+
+$router->get('file-manager', function(\Illuminate\Http\Request $request) {
+    if ($request->ajax()) {
+        return '<div class="page-iframe-wrap" mks-page-iframe><iframe src="' . route('filemanager', $request->query()) . '" class="page-iframe" frameborder="0"></iframe></div>';
+    }
+
+    return redirect()->route('filemanager', $request->query());
+});
