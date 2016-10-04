@@ -15,4 +15,11 @@ return [
     'Extraction failed' => 'Extraction failed',
     'Saving failed' => 'Saving failed',
     'File reading failed' => 'Could not read file',
+
+    'Files' => 'Files',
+    'Enable upload' => 'Enable upload',
+    'upload_with_permissions' => 'For users with appropriate permissions',
+    'upload_for_all' => 'For all registered users',
+    'Extensions' => 'Extensions',
+    'max_size' => 'Max file size',
 ];

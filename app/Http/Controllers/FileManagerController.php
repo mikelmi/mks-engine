@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Services\FileManager;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class FileManagerController extends Controller
 {
@@ -118,6 +119,10 @@ class FileManagerController extends Controller
         $old = $request->get('item');
         $new = $request->get('newItemPath');
 
+        if ($error = $this->isDenyExtension($request, $new)) {
+            return $error;
+        }
+
         if (!$fileManager->exists($old)) {
             return $this->errorResponse($this->t('File not found'));
         }
@@ -177,12 +182,16 @@ class FileManagerController extends Controller
         $newPath = $request->get('newPath');
         $singleFilename = basename($request->get('singleFilename'));
 
+        if ($error = $this->isDenyExtension($request, $singleFilename)) {
+            return $error;
+        }
+
         foreach ($items as $item) {
             if (!$fileManager->exists($item)) {
                 continue;
             }
 
-            if (!copy($item, $newPath, $singleFilename)) {
+            if (!$fileManager->copy($item, $newPath, $singleFilename)) {
                 return $this->errorResponse($this->t('Copying failed'));
             }
         }
@@ -273,9 +282,35 @@ class FileManagerController extends Controller
      */
     public function upload(Request $request, FileManager $fileManager)
     {
-        $this->validate($request, [
+        $rules = [
             'destination' => 'required',
-        ]);
+        ];
+
+        if (!$request->user()->isAdmin()) {
+            $filesCount = $request->files->count();
+            $extensions = settings('files.extensions');
+            $maxSize = settings('files.max_size');
+            $mimes = $extensions ? implode(',', $extensions) : null;
+
+            for($i = 0; $i < $filesCount; $i++) {
+                $rule = $mimes ? 'mimes:'.$mimes : null;
+                if ($maxSize) {
+                    $rule = ($rule ? '|':'') . 'max:'.($maxSize*1024);
+                }
+
+                if (!$rule) {
+                    continue;
+                }
+
+                $rules['file-'.$i] = $rule;
+            }
+        }
+
+        try {
+            $this->validate($request, $rules);
+        } catch (ValidationException $e) {
+            return $this->errorResponse($e->validator->getMessageBag()->first());
+        }
 
         $destination = $request->get('destination');
 
@@ -401,6 +436,23 @@ class FileManagerController extends Controller
     private function errorResponse($message)
     {
         return $this->resultResponse(['success' => false, 'error' => $message], 500);
+    }
+
+    private function isDenyExtension(Request $request, $path, array $extensions = null)
+    {
+        if ($request->user()->isAdmin()) {
+            return false;
+        }
+
+        if ($extensions === null) {
+            $extensions = settings('files.extensions');
+        }
+
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+
+        if ($extensions && !in_array($extension, $extensions)) {
+            return $this->errorResponse(trans('validation.mimes', ['attribute' => $path, 'values' => implode(', ', $extensions)]));
+        }
     }
 
     /**

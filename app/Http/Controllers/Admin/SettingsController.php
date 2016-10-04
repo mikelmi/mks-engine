@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Events\SettingsScopesCollect;
-use App\Models\SettingsScope;
+use App\Settings\SettingsScope;
 use App\Services\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -67,6 +67,8 @@ class SettingsController extends AdminController
 
         $old = $settings->getRepository($scope);
         $data = $request->only($scopeObject->getFields());
+
+        $scopeObject->beforeSave($data);
 
         $settings->set($scope, $data);
         $settings->save();

@@ -180,7 +180,9 @@ class FileManager
     {
         $toPath = $to;
 
-        if ($this->isDir($to)) {
+        if ($singleFilename) {
+            $toPath .= DIRECTORY_SEPARATOR . $singleFilename;
+        } elseif ($this->isDir($to)) {
             $toPath .= DIRECTORY_SEPARATOR . basename($from);
         }
 

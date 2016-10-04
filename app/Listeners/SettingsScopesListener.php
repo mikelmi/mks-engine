@@ -7,9 +7,10 @@ use App\Events\AdminMenuBuild;
 use App\Events\PagePathChanged;
 use App\Events\SettingsScopesCollect;
 use App\Models\CaptchaSettings;
-use App\Models\SettingsScope;
-use App\Models\SitePages;
-use App\Models\SiteSettings;
+use App\Settings\FilesSettings;
+use App\Settings\SettingsScope;
+use App\Settings\SitePages;
+use App\Settings\SiteSettings;
 use App\Services\Settings;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Collection;
@@ -37,6 +38,8 @@ class SettingsScopesListener
         $event->scopes->put('page', $pages);
 
         $event->scopes->put('captcha', new CaptchaSettings());
+
+        $event->scopes->put('files', new FilesSettings());
     }
     
     public function onAdminMenu(AdminMenuBuild $event)

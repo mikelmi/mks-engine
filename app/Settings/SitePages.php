@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Settings;
 
+use App\Models\Page;
 use Illuminate\Config\Repository;
 
 class SitePages extends SettingsScope

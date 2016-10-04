@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Settings;
 
 
 use Illuminate\Config\Repository;
@@ -154,6 +154,10 @@ class SettingsScope
 
     public function afterSave(Repository $old, Repository $new)
     {
+        
+    }
+
+    public function beforeSave(&$data) {
         
     }
 
