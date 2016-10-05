@@ -9,6 +9,7 @@ return [
     'locale' => 'en',
     'locales' => [
         'uk' => 'Українська',
+        'ru' => 'Русский',
         'en' => 'English'
     ],
     'search_form' => false,
