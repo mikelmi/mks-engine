@@ -116,9 +116,13 @@ $router->group(['prefix'=>'widget', 'middleware' => ['permission:admin.widget*']
 });
 
 $router->get('file-manager', function(\Illuminate\Http\Request $request) {
+    $params = array_merge([
+        'langCode' => app()->getLocale(),
+    ], $request->query());
+
     if ($request->ajax()) {
-        return '<div class="page-iframe-wrap" mks-page-iframe><iframe src="' . route('filemanager', $request->query()) . '" class="page-iframe" frameborder="0"></iframe></div>';
+        return '<div class="page-iframe-wrap" mks-page-iframe><iframe src="' . route('filemanager', $params) . '" class="page-iframe" frameborder="0"></iframe></div>';
     }
 
-    return redirect()->route('filemanager', $request->query());
-});
+    return redirect()->route('filemanager', $params);
+})->middleware('admin.locale');
