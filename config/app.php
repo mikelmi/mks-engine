@@ -172,7 +172,6 @@ return [
         Mikelmi\SmartTable\SmartTableServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Mikelmi\MksTheme\Providers\MksThemeServiceProvider::class,
-        App\Providers\FileManagerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -183,6 +182,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\CaptchaServiceProvider::class,
+        App\Providers\FileManagerServiceProvider::class,
+        App\Providers\ModulesLoaderServiceProvider::class,
 
     ],
 

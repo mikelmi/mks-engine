@@ -29,6 +29,3 @@ $router->group(['prefix'=>'file-manager', 'middleware' => ['can:upload']], funct
 $router->get('thumbnail/{path}', 'FileManagerController@thumbnail')
     ->where('path', '.+')
     ->name('thumbnail');
-
-//should be at the end
-$router->get('{path?}', ['as' => 'page', 'uses' => 'PageController@getByPath'])->where('path', '[A-Za-z0-0-_]+');
