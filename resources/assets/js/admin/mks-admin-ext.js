@@ -291,6 +291,28 @@
         };
     }]);
 
+    app.directive('mksSelect', [function () {
+        return {
+            restrict: 'A',
+            priority: -1,
+            link: function(scope, elem, attrs) {
+                var iconUrl = elem.data('langIcon');
+                if (iconUrl) {
+                    var formatResult = function(item) {
+                        if (!item.id) { return item.text; }
+                        var $item = $(
+                            '<span><img src="' + iconUrl + '/' + item.element.value.toLowerCase() + '" class="img-flag" /> ' + item.text + '</span>'
+                        );
+                        return $item;
+                    };
+
+                    elem.data('templateResult', formatResult);
+                    elem.data('templateSelection', formatResult);
+                }
+            }
+        };
+    }]);
+
     app.run(['$rootScope', function($rootScope) {
         //hide all modals when location changes
         $rootScope.$on('$routeChangeStart', function(event, next, current) {

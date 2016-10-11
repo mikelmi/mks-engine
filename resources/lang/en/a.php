@@ -76,4 +76,9 @@ return [
     'Change' => 'Change',
     'Current Password' => 'Current Password',
     'New Password' => 'New Password',
+    'Languages' => 'Languages',
+    'Add Language' => 'Add Language',
+    'System' => 'System',
+    'Site name' => 'Site name',
+    'Default' => 'Default',
 ];

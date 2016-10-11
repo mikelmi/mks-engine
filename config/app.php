@@ -172,6 +172,7 @@ return [
         Mikelmi\SmartTable\SmartTableServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Mikelmi\MksTheme\Providers\MksThemeServiceProvider::class,
+        Intervention\Image\ImageServiceProviderLaravel5::class,
 
         /*
          * Application Service Providers...
@@ -233,6 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Menu' => Lavary\Menu\Facade::class,
         'Theme' => Mikelmi\MksTheme\Facades\Theme::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

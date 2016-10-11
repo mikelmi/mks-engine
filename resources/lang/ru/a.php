@@ -76,4 +76,9 @@ return [
     'Change' => 'Изменить',
     'Current Password' => 'Поточный пароль',
     'New Password' => 'Новый пароль',
+    'Languages' => 'Языки',
+    'Add Language' => 'Добавить язык',
+    'System' => 'Система',
+    'Site name' => 'Название сайта',
+    'Default' => 'По умолчанию',
 ];

@@ -26,6 +26,14 @@ $router->group(['prefix'=>'file-manager', 'middleware' => ['can:upload']], funct
     $router->any('handler', 'FileManagerController@handle')->name('filemanager.handler');
 });
 
+//image thumbnail
 $router->get('thumbnail/{path}', 'FileManagerController@thumbnail')
     ->where('path', '.+')
     ->name('thumbnail');
+
+//language icon
+$router->get('lang-icon/{iso?}', function(\Illuminate\Http\Request $request, \App\Services\ImageService $imageService, $iso = null) {
+    $file = 'vendor/mikelmi/mks-admin/img/lang/' . ($iso ?: $request->get('iso')) . '.gif';
+
+    return $imageService->assetProxy($request, $file, null, 12, 8);
+})->name('lang.icon');

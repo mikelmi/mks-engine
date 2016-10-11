@@ -115,6 +115,7 @@ $router->group(['prefix'=>'widget', 'middleware' => ['permission:admin.widget*']
     $router->get('routes/{id?}', ['as' => 'widgets.routes', 'uses' => 'WidgetController@routes']);
 });
 
+//File Manager
 $router->get('file-manager', function(\Illuminate\Http\Request $request) {
     $params = array_merge([
         'langCode' => app()->getLocale(),
@@ -126,3 +127,17 @@ $router->get('file-manager', function(\Illuminate\Http\Request $request) {
 
     return redirect()->route('filemanager', $params);
 })->middleware('admin.locale');
+
+//Languages
+$router->group(['prefix'=>'language', 'middleware' => ['permission:admin.language*']], function(\Illuminate\Routing\Router $router) {
+    $router->get('/', 'LanguageController@index')->name('languages');
+    $router->get('data.json', 'LanguageController@data')->name('languages.data');
+    $router->get('all.json', 'LanguageController@all')->name('languages.all');
+    $router->post('toggle/{iso?}', 'LanguageController@toggle')->name('language.toggle');
+    $router->post('toggle-batch/{status}', 'LanguageController@toggleBatch')->name('language.toggleBatch');
+    $router->post('delete/{iso?}', 'LanguageController@delete')->name('language.delete');
+    $router->post('add', 'LanguageController@add')->name('language.add');
+    $router->get('edit/{iso}', 'LanguageController@edit')->name('language.edit');
+    $router->post('save/{iso}', 'LanguageController@save')->name('language.save');
+    $router->post('set-default/{iso?}', 'LanguageController@setDefault')->name('language.setDefault');
+});

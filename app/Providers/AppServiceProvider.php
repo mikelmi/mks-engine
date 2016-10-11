@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\PagePathChanged;
 use App\Models\Page;
+use App\Services\LanguageManager;
 use App\Services\Settings;
 use App\Services\WidgetManager;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
@@ -70,6 +71,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(WidgetManager::class, function() {
             return new WidgetManager();
+        });
+        
+        $this->app->singleton(LanguageManager::class, function($app) {
+            return new LanguageManager($app['settings'], resource_path('data/languages.json'));
         });
     }
 }

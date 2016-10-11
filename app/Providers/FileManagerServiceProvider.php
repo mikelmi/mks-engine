@@ -23,6 +23,7 @@ class FileManagerServiceProvider extends ServiceProvider
 
         $this->app->singleton(ImageService::class, function($app) {
             return new ImageService(
+                $app['image'],
                 dirname($app['config']->get('filesystems.disks.files.root')),
                 storage_path('app/public/images'), $app['config']->get('image', [])
             );
