@@ -60,3 +60,12 @@ function locales()
 
     return $locales;
 }
+
+function language_icon($iso)
+{
+    if (!$iso) {
+        return;
+    }
+    
+    return sprintf('<img src="%s" alt="" width="12" height="10">', route('lang.icon', $iso));
+}

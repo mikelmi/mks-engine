@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Services\LanguageManager;
 use App\Services\Settings;
 use Artesaos\SEOTools\Traits\SEOTools;
 
@@ -10,11 +11,23 @@ class SiteController extends Controller
 {
     use SEOTools;
 
-    public function __construct(Settings $settings)
+    public function __construct(Settings $settings, LanguageManager $languageManager)
     {
-        $this->seo()->metatags()->setTitleDefault($settings->get('site.title'));
-        $this->seo()->setDescription($settings->get('site.description'));
-        $this->seo()->metatags()->setKeywords($settings->get('site.keywords'));
+        $title = $settings->get('site.title');
+        $description = $settings->get('site.description');
+        $keywords = $settings->get('site.keywords');
+
+        if ($locale = app()->getLocale()) {
+            if ($language = $languageManager->get($locale)) {
+                $title = $language->get('site.title', $title);
+                $description = $language->get('site.description', $description);
+                $keywords = $language->get('site.keywords', $keywords);
+            }
+        }
+
+        $this->seo()->metatags()->setTitleDefault($title);
+        $this->seo()->setDescription($description);
+        $this->seo()->metatags()->setKeywords($keywords);
     }
 
     public function flashMessage($message, $type='info')

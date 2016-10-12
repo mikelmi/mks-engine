@@ -9,7 +9,13 @@ class SetLocale
 {
     public function handle(Request $request, \Closure $next, $guard = null)
     {
-        if ($locale = $request->attributes->get('language')) {
+        $locale = $request->attributes->get('language');
+
+        if (!$locale) {
+            $locale = $request->getPreferredLanguage(locales()) ?: settings('locale');
+        }
+
+        if ($locale) {
             app()->setLocale($locale);
         }
 

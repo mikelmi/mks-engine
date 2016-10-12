@@ -48,6 +48,7 @@
                         <th mst-select-all-rows="grid.rows"> </th>
                         <th st-sort="id" class="st-sortable">#</th>
                         <th st-sort="title" class="st-sortable">@lang('a.Title')</th>
+                        <th st-sort="lang" class="st-sortable">@lang('a.Language')</th>
                         <th st-sort="path" class="st-sortable">URL</th>
                         <th st-sort="created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
                         <th> </th>
@@ -57,6 +58,14 @@
                         <th><!-- id --></th>
                         <th><!-- title -->
                             <input st-search="name" data-placeholder="@lang('a.Title')" class="form-control form-control-sm form-block" type="search"/>
+                        </th>
+                        <th><!-- lang -->
+                            <select class="form-control form-block" st-search="lang">
+                                <option value=""> </option>
+                                @foreach($languages as $lang)
+                                    <option value="{{$lang->iso}}">{{$lang->title}}</option>
+                                @endforeach
+                            </select>
                         </th>
                         <th><!-- path -->
                             <input st-search="path" data-placeholder="@lang('a.Path')" class="form-control form-control-sm form-block" type="search"/>
@@ -73,6 +82,10 @@
                         <td mst-select-row="row"></td>
                         <td>{[{row.id}]}</td>
                         <td>{[{row.title}]}</td>
+                        <td>
+                            <img ng-if="row.lang" alt="" src="{{$lang_icon_url}}/{[{row.lang}]}" />
+                            {[{row.lang}]}
+                        </td>
                         <td>
                             <a href="{{route('page')}}/{[{row.path}]}" target="_blank">{[{row.path}]}</a>
                         </td>
@@ -94,7 +107,7 @@
                     <tfoot>
 
                     <tr>
-                        <td colspan="8">
+                        <td colspan="9">
                             <div class="pull-left text-muted">
                                 {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
                                 @lang('a.Selected_s'): {[{ grid.hasSelected }]}

@@ -44,6 +44,21 @@ class RoutesCollectListener
 
         $pagination = $pages->paginate(10)->toArray();
 
+        //set lang icons
+        if (in_array('lang', $columns)) {
+            $iconRoute = route('lang.icon');
+
+            foreach ($pagination['data'] as &$item) {
+                if (!$item['lang']) {
+                    continue;
+                }
+                $item['title'] = '<h1>'.$item['title'].'</h1>';
+                $item['lang'] = sprintf('<img src="%s" alt=""> %s', $iconRoute . '/' .$item['lang'], $item['lang']);
+            }
+
+            $data->put('html_columns', ['lang']);
+        }
+
         $data->put('items', $pagination['data']);
 
         unset($pagination['data']);
@@ -67,9 +82,9 @@ class RoutesCollectListener
         $this->collectParams($data, ['path', 'title', 'lang']);
 
         $data->put('columns', [
-            'path' => 'Path',
             'title' => trans('a.Title'),
-            'lang' => trans('a.Language')
+            'lang' => trans('a.Language'),
+            'path' => 'Path',
         ]);
     }
 

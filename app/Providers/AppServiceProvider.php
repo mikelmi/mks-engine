@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app['theme']->set($theme);
         }
 
-        \App\Http\Request::setLocales($this->app[LanguageManager::class]->locales());
+        \App\Http\Request::setLocales(locales());
     }
 
     /**

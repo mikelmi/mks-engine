@@ -9,7 +9,7 @@ class FilesSettings extends SettingsScope
 {
     public function __construct()
     {
-        parent::__construct('page', trans('filemanager.Files'));
+        parent::__construct('files', trans('filemanager.Files'));
 
         $this->setFields(['upload', 'extensions', 'max_size']);
     }

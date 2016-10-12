@@ -46,7 +46,12 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="item in modal.data.items" ng-click="modal.select(item)" style="cursor:pointer">
-                            <td ng-repeat="(key, title) in modal.data.columns">{[{ item[key] }]}</td>
+                            <td ng-repeat="(key, title) in modal.data.columns">
+                                <span ng-if="key != 'lang'">
+                                    {[{ item[key] }]}
+                                </span>
+                                <span ng-if="key == 'lang'" ng-bind-html="item[key]"></span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

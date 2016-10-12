@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Page;
 use App\Models\Role;
+use App\Services\LanguageManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,7 +24,9 @@ class PageController extends AdminController
             [
                 'data_url' => route('admin::pages.data', $scope),
                 'scope' => $scope,
-                'count' => $this->getCount()
+                'count' => $this->getCount(),
+                'lang_icon_url' => route('lang.icon'),
+                'languages' => app(LanguageManager::class)->enabled()
             ]
         );
 
@@ -39,10 +42,21 @@ class PageController extends AdminController
     {
         $items = $scope == 'trash' ? Page::onlyTrashed() : new Page();
 
+        $conn = \DB::getName();
+
+        if ($conn == 'sqlite') {
+            $path = 'coalesce({table}.lang||"/"||{table}.path, {table}.path) as path';
+        } else {
+            $path = 'CONCAT_WS("/", {table}.lang, {table}.path) as path';
+        }
+
+        $path = \DB::raw(str_replace('{table}', \DB::getTablePrefix().'pages', $path));
+
         $items = $items->select([
             'id',
             'title',
-            'path',
+            'lang',
+            $path,
             'created_at',
         ]);
 

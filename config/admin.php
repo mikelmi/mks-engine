@@ -49,7 +49,7 @@ return [
                     ]
                 ],
                 ['title' => 'a.Languages', 'href' => '#/language', 'hash' => 'language', 'icon'=>'language', 'nickname'=>'language'],
-                ['title' => 'filemanager.page_title', 'href' => '#/file-manager', 'icon'=>'folder'],
+                ['title' => 'filemanager.page_title', 'href' => '#/file-manager', 'icon'=>'folder', 'hash' => 'file-manager'],
             ]
         ],
         [

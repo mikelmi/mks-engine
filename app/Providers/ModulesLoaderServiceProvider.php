@@ -58,7 +58,13 @@ class ModulesLoaderServiceProvider extends ServiceProvider
             //register routes
             if (!$isRouteCached) {
                 if ($routes = $module->meta('routes')) {
-                    require $module->getPath($routes);
+                    $routePath = $module->getPath($routes);
+                    
+                    \Route::group([
+                        'middleware' => ['web', 'frontend'],
+                    ], function ($router) use ($routePath) {
+                        require $routePath;
+                    });
                 }
             }
 
@@ -75,6 +81,9 @@ class ModulesLoaderServiceProvider extends ServiceProvider
         }
 
         //should be at the end of all routes
-        $router->get('{path?}', ['as' => 'page', 'uses' => 'App\Http\Controllers\PageController@getByPath'])->where('path', '[A-Za-z0-0-_]+');
+        $router->get('/{path?}', 'App\Http\Controllers\PageController@getByPath')
+            ->where('path', '[A-Za-z0-0-_]+')
+            ->middleware(['web', 'frontend'])
+            ->name('page');
     }
 }
