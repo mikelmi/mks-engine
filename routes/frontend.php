@@ -37,3 +37,7 @@ $router->get('lang-icon/{iso?}', function(\Illuminate\Http\Request $request, \Ap
 
     return $imageService->assetProxy($request, $file, null, 12, 8);
 })->name('lang.icon');
+
+$router->get('testik', function() {
+    return app()->getAlias('Illuminate\Contracts\Routing\UrlGenerator');
+});

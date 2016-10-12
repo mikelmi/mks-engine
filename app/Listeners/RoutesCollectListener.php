@@ -64,11 +64,12 @@ class RoutesCollectListener
 
     public function onRouteParamsPagePath(Collection $data)
     {
-        $this->collectParams($data, ['path', 'title']);
+        $this->collectParams($data, ['path', 'title', 'lang']);
 
         $data->put('columns', [
             'path' => 'Path',
-            'title' => trans('a.Title')
+            'title' => trans('a.Title'),
+            'lang' => trans('a.Language')
         ]);
     }
 

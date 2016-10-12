@@ -140,4 +140,15 @@ class LanguageController extends AdminController
 
         return $this->redirect('/language');
     }
+
+    public function getSelectList(LanguageManager $languageManager, $iso = null)
+    {
+        return $languageManager->enabled()->map(function($item) use ($iso) {
+            return [
+                'id' => $item->iso,
+                'text' => $item->title,
+                'selected' => $item->iso === $iso
+            ];
+        })->values();
+    }
 }

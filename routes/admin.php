@@ -140,4 +140,5 @@ $router->group(['prefix'=>'language', 'middleware' => ['permission:admin.languag
     $router->get('edit/{iso}', 'LanguageController@edit')->name('language.edit');
     $router->post('save/{iso}', 'LanguageController@save')->name('language.save');
     $router->post('set-default/{iso?}', 'LanguageController@setDefault')->name('language.setDefault');
+    $router->get('select/{iso?}', 'LanguageController@getSelectList')->name('language.select');
 });

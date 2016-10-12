@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -39,7 +40,8 @@ class Kernel extends HttpKernel
         ],
 
         'frontend' => [
-            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            SetLocale::class,
         ]
     ];
 

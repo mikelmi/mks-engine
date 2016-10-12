@@ -49,3 +49,14 @@ function captcha_field_name()
 {
     return app('app.captcha')->fieldName();
 }
+
+function locales()
+{
+    static $locales;
+
+    if (!isset($locales)) {
+        $locales = app(\App\Services\LanguageManager::class)->locales();
+    }
+
+    return $locales;
+}

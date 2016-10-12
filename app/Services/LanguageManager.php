@@ -174,4 +174,12 @@ class LanguageManager
 
         return $this->settings->save();
     }
+
+    /**
+     * @return array
+     */
+    public function locales()
+    {
+        return $this->enabled()->keys()->toArray();
+    }
 }

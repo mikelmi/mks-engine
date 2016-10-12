@@ -42,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
         if ($theme = $this->app[Settings::class]->get('site.theme')) {
             $this->app['theme']->set($theme);
         }
+
+        \App\Http\Request::setLocales($this->app[LanguageManager::class]->locales());
     }
 
     /**

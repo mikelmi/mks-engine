@@ -95,6 +95,10 @@ class PageController extends AdminController
             $model->path = str_slug($model->title);
         }
 
+        if ($request->exists('lang')) {
+            $model->lang = $request->input('lang');
+        }
+
         $model->params = $request->input('params', []);
         $model->meta_title = $request->input('meta_title');
         $model->meta_keywords = $request->input('meta_keywords');
