@@ -12,6 +12,18 @@ class UrlGenerator extends \Illuminate\Routing\UrlGenerator
         return $this->getRootUrl($this->getRouteScheme($route), $domain, true);
     }
 
+    protected function toRoute($route, $parameters, $absolute)
+    {
+        $result = parent::toRoute($route, $parameters, $absolute);
+
+        if (!$absolute && $locale = $this->getLanguage())
+        {
+            $result = $locale . '/' . $result;
+        }
+
+        return $result;
+    }
+
     protected function getRootUrl($scheme, $root = null, $withLocale = false)
     {
         $result = parent::getRootUrl($scheme, $root);

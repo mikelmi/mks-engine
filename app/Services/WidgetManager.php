@@ -93,8 +93,15 @@ class WidgetManager
 
         $route = \Route::current();
 
+        $locale = app()->getLocale();
+
         /** @var Widget $widget */
         foreach ($all as $widget) {
+
+            // filter by lang
+            if (!$this->checkForLocale($widget, $locale)) {
+                continue;
+            }
 
             // filter by roles
             if (!$this->checkForRoles($widget, $user)) {
@@ -115,6 +122,11 @@ class WidgetManager
         }
 
         return $this->loaded;
+    }
+
+    protected function checkForLocale(Widget $widget, $locale)
+    {
+        return !$locale || !$widget->lang || $locale == $widget->lang;
     }
 
     protected function checkForRoles(Widget $widget, User $user = null)

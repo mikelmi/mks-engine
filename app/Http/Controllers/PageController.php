@@ -29,7 +29,15 @@ class PageController extends SiteController
             return $this->home();
         }
 
-        $page = Page::where('path', $path)->first();
+        $locale = app()->getLocale();
+
+        if ($locale) {
+            $page = Page::where('path', $path)->where('lang', $locale)->first();
+        }
+
+        if (!$page) {
+            $page = Page::where('path', $path)->orderBy('lang')->first();
+        }
 
         if (!$page) {
             abort(404);

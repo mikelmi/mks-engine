@@ -53,6 +53,7 @@
                     <th st-sort="status" class="st-sortable">@lang('admin::messages.Status')</th>
                     <th st-sort="position" class="st-sortable">@lang('a.Position')</th>
                     <th st-sort="ordering" class="st-sortable">@lang('a.Order')</th>
+                    <th st-sort="lang" class="st-sortable">@lang('a.Language')</th>
                     <th> </th>
                 </tr>
                 <tr>
@@ -82,6 +83,9 @@
                     <th><!-- ordering -->
                         <input st-search="ordering" data-placeholder="@lang('a.Order')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
+                    <th><!-- lang -->
+                        <input st-search="lang" data-placeholder="@lang('a.Language')" class="form-control form-control-sm form-block" type="search"/>
+                    </th>
                     <th class="st-actions-th"><!-- actions --></th>
                 </tr>
                 </thead>
@@ -108,6 +112,10 @@
                         </button>
                     </td>
                     <td>
+                        <img ng-if="row.lang" alt="" src="{{$lang_icon_url}}/{[{row.lang}]}" />
+                        {[{row.lang}]}
+                    </td>
+                    <td>
                         <div class="btn-group btn-group-sm">
                             <a class="btn btn-outline-primary" href="#/widget/edit/{[{row.id}]}" title="@lang('admin::messages.Edit')"><i class="fa fa-pencil"></i></a>
                             <button ng-if="!row.is_system" class="btn btn-outline-danger" ng-click="grid.removeRow(row,'{{route('admin::widget.delete')}}/'+row.id,'@lang('admin::messages.Delete')?')" title="@lang('admin::messages.Delete')">
@@ -121,7 +129,7 @@
                 <tfoot>
 
                 <tr>
-                    <td colspan="8">
+                    <td colspan="9">
                         <div class="pull-left text-muted">
                             {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
                             @lang('a.Selected_s'): {[{ grid.hasSelected }]}

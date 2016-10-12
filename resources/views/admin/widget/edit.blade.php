@@ -50,6 +50,18 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label text-sm-right">@lang('a.Language')</label>
+                        <div class="col-sm-10 row-block">
+                            <select class="form-control form-block" name="lang" mks-select
+                                    data-url="{{route('admin::language.select', $model->lang)}}"
+                                    data-lang-icon="{{route('lang.icon')}}"
+                            >
+                                <option value=""> - </option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group row" ng-class="{'has-danger':page.errors.title}">
                         <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
                         <div class="col-sm-10">

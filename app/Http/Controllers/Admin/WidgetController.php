@@ -15,7 +15,10 @@ class WidgetController extends AdminController
 {
     public function index(WidgetManager $widgetManager)
     {
-        return view('admin.widget.index', ['types' => $widgetManager->getTypes()]);
+        return view('admin.widget.index', [
+            'types' => $widgetManager->getTypes(),
+            'lang_icon_url' => route('lang.icon')
+        ]);
     }
 
     public function data(SmartTable $smartTable)
@@ -27,7 +30,8 @@ class WidgetController extends AdminController
             'title',
             'status',
             'position',
-            'ordering'
+            'ordering',
+            'lang'
         ]);
 
         return $smartTable->make($items)
@@ -107,6 +111,10 @@ class WidgetController extends AdminController
 
         if (!$model->name) {
             $model->name = str_slug($model->title);
+        }
+
+        if ($request->exists('lang')) {
+            $model->lang = $request->input('lang');
         }
         
         $widget->setModel($model);
