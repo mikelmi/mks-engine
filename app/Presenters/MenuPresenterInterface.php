@@ -4,7 +4,7 @@ namespace App\Presenters;
 
 
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 interface MenuPresenterInterface
 {
@@ -19,4 +19,16 @@ interface MenuPresenterInterface
      * @return string
      */
     public static function title();
+
+    /**
+     * @return array
+     */
+    public static function options();
+
+    /**
+     * @param $name
+     * @param null $default
+     * @return mixed
+     */
+    public function option($name, $default = null);
 }

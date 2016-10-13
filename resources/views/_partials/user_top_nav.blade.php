@@ -1,4 +1,4 @@
-<ul class="nav navbar-nav pull-right">
+<ul class="nav navbar-nav">
     <!-- Authentication Links -->
     @if (Auth::guest())
         @if (settings('users.auth'))

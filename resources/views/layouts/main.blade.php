@@ -4,7 +4,12 @@
     <nav class="navbar navbar-fixed-top navbar-light bg-faded">
         <a class="navbar-brand" href="#">{{settings('site.title')}}</a>
         @widget(mainmenu)
-        @include('_partials.user_top_nav')
+        <div class="pull-right" style="margin-left: 20px">
+            @include('_partials.user_top_nav')
+        </div>
+        <div class="pull-right">
+            @widgets(top-right)
+        </div>
     </nav>
 
     <div class="container-fluid top-pad">
