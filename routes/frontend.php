@@ -39,9 +39,25 @@ $router->get('lang-icon/{iso?}', function(\Illuminate\Http\Request $request, \Ap
 })->name('lang.icon');
 
 //change language
-$router->get('lang/{iso?}', function($iso) {
-    //TODO: Change locale
-    return redirect($iso);
-})
-    ->where('iso', '[A-Za-z-_]+')
-    ->name('language.change');
+$router->get('lang/{iso?}', function(\Illuminate\Http\Request $request, \App\Services\LanguageManager $languageManager, $iso) {
+    if (!$languageManager->get($iso)) {
+        abort(404);
+    }
+
+    /** @var \Illuminate\Routing\UrlGenerator $url */
+    $url = app('url');
+
+    $prev = $url->previous('/'.$iso);
+
+    $root = $request->root();
+
+    $path = ltrim(str_replace_first($root, '', $prev), '/');
+    $path = ltrim(str_replace_first(app()->getLocale(), '', $path), '/');
+
+    if (!$path) {
+        return redirect($iso);
+    }
+
+    return redirect()->away($root . '/' . $iso . '/' . $path);
+
+})->where('iso', '[A-Za-z-_]+')->name('language.change');

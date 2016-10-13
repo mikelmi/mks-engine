@@ -47,9 +47,7 @@ class Request extends BaseRequest
 
             if (static::$locales) {
                 if (preg_match('#^('.(implode('|', static::$locales)).')(/|$)#', $path, $m)) {
-                    $this->setLocale($m[1]);
-                    $this->language = $m[1];
-                    $this->attributes->set('language', $this->language);
+                    $this->setLanguage($m[1]);
 
                     $path = trim(substr($path, strlen($this->language)), '/');
 
@@ -87,5 +85,16 @@ class Request extends BaseRequest
         }
 
         return $result;
+    }
+
+    public function setLanguage($locale)
+    {
+        if ($locale != $this->language) {
+            $this->pathNoLocale = null;
+        }
+        
+        $this->setLocale($locale);
+        $this->language = $locale;
+        $this->attributes->set('language', $this->language);
     }
 }
