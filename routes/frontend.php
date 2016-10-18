@@ -39,8 +39,8 @@ $router->get('lang-icon/{iso?}', function(\Illuminate\Http\Request $request, \Ap
 })->name('lang.icon');
 
 //change language
-$router->get('lang/{iso?}', function(\Illuminate\Http\Request $request, \App\Services\LanguageManager $languageManager, $iso) {
-    if (!$languageManager->get($iso)) {
+$router->get('lang/{iso?}', function(\Illuminate\Http\Request $request, \App\Repositories\LanguageRepository $languageRepository, $iso) {
+    if (!$languageRepository->get($iso)) {
         abort(404);
     }
 

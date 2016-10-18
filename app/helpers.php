@@ -55,7 +55,7 @@ function locales()
     static $locales;
 
     if (!isset($locales)) {
-        $locales = app(\App\Services\LanguageManager::class)->locales();
+        $locales = app(\App\Repositories\LanguageRepository::class)->locales();
     }
 
     return $locales;

@@ -4,7 +4,7 @@ namespace App\Presenters;
 
 
 use App\Models\Language;
-use App\Services\LanguageManager;
+use App\Repositories\LanguageRepository;
 use Illuminate\Support\Collection;
 
 class NavLanguagesPresenter extends NavMenuPresenter
@@ -78,7 +78,7 @@ class NavLanguagesPresenter extends NavMenuPresenter
     protected function getCurrentLanguage()
     {
         if ($this->locale) {
-            return app(LanguageManager::class)->get($this->locale);
+            return app(LanguageRepository::class)->get($this->locale);
         }
 
         return null;

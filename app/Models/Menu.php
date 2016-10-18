@@ -24,6 +24,10 @@ class Menu extends Model
 
     public $timestamps = false;
 
+    protected $casts = [
+        'active' => 'boolean'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

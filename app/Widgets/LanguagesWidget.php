@@ -7,7 +7,7 @@ use App\Presenters\DropdownNavbarLanguagesPresenter;
 use App\Presenters\MenuPresenterInterface;
 use App\Presenters\NavLanguagesPresenter;
 use App\Presenters\SelectLanguagesPresenter;
-use App\Services\LanguageManager;
+use App\Repositories\LanguageRepository;
 use Illuminate\Http\Request;
 
 class LanguagesWidget extends MenuWidget implements WidgetInterface
@@ -51,7 +51,7 @@ class LanguagesWidget extends MenuWidget implements WidgetInterface
 
         $presenter = $this->makePresenter($type);
 
-        $languages = app(LanguageManager::class)->enabled();
+        $languages = app(LanguageRepository::class)->enabled();
 
         $items = $presenter->render($languages, ['class' => $this->model->param('css_class')]);
 

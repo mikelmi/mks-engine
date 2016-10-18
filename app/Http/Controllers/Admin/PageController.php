@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\Page;
-use App\Models\Role;
-use App\Services\LanguageManager;
+use App\Repositories\LanguageRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\SmartTable\SmartTable;
 
@@ -26,7 +24,7 @@ class PageController extends AdminController
                 'scope' => $scope,
                 'count' => $this->getCount(),
                 'lang_icon_url' => route('lang.icon'),
-                'languages' => app(LanguageManager::class)->enabled()
+                'languages' => app(LanguageRepository::class)->enabled()
             ]
         );
 

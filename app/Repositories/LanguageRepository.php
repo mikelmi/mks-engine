@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Services;
+namespace App\Repositories;
 
 
 use App\Models\Language;
 use Illuminate\Support\Collection;
+use App\Services\Settings;
+use App\Services\Json;
 
-class LanguageManager
+class LanguageRepository
 {
 
     /**
@@ -25,7 +27,7 @@ class LanguageManager
     private $data;
 
     /**
-     * LanguageManager constructor.
+     * LanguageRepository constructor.
      * @param Settings $settings
      * @param string $source
      */

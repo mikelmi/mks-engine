@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Page;
 use App\Services\CaptchaManager;
-use App\Services\LanguageManager;
+use App\Repositories\LanguageRepository;
 use App\Services\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -69,14 +69,14 @@ class PageController extends SiteController
         return view('page.show', compact('page'));
     }
 
-    public function home(Request $request, Settings $settings, Router $router, LanguageManager $languageManager)
+    public function home(Request $request, Settings $settings, Router $router, LanguageRepository $languageRepository)
     {
         $locale = app()->getLocale();
 
         $routeName = null;
         $routeParams = null;
 
-        if ($locale && $language = $languageManager->get($locale)) {
+        if ($locale && $language = $languageRepository->get($locale)) {
             $routeName = $language->get('home.route');
             $routeParams = $language->get('home.params');
         }

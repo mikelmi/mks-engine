@@ -12,7 +12,8 @@ class SetLocale
         $locale = $request->attributes->get('language');
 
         if (!$locale) {
-            $locale = $request->getPreferredLanguage(locales()) ?: settings('locale');
+            $locales = locales();
+            $locale = $locales ? ($request->getPreferredLanguage(locales()) ?: settings('locale')) : null;
         }
 
         if ($locale) {

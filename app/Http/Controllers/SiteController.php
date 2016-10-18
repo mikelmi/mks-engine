@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Services\LanguageManager;
+use App\Repositories\LanguageRepository;
 use App\Services\Settings;
 use Artesaos\SEOTools\Traits\SEOTools;
 
@@ -11,14 +11,14 @@ class SiteController extends Controller
 {
     use SEOTools;
 
-    public function __construct(Settings $settings, LanguageManager $languageManager)
+    public function __construct(Settings $settings, LanguageRepository $languageRepository)
     {
         $title = $settings->get('site.title');
         $description = $settings->get('site.description');
         $keywords = $settings->get('site.keywords');
 
         if ($locale = app()->getLocale()) {
-            if ($language = $languageManager->get($locale)) {
+            if ($language = $languageRepository->get($locale)) {
                 $title = $language->get('site.title', $title);
                 $description = $language->get('site.description', $description);
                 $keywords = $language->get('site.keywords', $keywords);

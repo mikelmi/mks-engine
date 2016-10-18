@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\Page;
-use App\Services\LanguageManager;
+use App\Repositories\LanguageRepository;
 use App\Services\Settings;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
@@ -17,13 +17,13 @@ class LanguageController extends AdminController
         return view('admin.language.index');
     }
 
-    public function data(SmartTable $smartTable, LanguageManager $languageManager)
+    public function data(SmartTable $smartTable, LanguageRepository $languageRepository)
     {
         $iconUrl = route('lang.icon');
 
         $locale = settings('locale');
 
-        $items = $languageManager->available()->map(function($item) use ($iconUrl, $locale) {
+        $items = $languageRepository->available()->map(function($item) use ($iconUrl, $locale) {
             $item = array_only($item->toArray(), ['iso', 'name', 'title', 'enabled']);
             $item['icon'] = $iconUrl . '/' . $item['iso'];
             $item['default'] = $item['iso'] === $locale;
@@ -37,9 +37,9 @@ class LanguageController extends AdminController
             ->response();
     }
 
-    public function all(LanguageManager $languageManager)
+    public function all(LanguageRepository $languageRepository)
     {
-        $all = $languageManager->all()->diffKeys($languageManager->available());
+        $all = $languageRepository->all()->diffKeys($languageRepository->available());
 
         return $all->map(function($item) {
             return [
@@ -49,34 +49,34 @@ class LanguageController extends AdminController
         })->values();
     }
 
-    public function add(Request $request, LanguageManager $languageManager)
+    public function add(Request $request, LanguageRepository $languageRepository)
     {
         $this->validate($request, [
             'language' => 'required'
         ]);
 
-        $languageManager->add($request->get('language'));
+        $languageRepository->add($request->get('language'));
 
         $this->flashSuccess(trans('a.Saved'));
 
         return $this->redirect('/language');
     }
 
-    public function delete(Request $request, LanguageManager $languageManager, $iso = null)
+    public function delete(Request $request, LanguageRepository $languageRepository, $iso = null)
     {
         $keys = $iso ?: $request->get('id');
         
-        $result = $languageManager->delete($keys);
+        $result = $languageRepository->delete($keys);
         
         return response()->json($result);
     }
 
-    public function toggle(LanguageManager $languageManager, $iso)
+    public function toggle(LanguageRepository $languageRepository, $iso)
     {
-        $language = $languageManager->get($iso);
+        $language = $languageRepository->get($iso);
         $status = !$language->isEnabled();
 
-        if (!$languageManager->setStatus($iso, $status)) {
+        if (!$languageRepository->setStatus($iso, $status)) {
             abort(500);
         }
 
@@ -87,7 +87,7 @@ class LanguageController extends AdminController
         ];
     }
 
-    public function toggleBatch(Request $request, LanguageManager $languageManager, $status)
+    public function toggleBatch(Request $request, LanguageRepository $languageRepository, $status)
     {
         $this->validate($request, [
             'id' => 'array'
@@ -95,55 +95,55 @@ class LanguageController extends AdminController
 
         $id = $request->get('id');
 
-        if (!$languageManager->setStatuses($id, (bool) $status)) {
+        if (!$languageRepository->setStatuses($id, (bool) $status)) {
             abort(500);
         }
 
         return [
-            'models' => $languageManager->available()->whereIn('iso', $id)->toArray()
+            'models' => $languageRepository->available()->whereIn('iso', $id)->toArray()
         ];
     }
     
-    public function edit(LanguageManager $languageManager, $iso)
+    public function edit(LanguageRepository $languageRepository, $iso)
     {
-        $model = $languageManager->get($iso);
+        $model = $languageRepository->get($iso);
 
         $pages = Page::ordered()->pluck('title', 'id')->toArray();
 
         return view('admin.language.edit', compact('model', 'pages'));
     }
     
-    public function save(Request $request, LanguageManager $languageManager, $iso)
+    public function save(Request $request, LanguageRepository $languageRepository, $iso)
     {
         $this->validate($request, [
             'title' => 'required'
         ]);
         
-        $model = $languageManager->get($iso);
+        $model = $languageRepository->get($iso);
         
         $model->setTitle($request->get('title'));
         $model->setEnabled((bool)$request->get('enabled'));
         $model->setParams($request->only(['site', 'home', '404', '500', '503']));
 
-        $languageManager->save($model);
+        $languageRepository->save($model);
 
         $this->flashSuccess(trans('a.Saved'));
 
         return $this->redirect('/language');
     }
 
-    public function setDefault(LanguageManager $languageManager, Settings $settings, $iso)
+    public function setDefault(LanguageRepository $languageRepository, Settings $settings, $iso)
     {
-        $language = $languageManager->get($iso);
+        $language = $languageRepository->get($iso);
         $settings->set('locale', $language->getIso());
         $settings->save();
 
         return $this->redirect('/language');
     }
 
-    public function getSelectList(LanguageManager $languageManager, $iso = null)
+    public function getSelectList(LanguageRepository $languageRepository, $iso = null)
     {
-        return $languageManager->enabled()->map(function($item) use ($iso) {
+        return $languageRepository->enabled()->map(function($item) use ($iso) {
             return [
                 'id' => $item->iso,
                 'text' => $item->title,
