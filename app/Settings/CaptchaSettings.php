@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace App\Settings;
 
-
-use App\Settings\SettingsScope;
 
 class CaptchaSettings extends SettingsScope
 {

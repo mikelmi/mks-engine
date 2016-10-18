@@ -6,7 +6,7 @@ namespace App\Listeners;
 use App\Events\AdminMenuBuild;
 use App\Events\PagePathChanged;
 use App\Events\SettingsScopesCollect;
-use App\Models\CaptchaSettings;
+use App\Settings\CaptchaSettings;
 use App\Settings\FilesSettings;
 use App\Settings\SettingsScope;
 use App\Settings\SitePages;
