@@ -11,7 +11,12 @@ trait Sluggable
     protected static function bootSluggable()
     {
         static::creating(function (Model $model) {
+            $model->{$model->getSlugField()} = '';
+        });
+
+        static::created(function (Model $model) {
             $model->addSlug();
+            $model->save();
         });
 
         static::updating(function (Model $model) {
@@ -27,7 +32,9 @@ trait Sluggable
             throw new \InvalidArgumentException('Model ' . get_called_class() . ' does not provide getSlugSource()');
         }
 
-        $this->{$this->getSlugField()} = implode('-', array_map('str_slug', $this->getAttributes((array)$sources)));
+        $values = array_only($this->getAttributes(), (array)$sources);
+
+        $this->{$this->getSlugField()} = implode('-', array_map('str_slug', $values));
     }
 
     protected function getSlugSource()

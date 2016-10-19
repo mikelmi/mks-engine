@@ -81,4 +81,6 @@ return [
     'System' => 'System',
     'Site name' => 'Site name',
     'Default' => 'Default',
+    'per_page' => 'Items per page',
+    'more' => 'More',
 ];
