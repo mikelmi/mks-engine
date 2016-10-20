@@ -68,3 +68,34 @@
     height: 100%;
     border: 0;
 }
+
+/** Images picker **/
+
+.images-picker {
+    margin: 0 -3px;
+}
+
+.images-picker .img-wrap {
+    margin: 3px;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+}
+
+.img-wrap.featured {
+    background-color: #fcf8e3;
+    border-color: #faf2cc;
+}
+
+.img-wrap > .img-tools {
+    position: absolute;
+    right: 1px;
+    top:1px;
+    display: none;
+}
+
+.img-wrap:hover > .img-tools {
+    display: block;
+}

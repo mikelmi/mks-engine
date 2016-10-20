@@ -27,6 +27,10 @@
         @include('filemanager.templates.navbar')
     </script>
 
+    <script type="text/ng-template" id="src/templates/item-context-menu.html">
+        @include('filemanager.templates.item-context-menu')
+    </script>
+
     <script type="text/javascript">
         function getUrlParam( paramName ) {
             var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' );
@@ -64,13 +68,41 @@
                 }
 
                 if (typeof window.opener.CKEDITOR != 'undefined') {
-                    window.opener.CKEDITOR.tools.callFunction(getUrlParam('CKEditorFuncNum'), item.url);
-                } else if (typeof window.opener.onFileManagerSelect == 'function') {
-                    window.opener.onFileManagerSelect(item.url);
+                    var ckCallback = getUrlParam('CKEditorFuncNum');
+                    if (ckCallback) {
+                        window.opener.CKEDITOR.tools.callFunction(ckCallback, item.url);
+                        window.close();
+
+                        return;
+                    }
                 }
+
+                var callback = getUrlParam('callback');
+                if (callback && typeof window.opener[callback] == 'function') {
+                    window.opener[callback]([item.url]);
+                }
+
                 window.close();
             }
         };
+
+        if (window.opener && getUrlParam('multiple')) {
+            window.FM_CONFIG.pickMultipleCallback = function(items) {
+                var callback = getUrlParam('callback');
+                if (callback && typeof window.opener[callback] == 'function') {
+                    var urls = [];
+                    for (var i = 0; i < items.length; i++) {
+                        urls.push(items[i].model.url);
+                    }
+
+                    window.opener[callback](urls);
+                }
+
+                window.close();
+            };
+        } else {
+            alert(2);
+        }
 
         window.FM_ACTIONS = {
             pickFiles: typeof window.opener != 'undefined' && window.opener !== null,

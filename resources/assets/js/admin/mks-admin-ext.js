@@ -314,6 +314,83 @@
         };
     }]);
 
+    app.component('mksImagesPicker', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/images-picker.html');
+        }],
+        bindings: {
+            url: '@',
+            items: '=?',
+            inputName: '@name',
+            pickMain: '@'
+        },
+        controller: ['$http', 'UrlBuilder', '$element', function($http, UrlBuilder, $element) {
+            var ctrl = this;
+            
+            this.$onInit = function () {
+                if (!this.inputName) {
+                    this.inputName = 'images';
+                }
+
+                if (!this.items) {
+                    this.items = [];
+
+                    if (this.url) {
+                        $http.get(this.url).then(function(r) {
+                            if (r.data) {
+                                ctrl.items = r.data;
+                            }
+                        });
+                    }
+                }
+
+                window.pickImageMultiple = function(urls) {
+                    ctrl.safeApply(function() {
+                        angular.forEach(urls, function(url) {
+                            ctrl.items.push({url: url});
+                        });
+                    });
+                };
+            };
+            
+            this.add = function () {
+                CKEDITOR.editor.prototype.popup(UrlBuilder.get('file-manager?type=images&multiple=1&callback=pickImageMultiple'));
+            };
+
+            this.delete = function (item) {
+                var index = this.items.indexOf(item);
+                if (index > -1) {
+                    this.items.splice(index, 1);
+                }
+            };
+
+            this.safeApply = function (fn) {
+                var scope = $element.scope();
+                var phase = scope.$$phase;
+                if (phase == '$apply' || phase == '$digest') {
+                    if (fn && (typeof (fn) === 'function')) {
+                        fn();
+                    }
+                } else {
+                    scope.$apply(fn);
+                }
+            };
+
+            this.itemsValue = function () {
+                return angular.toJson(this.items);
+            };
+
+            this.setMain = function (item) {
+                var index = this.items.indexOf(item);
+                if (index > -1) {
+                    for (var i=0; i < this.items.length; i++) {
+                        this.items[i].main = i == index;
+                    }
+                }
+            };
+        }]
+    });
+
     app.run(['$rootScope', function($rootScope) {
         //hide all modals when location changes
         $rootScope.$on('$routeChangeStart', function(event, next, current) {
