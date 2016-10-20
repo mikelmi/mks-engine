@@ -14,6 +14,7 @@
                         if (model && this.model) {
                             this.model.thumbnail = model.thumbnail;
                             this.model.url = model.url;
+                            this.model.relativeUrl = model.relativeUrl;
                         }
                     };
                     $delegate.prototype = oldProto;

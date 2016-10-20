@@ -99,3 +99,9 @@
 .img-wrap:hover > .img-tools {
     display: block;
 }
+
+.form-control-dim {
+    width: 100px;
+    text-align: center;
+    display: inline-block;
+}

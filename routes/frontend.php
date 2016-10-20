@@ -27,7 +27,7 @@ $router->group(['prefix'=>'file-manager', 'middleware' => ['can:upload']], funct
 });
 
 //image thumbnail
-$router->get('thumbnail/{path}', 'FileManagerController@thumbnail')
+$router->get('thumbnail/{path?}', 'FileManagerController@thumbnail')
     ->where('path', '.+')
     ->name('thumbnail');
 

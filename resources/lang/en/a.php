@@ -83,4 +83,7 @@ return [
     'Default' => 'Default',
     'per_page' => 'Items per page',
     'more' => 'More',
+    'thumbnail_size' => 'Thumbnail size',
+    'Width' => 'Width',
+    'Height' => 'Height',
 ];

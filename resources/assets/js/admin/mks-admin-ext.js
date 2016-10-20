@@ -344,10 +344,10 @@
                     }
                 }
 
-                window.pickImageMultiple = function(urls) {
+                window.pickImageMultiple = function(files) {
                     ctrl.safeApply(function() {
-                        angular.forEach(urls, function(url) {
-                            ctrl.items.push({url: url});
+                        angular.forEach(files, function(file) {
+                            ctrl.items.push({url: file.relativeUrl || file.url});
                         });
                     });
                 };

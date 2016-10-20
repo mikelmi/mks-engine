@@ -79,7 +79,7 @@
 
                 var callback = getUrlParam('callback');
                 if (callback && typeof window.opener[callback] == 'function') {
-                    window.opener[callback]([item.url]);
+                    window.opener[callback]([item]);
                 }
 
                 window.close();
@@ -90,18 +90,16 @@
             window.FM_CONFIG.pickMultipleCallback = function(items) {
                 var callback = getUrlParam('callback');
                 if (callback && typeof window.opener[callback] == 'function') {
-                    var urls = [];
+                    var models = [];
                     for (var i = 0; i < items.length; i++) {
-                        urls.push(items[i].model.url);
+                        models.push(items[i].model);
                     }
 
-                    window.opener[callback](urls);
+                    window.opener[callback](models);
                 }
 
                 window.close();
             };
-        } else {
-            alert(2);
         }
 
         window.FM_ACTIONS = {

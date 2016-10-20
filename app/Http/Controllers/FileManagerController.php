@@ -436,10 +436,15 @@ class FileManagerController extends Controller
 
     public function thumbnail(Request $request, ImageService $image, $path)
     {
+        $preset = $request->get('p', 'filemanager');
+        if (!$preset) {
+            $preset = 'filemanager';
+        }
+
         return $image->response(
             $request,
             $path,
-            ['p' => $request->get('p', 'filemanager')]
+            ['p' => $preset]
         );
     }
 

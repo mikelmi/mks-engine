@@ -89,6 +89,7 @@ class FileManager
                 'type' => $isDir ? 'dir' : 'file',
                 'thumbnail' => $thumbnail,
                 'url' => $baseUrl . '/' . $relativeUrl,
+                'relativeUrl' => $relativeUrl
             ];
         }
 
