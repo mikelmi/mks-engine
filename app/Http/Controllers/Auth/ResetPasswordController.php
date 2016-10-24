@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 
 use App\Http\Controllers\SiteController;
+use App\Repositories\LanguageRepository;
 use App\Services\Settings;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
@@ -28,9 +29,9 @@ class ResetPasswordController extends SiteController
      *
      * @return void
      */
-    public function __construct(Settings $settings)
+    public function __construct(Settings $settings, LanguageRepository $languageRepository)
     {
-        parent::__construct($settings);
+        parent::__construct($settings, $languageRepository);
 
         $this->middleware('guest');
         $this->middleware('auth.ability');

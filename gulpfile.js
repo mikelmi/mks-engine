@@ -1,6 +1,10 @@
+var gulp = require('gulp');
 const elixir = require('laravel-elixir');
 
 require('laravel-elixir-vue');
+
+var lessToScss = require('gulp-less-to-scss');
+
 
 /*
  |--------------------------------------------------------------------------
@@ -45,15 +49,31 @@ function path_bower_rel(path) {
     return '../../../bower_components/' + (path||'');
 }
 
+elixir.extend('lessToSass', function(source, dist) {
+    new elixir.Task('lessToSass', function() {
+        return gulp.src(source)
+            .pipe(lessToScss())
+            .pipe(gulp.dest(dist));
+    });
+
+});
+
 elixir(function(mix) {
+
+    mix.lessToSass(
+        path_node('ekko-lightbox/ekko-lightbox.less'),
+        elixir.config.assetsPath + '/sass'
+    );
+
     mix.sass('bootstrap.scss');
 
     mix.scripts(path_node_rel(
         [
             'jquery/dist/jquery.js',
             'tether/dist/js/tether.js',
-            'bootstrap/dist/js/bootstrap.js'
-        ]),
+            'bootstrap/dist/js/bootstrap.js',
+            'ekko-lightbox/dist/ekko-lightbox.js'
+        ]).concat(['bootstrap.js']),
         'public/js/bootstrap.js');
 
     //font-awesome
