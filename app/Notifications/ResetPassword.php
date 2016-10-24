@@ -7,7 +7,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class ResetPassword extends BaseResetPassword
 {
-    public function toMail()
+    public function toMail($notifiable)
     {
         return (new MailMessage())
             ->subject(trans('passwords.subject'))
