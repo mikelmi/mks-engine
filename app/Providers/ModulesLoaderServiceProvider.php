@@ -36,8 +36,16 @@ class ModulesLoaderServiceProvider extends ServiceProvider
 
         foreach ($repository->ordered() as $name => $module) {
 
+            //merge configs
             foreach ($module->meta('configs', []) as $scope => $config) {
                 $this->mergeConfigFrom($module->getPath($config), $scope);
+            }
+
+            //publish assets
+            if ($assets = $module->meta('assets')) {
+                $this->publishes([
+                    $module->getPath($assets) => public_path('modules/' . strtolower($module->getName())),
+                ], 'assets');
             }
 
             //attach middleware resolvers
