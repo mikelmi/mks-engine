@@ -37,30 +37,30 @@ return [
 
     'menu' => [
         [
-            'title' => 'a.System', 'icon'=>'cogs',
+            'title' => 'general.System', 'icon'=>'cogs',
             'children' => [
-                ['title' => 'a.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
+                ['title' => 'general.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
                 [
-                    'title' => 'a.Users', 'href' => '#/user', 'hash'=>'user', 'icon'=>'users',
+                    'title' => 'general.Users', 'href' => '#/user', 'hash'=>'user', 'icon'=>'users',
                     'children' => [
-                        ['title' => 'a.Users', 'href' => '#/user', 'hash' => 'user'],
-                        ['title' => 'a.Roles', 'href' => '#/role', 'hash' => 'role'],
-                        ['title' => 'a.Permissions', 'href' => '#/permission', 'hash' => 'permission'],
+                        ['title' => 'general.Users', 'href' => '#/user', 'hash' => 'user'],
+                        ['title' => 'general.Roles', 'href' => '#/role', 'hash' => 'role'],
+                        ['title' => 'general.Permissions', 'href' => '#/permission', 'hash' => 'permission'],
                     ]
                 ],
-                ['title' => 'a.Languages', 'href' => '#/language', 'hash' => 'language', 'icon'=>'language', 'nickname'=>'language'],
+                ['title' => 'general.Languages', 'href' => '#/language', 'hash' => 'language', 'icon'=>'language', 'nickname'=>'language'],
                 ['title' => 'filemanager.page_title', 'href' => '#/file-manager', 'icon'=>'folder', 'hash' => 'file-manager'],
             ]
         ],
         [
-            'title' => 'a.Pages', 'href' => '#/page', 'hash'=>'page', 'icon'=>'file',
+            'title' => 'general.Pages', 'href' => '#/page', 'hash'=>'page', 'icon'=>'file',
             'children' => [
-                ['title' => 'a.Pages', 'href' => '#/page', 'hash' => 'page'],
+                ['title' => 'general.Pages', 'href' => '#/page', 'hash' => 'page'],
                 ['title' => 'admin::messages.Add', 'href' => '#/page/edit', 'hash' => 'page/edit'],
                 ['title' => 'admin::messages.Trash', 'href' => '#/page/trash', 'hash' => 'page/trash']
             ]
         ],
-        ['title' => 'a.Menu', 'href' => '#/menuman', 'hash' => 'menuman', 'icon'=>'list-ul', 'nickname'=>'menu'],
-        ['title' => 'a.Widgets', 'href' => '#/widget', 'hash' => 'widget', 'icon'=>'th-large', 'nickname'=>'widget'],
+        ['title' => 'general.Menu', 'href' => '#/menuman', 'hash' => 'menuman', 'icon'=>'list-ul', 'nickname'=>'menu'],
+        ['title' => 'general.Widgets', 'href' => '#/widget', 'hash' => 'widget', 'icon'=>'th-large', 'nickname'=>'widget'],
     ],
 ];

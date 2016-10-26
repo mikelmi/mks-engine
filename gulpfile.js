@@ -72,7 +72,8 @@ elixir(function(mix) {
             'jquery/dist/jquery.js',
             'tether/dist/js/tether.js',
             'bootstrap/dist/js/bootstrap.js',
-            'ekko-lightbox/dist/ekko-lightbox.js'
+            'ekko-lightbox/dist/ekko-lightbox.js',
+            'jquery-form/jquery.form.js'
         ]).concat(['bootstrap.js']),
         'public/js/bootstrap.js');
 

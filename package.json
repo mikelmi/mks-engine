@@ -19,6 +19,7 @@
   "dependencies": {
     "angular-ui-tree": "^2.19.0",
     "ekko-lightbox": "^5.0.0",
-    "font-awesome": "^4.6.3"
+    "font-awesome": "^4.6.3",
+    "jquery-form": "^3.50.0"
   }
 }
