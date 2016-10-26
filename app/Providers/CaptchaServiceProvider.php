@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 
 class CaptchaServiceProvider extends ServiceProvider
 {
-    protected $defer = true;
+    protected $defer = false;
 
     public function register()
     {
@@ -43,7 +43,8 @@ class CaptchaServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            CaptchaManager::class
+            CaptchaManager::class,
+            'app.captcha'
         ];
     }
 }
