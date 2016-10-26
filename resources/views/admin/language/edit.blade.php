@@ -2,7 +2,7 @@
 
 @section('title')
     <div class="breadcrumb">
-        <a href="#/language" class="breadcrumb-item">@lang('a.Languages')</a>
+        <a href="#/language" class="breadcrumb-item">@lang('general.Languages')</a>
         <span class="breadcrumb-item">
             {!! $model->iconImage() !!}
             {{  $model->name }} ({{  $model->iso }})
@@ -21,10 +21,10 @@
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs pull-xs-left">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" data-target="#lang-tab" data-toggle="tab" role="tab">@lang('a.Language')</a>
+                    <a class="nav-link active" href="#" data-target="#lang-tab" data-toggle="tab" role="tab">@lang('general.Language')</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-target="#lang-pages-tab" data-toggle="tab" role="tab">@lang('a.Pages')</a>
+                    <a class="nav-link" href="#" data-target="#lang-pages-tab" data-toggle="tab" role="tab">@lang('general.Pages')</a>
                 </li>
             </ul>
         </div>
@@ -34,7 +34,7 @@
 
                 <div class="tab-pane active" id="lang-tab" role="tabpanel">
                     <div class="form-group row" ng-class="{'has-danger':page.errors.title}">
-                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Title') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Title') </label>
                         <div class="col-sm-9">
                             <input type="text" name="title" value="{{ $model->title }}" class="form-control" />
                             <small class="form-control-feedback" ng-show="page.errors.title">{[{page.errors.title[0]}]}</small>
@@ -56,19 +56,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Site name') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Site name') </label>
                         <div class="col-sm-9">
                             <input type="text" name="site[title]" value="{{ $model->get('site.title') }}" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Description') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Description') </label>
                         <div class="col-sm-9">
                             <textarea name="site[description]" class="form-control">{{ $model->get('site.description') }}</textarea>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Keywords') </label>
+                        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Keywords') </label>
                         <div class="col-sm-9">
                             <input type="text" name="site[keywords]" value="{{ $model->get('site.keywords') }}" class="form-control" />
                         </div>
@@ -77,7 +77,7 @@
 
                 <div class="tab-pane" id="lang-pages-tab" role="tabpanel">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-sm-right">@lang('a.Homepage')</label>
+                        <label class="col-sm-3 col-form-label text-sm-right">@lang('general.Homepage')</label>
                         <div class="col-sm-9">
                             <mks-link-select field-route="home[route]"
                                              field-params="home[params]"
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-sm-right">@lang('a.Error page')</label>
+                        <label class="col-sm-3 col-form-label text-sm-right">@lang('general.Error page')</label>
                         <div class="col-sm-9">
                             <select name="500" class="form-control" mks-select>
                                 <option value=""> - </option>
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-sm-right">@lang('a.Offline page')</label>
+                        <label class="col-sm-3 col-form-label text-sm-right">@lang('general.Offline page')</label>
                         <div class="col-sm-9">
                             <select name="503" class="form-control" mks-select>
                                 <option value=""> - </option>

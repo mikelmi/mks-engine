@@ -2,7 +2,7 @@
     <input type="hidden" ng-value="menuModel.id">
 
     <div class="form-group row" ng-class="{'has-danger': menuForm.name.$dirty && menuForm.name.$invalid}">
-        <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
+        <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Title') </label>
         <div class="col-sm-10">
             <input type="text" name="name" class="form-control" ng-model="menuModel.name" required />
         </div>

@@ -10,7 +10,7 @@
         <div class="input-group" ng-hide="!routeOption.hasParams">
             <input type="text" class="form-control" ng-value="paramsVisible(routes[routeOption.id])" readonly />
             <span class="input-group-btn">
-                <button type="button" class="btn btn-info" ng-disabled="!routeOption" ng-click="modal.open()">@lang('a.Select')...</button>
+                <button type="button" class="btn btn-info" ng-disabled="!routeOption" ng-click="modal.open()">@lang('general.Select')...</button>
             </span>
         </div>
     </div>
@@ -23,13 +23,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="@lang('a.Close')">
+                <button type="button" class="close" data-dismiss="modal" aria-label="@lang('general.Close')">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" ng-if="routeOption.extended">
                     <span>{[{ modal.data.title }]}&nbsp;&nbsp;&nbsp;</span>
                     <div class="input-group" style="width: 250px; display: inline-flex">
-                        <input placeholder="@lang('a.Search')..." type="search" ng-model="modal.searchQuery" class="form-control" />
+                        <input placeholder="@lang('general.Search')..." type="search" ng-model="modal.searchQuery" class="form-control" />
                         <span class="input-group-btn">
                             <button class="btn btn-secondary" type="submit" ng-click="$event.preventDefault(); modal.search(modal.searchQuery)"><i class="fa fa-search"></i></button>
                         </span>

@@ -1,7 +1,7 @@
 @extends('admin::page')
 
 @section('title')
-    @lang('a.Menu')
+    @lang('general.Menu')
 @endsection
 
 @section('controller')
@@ -11,7 +11,7 @@
 @section('tools')
     <button class="btn btn-primary" ng-hide="menuModel" ng-click="addMenu()">
         <i class="fa fa-plus"></i>
-        {{trans('a.Add Menu')}}
+        {{trans('general.Add Menu')}}
     </button>
     <button class="btn btn-success" ng-show="currentMenu.id" ng-click="editMenu(currentMenu)">
         <i class="fa fa-pencil"></i>
@@ -49,7 +49,7 @@
                 <div>
                     <a class="btn btn-link" ng-href="#/menuman/items/{[{currentMenu.id}]}/edit">
                         <i class="fa fa-plus"></i>
-                        @lang('a.Add Menu Item')
+                        @lang('general.Add Menu Item')
                     </a>
                 </div>
 

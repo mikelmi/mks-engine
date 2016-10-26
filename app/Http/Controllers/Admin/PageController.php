@@ -134,7 +134,7 @@ class PageController extends AdminController
 
         \DB::commit();
 
-        $this->flashSuccess(trans('a.Saved'));
+        $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect([
             '/page' . ($model->trashed() ? '/trash' : ''),

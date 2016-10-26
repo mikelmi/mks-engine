@@ -13,7 +13,7 @@ class TextWidget extends WidgetBase implements WidgetInterface
      */
     public static function title()
     {
-        return trans('a.TextWidget');
+        return trans('general.TextWidget');
     }
 
     public function form()

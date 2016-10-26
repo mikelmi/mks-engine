@@ -8,7 +8,7 @@
         {{ csrf_field() }}
 
         <div class="form-group row{{ $errors->has('name') ? ' has-danger' : '' }}">
-            <label for="name" class="col-md-4 col-form-label">@lang('a.Name')</label>
+            <label for="name" class="col-md-4 col-form-label">@lang('general.Name')</label>
 
             <div class="col-md-6">
                 <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="form-group row{{ $errors->has('password') ? ' has-danger' : '' }}">
-            <label for="password" class="col-md-4 col-form-label">@lang('a.Password')</label>
+            <label for="password" class="col-md-4 col-form-label">@lang('general.Password')</label>
 
             <div class="col-md-6">
                 <input id="password" type="password" class="form-control" name="password" required>

@@ -8,7 +8,7 @@
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Name') </label>
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Name') </label>
         <div class="col-sm-9">
             <p class="form-control-static">{{$user->name}}</p>
         </div>

@@ -42,7 +42,7 @@ class MenuWidget extends WidgetBase implements WidgetInterface
      */
     public static function title()
     {
-        return trans('a.Menu');
+        return trans('general.Menu');
     }
 
     public function form()

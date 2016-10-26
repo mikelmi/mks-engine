@@ -7,7 +7,7 @@
         {{ csrf_field() }}
 
         <div class="form-group row @if($errors->has('name')) has-danger @endif">
-            <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Name') </label>
+            <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Name') </label>
             <div class="col-sm-9">
                 <input type="text" name="name" value="{{ old('name', $user->name) }}" class="form-control" />
                 @if($errors->has('name'))
@@ -26,12 +26,12 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-sm-3 text-sm-right"> @lang('a.Password') </label>
+            <label class="col-sm-3 text-sm-right"> @lang('general.Password') </label>
             <div class="col-sm-9">
                 <div class="form-check">
                     <label class="form-check-label" onclick="var e=document.getElementById('changePasswordCheckbox');e.checked=!e.checked" data-toggle="collapse" data-target="#passwordFields" aria-expanded="{{old('change_password') ? 'true':'false'}}" aria-controls="passwordFields">
                         <input class="form-check-input" id="changePasswordCheckbox" type="checkbox" name="change_password" @if (old('change_password')) checked @endif />
-                        @lang('a.Change')
+                        @lang('general.Change')
                     </label>
                 </div>
             </div>
@@ -40,7 +40,7 @@
         <div id="passwordFields" class="collapse @if (old('change_password')) in @endif">
 
             <div class="form-group row @if($errors->has('password_current')) has-danger @endif">
-                <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Current Password') </label>
+                <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Current Password') </label>
                 <div class="col-sm-9">
                     <input type="password" name="password_current" value="" class="form-control" />
                     @if($errors->has('password_current'))
@@ -50,7 +50,7 @@
             </div>
 
             <div class="form-group row @if($errors->has('password_new')) has-danger @endif">
-                <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.New Password') </label>
+                <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.New Password') </label>
                 <div class="col-sm-9">
                     <input type="password" name="password_new" value="" class="form-control" />
                     @if($errors->has('password_new'))
@@ -60,7 +60,7 @@
             </div>
 
             <div class="form-group row @if($errors->has('password_new_confirmation')) has-danger @endif">
-                <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Confirm Password') </label>
+                <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Confirm Password') </label>
                 <div class="col-sm-9">
                     <input type="password" name="password_new_confirmation" value="" class="form-control" />
                     @if($errors->has('password_new_confirmation'))
@@ -74,10 +74,10 @@
         <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
                 <button class="btn btn-primary">
-                    @lang('admin::messages.Save')
+                    @lang('general.Save')
                 </button>
                 <a class="btn btn-secondary" href="{{ route('user.profile') }}">
-                    @lang('admin::messages.Cancel')
+                    @lang('general.Cancel')
                 </a>
             </div>
         </div>

@@ -5,11 +5,11 @@
 @endsection
 
 @section('title')
-    @lang('a.Permissions')
+    @lang('general.Permissions')
 @endsection
 
 @section('right')
-    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('a.Search')..." ng-model="gridQuery" />
+    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('general.Search')..." ng-model="gridQuery" />
 @endsection
 
 @section('tools')
@@ -30,18 +30,18 @@
                 <tr class="thead-default">
                     <th mst-select-all-rows="grid.rows"> </th>
                     <th st-sort="id" class="st-sortable">#</th>
-                    <th st-sort="name" class="st-sortable">@lang('a.Title')</th>
-                    <th st-sort="display_name" class="st-sortable">@lang('a.Display Title')</th>
+                    <th st-sort="name" class="st-sortable">@lang('general.Title')</th>
+                    <th st-sort="display_name" class="st-sortable">@lang('general.Display Title')</th>
                     <th> </th>
                 </tr>
                 <tr>
                     <th><!-- checkbox --></th>
                     <th><!-- id --></th>
                     <th><!-- name -->
-                        <input st-search="name" data-placeholder="@lang('a.Name')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="name" data-placeholder="@lang('general.Name')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- display_name -->
-                        <input st-search="display_name" data-placeholder="@lang('a.Display Title')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="display_name" data-placeholder="@lang('general.Display Title')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th class="st-actions-th"><!-- actions --></th>
                 </tr>
@@ -70,7 +70,7 @@
                     <td colspan="5">
                         <div class="pull-left text-muted">
                             {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
-                            @lang('a.Selected_s'): {[{ grid.hasSelected }]}
+                            @lang('general.Selected_s'): {[{ grid.hasSelected }]}
                         </div>
                         <div class="pull-right" st-pagination="" st-items-by-page="10"></div>
                         <div class="clearfix"></div>

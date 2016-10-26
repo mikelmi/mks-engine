@@ -5,11 +5,11 @@
 @endsection
 
 @section('title')
-    @lang('a.Widgets')
+    @lang('general.Widgets')
 @endsection
 
 @section('right')
-    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('a.Search')..." ng-model="gridQuery" />
+    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('general.Search')..." ng-model="gridQuery" />
 @endsection
 
 @section('tools')
@@ -48,19 +48,19 @@
                 <tr class="thead-default">
                     <th mst-select-all-rows="grid.rows"> </th>
                     <th st-sort="id" class="st-sortable">#</th>
-                    <th st-sort="title" class="st-sortable">@lang('a.Title')</th>
-                    <th st-sort="class" class="st-sortable">@lang('a.Type')</th>
+                    <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
+                    <th st-sort="class" class="st-sortable">@lang('general.Type')</th>
                     <th st-sort="status" class="st-sortable">@lang('admin::messages.Status')</th>
-                    <th st-sort="position" class="st-sortable">@lang('a.Position')</th>
-                    <th st-sort="ordering" class="st-sortable">@lang('a.Order')</th>
-                    <th st-sort="lang" class="st-sortable">@lang('a.Language')</th>
+                    <th st-sort="position" class="st-sortable">@lang('general.Position')</th>
+                    <th st-sort="ordering" class="st-sortable">@lang('general.Order')</th>
+                    <th st-sort="lang" class="st-sortable">@lang('general.Language')</th>
                     <th> </th>
                 </tr>
                 <tr>
                     <th><!-- checkbox --></th>
                     <th><!-- id --></th>
                     <th><!-- title -->
-                        <input st-search="title" data-placeholder="@lang('a.Title')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="title" data-placeholder="@lang('general.Title')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- class -->
                         <select st-search="class" class="form-control form-control-sm form-control-block">
@@ -78,13 +78,13 @@
                         </select>
                     </th>
                     <th><!-- title -->
-                        <input st-search="position" data-placeholder="@lang('a.Position')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="position" data-placeholder="@lang('general.Position')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- ordering -->
-                        <input st-search="ordering" data-placeholder="@lang('a.Order')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="ordering" data-placeholder="@lang('general.Order')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- lang -->
-                        <input st-search="lang" data-placeholder="@lang('a.Language')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="lang" data-placeholder="@lang('general.Language')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th class="st-actions-th"><!-- actions --></th>
                 </tr>
@@ -132,7 +132,7 @@
                     <td colspan="9">
                         <div class="pull-left text-muted">
                             {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
-                            @lang('a.Selected_s'): {[{ grid.hasSelected }]}
+                            @lang('general.Selected_s'): {[{ grid.hasSelected }]}
                         </div>
                         <div class="pull-right" st-pagination="" st-items-by-page="10"></div>
                         <div class="clearfix"></div>

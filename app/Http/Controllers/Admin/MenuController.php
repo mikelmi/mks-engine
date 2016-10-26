@@ -136,7 +136,7 @@ class MenuController extends AdminController
 
         $model->save();
 
-        $this->flashSuccess(trans('a.Saved'));
+        $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect([
             '/menuman/' . $scope,

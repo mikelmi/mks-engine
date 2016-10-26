@@ -13,7 +13,7 @@ class HtmlWidget extends WidgetBase implements WidgetInterface
      */
     public static function title()
     {
-        return trans('a.HtmlWidget');
+        return trans('general.HtmlWidget');
     }
 
     public function form()

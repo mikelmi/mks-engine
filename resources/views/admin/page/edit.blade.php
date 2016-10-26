@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="breadcrumb">
-        <a href="#/page" class="breadcrumb-item">@lang('a.Pages')</a>
+        <a href="#/page" class="breadcrumb-item">@lang('general.Pages')</a>
         <span class="breadcrumb-item">
             {{  trans('admin::messages.' . ($model->id ? 'Edit' : 'Add')) }}
         </span>
@@ -37,13 +37,13 @@
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs pull-xs-left">
             <li class="nav-item">
-                <a class="nav-link active" href="#" role="tab" data-toggle="tab" data-target="#tab-page">@lang('a.Page')</a>
+                <a class="nav-link active" href="#" role="tab" data-toggle="tab" data-target="#tab-page">@lang('general.Page')</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" role="tab" data-toggle="tab" data-target="#tab-seo">SEO</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" role="tab" data-toggle="tab" data-target="#tab-params">@lang('a.Params')</a>
+                <a class="nav-link" href="#" role="tab" data-toggle="tab" data-target="#tab-params">@lang('general.Params')</a>
             </li>
         </ul>
     </div>
@@ -61,7 +61,7 @@
                     </div>
                 @endif
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label text-sm-right">@lang('a.Language')</label>
+                    <label class="col-sm-2 col-form-label text-sm-right">@lang('general.Language')</label>
                     <div class="col-sm-10 row-block">
                         <select class="form-control form-block" name="lang" mks-select
                                 data-url="{{route('admin::language.select', $model->lang)}}"
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.title}">
-                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Title') </label>
                     <div class="col-sm-10">
                         <input type="text" name="title" value="{{ old('title', $model->title) }}" class="form-control" />
                         <small class="form-control-feedback" ng-show="page.errors.title">{[{page.errors.title[0]}]}</small>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.page_text}">
-                    <label class="col-sm-12 col-form-label"> @lang('a.Text') </label>
+                    <label class="col-sm-12 col-form-label"> @lang('general.Text') </label>
                     <div class="col-sm-12">
                         <textarea name="page_text" class="form-control" rows="5" mks-editor>{{ old('page_text', $model->page_text) }}</textarea>
                         <small class="form-control-feedback" ng-show="page.errors.page_text">{[{page.errors.page_text[0]}]}</small>
@@ -101,21 +101,21 @@
 
             <div class="tab-pane" id="tab-seo" role="tabpanel">
                 <div class="form-group row" ng-class="{'has-danger':page.errors.meta_title}">
-                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Title') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Title') </label>
                     <div class="col-sm-10">
                         <input type="text" name="meta_title" value="{{ old('meta_title', $model->meta_title) }}" class="form-control" />
                         <small class="form-control-feedback" ng-show="page.errors.meta_title">{[{page.errors.meta_title[0]}]}</small>
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.meta_description}">
-                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Description') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Description') </label>
                     <div class="col-sm-10">
                         <textarea name="meta_description" class="form-control">{{ old('meta_description', $model['meta_description']) }}</textarea>
                         <small class="form-control-feedback" ng-show="page.errors.meta_description">{[{page.errors.meta_description[0]}]}</small>
                     </div>
                 </div>
                 <div class="form-group row" ng-class="{'has-danger':page.errors.meta_keywords}">
-                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Keywords') </label>
+                    <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Keywords') </label>
                     <div class="col-sm-10">
                         <input type="text" name="meta_keywords" value="{{ old('meta_keywords', $model['meta_keywords']) }}" class="form-control" />
                         <small class="form-control-feedback" ng-show="page.errors.meta_keywords">{[{page.errors.meta_keywords[0]}]}</small>
@@ -125,29 +125,29 @@
 
             <div class="tab-pane" id="tab-params" role="tabpanel">
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Hide Title') </label>
+                    <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Hide Title') </label>
                     <div class="col-sm-9">
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-outline-success @if (old('params.hide_title', $model->param('hide_title'))) active @endif">
                                 <input type="radio" name="params[hide_title]" autocomplete="off" value="1"@if (old('hide_title', $model->param('hide_title'))) checked @endif >
-                                @lang('a.Yes')
+                                @lang('general.Yes')
                             </label>
                             <label class="btn btn-outline-danger @if (!old('params.hide_title', $model->param('hide_title'))) active @endif">
                                 <input type="radio" name="params[hide_title]" autocomplete="off" value="0"@if (!old('hide_title', $model->param('hide_title'))) checked @endif >
-                                @lang('a.No')
+                                @lang('general.No')
                             </label>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Roles') </label>
+                    <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Roles') </label>
                     <div class="col-sm-9">
                         <select class="form-control" name="params[roles]" ng-model="paramRoles" ng-init="paramRoles='{{old('params.roles', $model->param('roles'))}}'">
-                            <option value="">@lang('a.Show for all')</option>
-                            <option value="1">@lang('a.Show for registered')</option>
-                            <option value="2">@lang('a.Show for roles'):</option>
-                            <option value="-1">@lang('a.Hide for roles'):</option>
+                            <option value="">@lang('general.Show for all')</option>
+                            <option value="1">@lang('general.Show for registered')</option>
+                            <option value="2">@lang('general.Show for roles'):</option>
+                            <option value="-1">@lang('general.Hide for roles'):</option>
                         </select>
                     </div>
                 </div>

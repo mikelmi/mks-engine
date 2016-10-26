@@ -5,11 +5,11 @@
 @endsection
 
 @section('title')
-    @lang('a.Users')
+    @lang('general.Users')
 @endsection
 
 @section('right')
-    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('a.Search')..." ng-model="gridQuery" />
+    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('general.Search')..." ng-model="gridQuery" />
 @endsection
 
 @section('tools')
@@ -38,10 +38,10 @@
                 <tr class="thead-default">
                     <th mst-select-all-rows="grid.rows"> </th>
                     <th st-sort="id" class="st-sortable">#</th>
-                    <th st-sort="users.name" class="st-sortable">@lang('a.Name')</th>
+                    <th st-sort="users.name" class="st-sortable">@lang('general.Name')</th>
                     <th st-sort="email" class="st-sortable">Email</th>
                     <th st-sort="active" class="st-sortable">@lang('admin::messages.Status')</th>
-                    <th st-sort="rolesList" class="st-sortable">@lang('a.Roles')</th>
+                    <th st-sort="rolesList" class="st-sortable">@lang('general.Roles')</th>
                     <th st-sort="users.created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
                     <th> </th>
                 </tr>
@@ -49,7 +49,7 @@
                     <th><!-- checkbox --></th>
                     <th><!-- id --></th>
                     <th><!-- name -->
-                        <input st-search="name" data-placeholder="@lang('a.Name')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="name" data-placeholder="@lang('general.Name')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- email -->
                         <input st-search="email" data-placeholder="Email" class="form-control form-control-sm form-block" type="search"/>
@@ -62,7 +62,7 @@
                         </select>
                     </th>
                     <th><!-- Roles -->
-                        <input st-search="rolesList" data-placeholder="@lang('a.Roles')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="rolesList" data-placeholder="@lang('general.Roles')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- created_at -->
                         <input st-search="created_at" data-placeholder="@lang('admin::messages.Created at')" class="form-control form-control-sm form-block" type="date"/>
@@ -101,7 +101,7 @@
                     <td colspan="8">
                         <div class="pull-left text-muted">
                             {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
-                            @lang('a.Selected_s'): {[{ grid.hasSelected }]}
+                            @lang('general.Selected_s'): {[{ grid.hasSelected }]}
                         </div>
                         <div class="pull-right" st-pagination="" st-items-by-page="10"></div>
                         <div class="clearfix"></div>

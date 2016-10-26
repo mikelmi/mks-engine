@@ -27,7 +27,7 @@ class RoutesCollectListener
         $event->routes->forget('page.id');
         $page = $event->routes->get('page');
         if ($page) {
-            $page['text'] = trans('a.Page');
+            $page['text'] = trans('general.Page');
             $page['extended'] = true;
             $event->routes['page'] = $page;
         }
@@ -64,7 +64,7 @@ class RoutesCollectListener
         unset($pagination['data']);
         $data->put('pagination', $pagination);
 
-        $data->put('title', trans('a.Pages'));
+        $data->put('title', trans('general.Pages'));
     }
 
     public function onRouteParamsPageId(Collection $data)
@@ -73,7 +73,7 @@ class RoutesCollectListener
 
         $data->put('columns', [
             'id' => 'ID',
-            'title' => trans('a.Title')
+            'title' => trans('general.Title')
         ]);
     }
 
@@ -82,8 +82,8 @@ class RoutesCollectListener
         $this->collectParams($data, ['path', 'title', 'lang']);
 
         $data->put('columns', [
-            'title' => trans('a.Title'),
-            'lang' => trans('a.Language'),
+            'title' => trans('general.Title'),
+            'lang' => trans('general.Language'),
             'path' => 'Path',
         ]);
     }

@@ -30,7 +30,7 @@ class SettingsScopesListener
         $site = new SiteSettings();
         $event->scopes->put('site', $site);
 
-        $users = new SettingsScope('users', trans('a.Users'));
+        $users = new SettingsScope('users', trans('general.Users'));
         $users->setFields(['registration', 'auth', 'verification']);
         $event->scopes->put('users', $users);
 

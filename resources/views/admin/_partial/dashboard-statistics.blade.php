@@ -10,7 +10,7 @@
                 <i class="fa" ng-class="{'fa-angle-down': $ctrl.collapsed, 'fa-angle-up': !$ctrl.collapsed}"></i>
             </a>
         </div>
-        <h5>@lang('a.Statistics')</h5>
+        <h5>@lang('general.Statistics')</h5>
     </div>
 
     <div class="list-group collapse in" id="statistics">

@@ -10,7 +10,7 @@ class NavbarMenuPresenter extends NavMenuPresenter
      */
     public static function title()
     {
-        return 'navbar (' . trans('a.Horizontal') . ')';
+        return 'navbar (' . trans('general.Horizontal') . ')';
     }
 
     public static function options()

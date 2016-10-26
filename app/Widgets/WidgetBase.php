@@ -47,8 +47,8 @@ abstract class WidgetBase implements WidgetInterface
     public function getTemplates()
     {
         return [
-            '' => trans('a.Empty'),
-            'block' => trans('a.Block'),
+            '' => trans('general.Empty'),
+            'block' => trans('general.Block'),
         ];
     }
 }

@@ -9,7 +9,7 @@ class SitePages extends SettingsScope
 {
     public function __construct()
     {
-        parent::__construct('page', trans('a.Pages'));
+        parent::__construct('page', trans('general.Pages'));
 
         $this->setFields(['home', '404', '503', '500']);
     }

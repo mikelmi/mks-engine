@@ -5,11 +5,11 @@
 @endsection
 
 @section('title')
-    @lang('a.Languages')
+    @lang('general.Languages')
 @endsection
 
 @section('right')
-    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('a.Search')..." ng-model="gridQuery" />
+    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('general.Search')..." ng-model="gridQuery" />
 @endsection
 
 @section('tools')
@@ -38,8 +38,8 @@
                 <tr class="thead-default">
                     <th mst-select-all-rows="grid.rows"> </th>
                     <th st-sort="iso" class="st-sortable">ISO</th>
-                    <th st-sort="name" class="st-sortable">@lang('a.Name')</th>
-                    <th st-sort="title" class="st-sortable">@lang('a.Title')</th>
+                    <th st-sort="name" class="st-sortable">@lang('general.Name')</th>
+                    <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
                     <th st-sort="enabled" class="st-sortable">@lang('admin::messages.Status')</th>
                     <th> </th>
                 </tr>
@@ -47,10 +47,10 @@
                     <th><!-- checkbox --></th>
                     <th><!-- iso --></th>
                     <th><!-- name -->
-                        <input st-search="name" data-placeholder="@lang('a.Name')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="name" data-placeholder="@lang('general.Name')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- title -->
-                        <input st-search="title" data-placeholder="@lang('a.Title')" class="form-control form-control-sm form-block" type="search"/>
+                        <input st-search="title" data-placeholder="@lang('general.Title')" class="form-control form-control-sm form-block" type="search"/>
                     </th>
                     <th><!-- enabled -->
                         <select st-search="enabled" class="form-control form-block">
@@ -73,7 +73,7 @@
                         <button class="btn btn-sm" ng-click="grid.updateRow(row,'{{ route('admin::language.toggle') }}/'+row.iso)" title="@lang('admin::messages.Activate')/@lang('admin::messages.Deactivate')" ng-class="{'btn-success':row.enabled,'btn-warning':!row.enabled}">
                             <i class="fa" ng-class="{'fa-check':row.enabled,'fa-minus':!row.enabled}"></i>
                         </button>
-                        <button class="btn btn-sm" ng-click="grid.updateRow(row,'{{ route('admin::language.setDefault') }}/'+row.iso)" title="@lang('a.Default')" ng-class="{'btn-info':row.default,'btn-outline-secondary':!row.default}">
+                        <button class="btn btn-sm" ng-click="grid.updateRow(row,'{{ route('admin::language.setDefault') }}/'+row.iso)" title="@lang('general.Default')" ng-class="{'btn-info':row.default,'btn-outline-secondary':!row.default}">
                             <i class="fa fa-star"></i>
                         </button>
                     </td>
@@ -94,7 +94,7 @@
                     <td colspan="6">
                         <div class="pull-left text-muted">
                             {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
-                            @lang('a.Selected_s'): {[{ grid.hasSelected }]}
+                            @lang('general.Selected_s'): {[{ grid.hasSelected }]}
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -113,12 +113,12 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="@lang('admin::messages.Cancel')">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title" id="addLangModalLabel">@lang('a.Add Language')</h4>
+                    <h4 class="modal-title" id="addLangModalLabel">@lang('general.Add Language')</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" action="{{route('admin::language.add')}}" mks-form id="addLangForm">
                         <div class="form-group row">
-                            <label class="col-xs-2 col-form-label">@lang('a.Language')</label>
+                            <label class="col-xs-2 col-form-label">@lang('general.Language')</label>
                             <div class="col-xs-10 row-block">
                                 <select name="language" class="form-control" mks-select
                                         data-url="{{route('admin::languages.all')}}"

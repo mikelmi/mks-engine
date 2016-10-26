@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="breadcrumb">
-        <a href="#/role" class="breadcrumb-item">@lang('a.Roles')</a>
+        <a href="#/role" class="breadcrumb-item">@lang('general.Roles')</a>
         <span class="breadcrumb-item">
             {{  trans('admin::messages.' . ($model->id ? 'Edit' : 'Add')) }}
         </span>
@@ -30,21 +30,21 @@
     <form class="card-block p-a-3" action="{{route('admin::role.save', [$model->id])}}" method="post" mks-form>
 
         <div class="form-group row" ng-class="{'has-danger':page.errors.name}">
-            <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Title') </label>
+            <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Title') </label>
             <div class="col-sm-9">
                 <input type="text" name="name" value="{{ old('name', $model->name) }}" class="form-control" />
                 <small class="form-control-feedback" ng-show="page.errors.name">{[{page.errors.name[0]}]}</small>
             </div>
         </div>
         <div class="form-group row" ng-class="{'has-danger':page.errors.display_name}">
-            <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Display Name') </label>
+            <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Display Name') </label>
             <div class="col-sm-9">
                 <input type="text" name="display_name" value="{{ old('display_name', $model->display_name) }}" class="form-control" />
                 <small class="form-control-feedback" ng-if="page.errors.email">{[{page.errors.display_name[0]}]}</small>
             </div>
         </div>
         <div class="form-group row" ng-class="{'has-danger':page.errors.description}">
-            <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Description') </label>
+            <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Description') </label>
             <div class="col-sm-9">
                 <textarea name="description"class="form-control">{{ old('description', $model->description) }}</textarea>
                 <small class="form-control-feedback" ng-if="page.errors.email">{[{page.errors.description[0]}]}</small>
@@ -53,7 +53,7 @@
 
         @if (!$model->is_system)
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label text-sm-right"> @lang('a.Permissions') </label>
+                <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Permissions') </label>
                 <div class="col-sm-9">
                     <select multiple class="form-control form-block" name="permissions[]" mks-select data-url="{{route('admin::role.permissions', $model->id)}}">
                     </select>

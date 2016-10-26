@@ -10,7 +10,7 @@ class PillsMenuPresenter extends NavMenuPresenter
      */
     public static function title()
     {
-        return 'pills (' . trans('a.Horizontal') . ')';
+        return 'pills (' . trans('general.Horizontal') . ')';
     }
 
     public static function options()

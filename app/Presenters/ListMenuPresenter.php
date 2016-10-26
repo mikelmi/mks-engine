@@ -10,7 +10,7 @@ class ListMenuPresenter extends NavMenuPresenter
      */
     public static function title()
     {
-        return 'list (' . trans('a.Vertical') . ')';
+        return 'list (' . trans('general.Vertical') . ')';
     }
 
     public static function options()

@@ -1,7 +1,7 @@
 @extends('admin::page')
 
 @section('title')
-    @lang('a.Settings')
+    @lang('general.Settings')
 @endsection
 
 @section('tools')

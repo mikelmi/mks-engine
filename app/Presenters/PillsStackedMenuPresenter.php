@@ -10,7 +10,7 @@ class PillsStackedMenuPresenter extends PillsMenuPresenter
      */
     public static function title()
     {
-        return 'pills-stacked (' . trans('a.Vertical') . ')';
+        return 'pills-stacked (' . trans('general.Vertical') . ')';
     }
 
     public static function options()

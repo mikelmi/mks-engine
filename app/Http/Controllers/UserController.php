@@ -87,7 +87,7 @@ class UserController extends SiteController
 
         $user->save();
 
-        $this->flashSuccess(trans('a.Saved'));
+        $this->flashSuccess(trans('general.Saved'));
 
         return redirect()->route('user.profile');
     }

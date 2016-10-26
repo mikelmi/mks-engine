@@ -24,7 +24,7 @@ class LanguagesWidget extends MenuWidget implements WidgetInterface
      */
     public static function title()
     {
-        return trans('a.Languages');
+        return trans('general.Languages');
     }
 
     public function form()

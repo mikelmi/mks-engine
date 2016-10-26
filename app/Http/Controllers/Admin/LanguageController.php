@@ -57,7 +57,7 @@ class LanguageController extends AdminController
 
         $languageRepository->add($request->get('language'));
 
-        $this->flashSuccess(trans('a.Saved'));
+        $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect('/language');
     }
@@ -127,7 +127,7 @@ class LanguageController extends AdminController
 
         $languageRepository->save($model);
 
-        $this->flashSuccess(trans('a.Saved'));
+        $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect('/language');
     }

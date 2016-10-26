@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="breadcrumb">
-        <a href="#/user" class="breadcrumb-item">@lang('a.Users')</a>
+        <a href="#/user" class="breadcrumb-item">@lang('general.Users')</a>
         <span class="breadcrumb-item">
             {{  trans('admin::messages.' . ($model->id ? 'Edit' : 'Add')) }}
         </span>
@@ -39,7 +39,7 @@
         @endif
 
         <div class="form-group row" ng-class="{'has-danger':page.errors.name}">
-            <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Name') </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Name') </label>
             <div class="col-sm-10">
                 <input type="text" name="name" value="{{ old('name', $model->name) }}" class="form-control" />
                 <small class="form-control-feedback" ng-show="page.errors.name">{[{page.errors.name[0]}]}</small>
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Roles') </label>
+                <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Roles') </label>
                 <div class="col-sm-10">
                     <select multiple class="form-control form-block" name="roles[]" mks-select data-url="{{route('admin::user.roles', $model->id)}}">
                     </select>
@@ -93,16 +93,16 @@
         @endif
 
         <div class="form-group row" ng-class="{'has-danger':page.errors.password}">
-            <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Password') </label>
+            <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Password') </label>
             <div class="col-sm-10">
                 <div class="input-group">
                 <span class="input-group-addon">
                     &nbsp;
                     <input type="checkbox" ng-model="psw_checked" class="form-check-input" />
                 </span>
-                    <input type="password" name="password" class="form-control" ng-disabled="!psw_checked" placeholder="@lang('a.Password')" /><br />
+                    <input type="password" name="password" class="form-control" ng-disabled="!psw_checked" placeholder="@lang('general.Password')" /><br />
                     &nbsp;&nbsp;
-                    <input type="password" name="password_confirmation" class="form-control" ng-disabled="!psw_checked" placeholder="@lang('a.Confirm Password')" />
+                    <input type="password" name="password_confirmation" class="form-control" ng-disabled="!psw_checked" placeholder="@lang('general.Confirm Password')" />
                     <div>
                         <small class="form-control-feedback" ng-if="page.errors.password">{[{page.errors.password[0]}]}</small>
                     </div>

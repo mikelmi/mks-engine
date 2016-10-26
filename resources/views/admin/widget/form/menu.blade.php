@@ -1,5 +1,5 @@
 <div class="form-group row" ng-class="{'has-danger':page.errors.content}">
-    <label class="col-sm-2 col-form-label text-sm-right"> @lang('a.Menu') </label>
+    <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Menu') </label>
     <div class="col-sm-10">
         <select name="content" class="form-control">
             @foreach($menu as $item)
@@ -13,7 +13,7 @@
 </div>
 
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label text-sm-right">@lang('a.Type')</label>
+    <label class="col-sm-2 col-form-label text-sm-right">@lang('general.Type')</label>
     <div class="col-sm-10">
         <select name="params[type]" class="form-control">
             @foreach($presenters as $type => $title)

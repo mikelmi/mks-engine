@@ -10,7 +10,7 @@ class TabsMenuPresenter extends NavMenuPresenter
      */
     public static function title()
     {
-        return 'tabs (' . trans('a.Horizontal') . ')';
+        return 'tabs (' . trans('general.Horizontal') . ')';
     }
 
     public static function options()

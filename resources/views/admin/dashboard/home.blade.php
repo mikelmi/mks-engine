@@ -1,7 +1,7 @@
 @extends('admin::page')
 
 @section('title')
-    @lang('a.Dashboard')
+    @lang('general.Dashboard')
 @endsection
 
 @section('content')

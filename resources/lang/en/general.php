@@ -86,4 +86,18 @@ return [
     'thumbnail_size' => 'Thumbnail size',
     'Width' => 'Width',
     'Height' => 'Height',
+
+    'Cancel' => 'Cancel',
+    'Add' => 'Add',
+    'Create' => 'Create',
+    'Edit' => 'Edit',
+    'Save' => 'Save',
+    'Delete' => 'Delete',
+    'Created at' => 'Created at',
+    'Updated at' => 'Updated at',
+    'Status' => 'Status',
+    'Activate' => 'Activate',
+    'Deactivate' => 'Deactivate',
+    'Active' => 'Active',
+    'Inactive' => 'Inactive',
 ];

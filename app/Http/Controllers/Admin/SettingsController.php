@@ -75,7 +75,7 @@ class SettingsController extends AdminController
 
         $scopeObject->afterSave($old, $settings->getRepository($scope));
 
-        $this->flashSuccess(trans('a.Saved'));
+        $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect('/settings/' . $scope);
     }

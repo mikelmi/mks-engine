@@ -5,11 +5,11 @@
 @endsection
 
 @section('title')
-    @lang('a.Pages')
+    @lang('general.Pages')
 @endsection
 
 @section('right')
-    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('a.Search')..." ng-model="gridQuery" />
+    <input class="form-control form-control-search ic-left" type="search" placeholder="@lang('general.Search')..." ng-model="gridQuery" />
 @endsection
 
 @section('tools')
@@ -32,7 +32,7 @@
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs pull-xs-left">
                 <li class="nav-item">
-                    <a class="nav-link @if($scope != 'trash') active @endif " href="#/page">@lang('a.Pages') <span class="tag tag-pill tag-default">{[{ page.model.pages_count }]}</span></a>
+                    <a class="nav-link @if($scope != 'trash') active @endif " href="#/page">@lang('general.Pages') <span class="tag tag-pill tag-default">{[{ page.model.pages_count }]}</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link @if($scope == 'trash') active @endif " href="#/page/trash">@lang('admin::messages.Trash') <span class="tag tag-pill tag-default">{[{ page.model.trash_count }]}</span></a>
@@ -47,8 +47,8 @@
                     <tr class="thead-default">
                         <th mst-select-all-rows="grid.rows"> </th>
                         <th st-sort="id" class="st-sortable">#</th>
-                        <th st-sort="title" class="st-sortable">@lang('a.Title')</th>
-                        <th st-sort="lang" class="st-sortable">@lang('a.Language')</th>
+                        <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
+                        <th st-sort="lang" class="st-sortable">@lang('general.Language')</th>
                         <th st-sort="path" class="st-sortable">URL</th>
                         <th st-sort="created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
                         <th> </th>
@@ -57,7 +57,7 @@
                         <th><!-- checkbox --></th>
                         <th><!-- id --></th>
                         <th><!-- title -->
-                            <input st-search="name" data-placeholder="@lang('a.Title')" class="form-control form-control-sm form-block" type="search"/>
+                            <input st-search="name" data-placeholder="@lang('general.Title')" class="form-control form-control-sm form-block" type="search"/>
                         </th>
                         <th><!-- lang -->
                             <select class="form-control form-block" st-search="lang">
@@ -68,7 +68,7 @@
                             </select>
                         </th>
                         <th><!-- path -->
-                            <input st-search="path" data-placeholder="@lang('a.Path')" class="form-control form-control-sm form-block" type="search"/>
+                            <input st-search="path" data-placeholder="@lang('general.Path')" class="form-control form-control-sm form-block" type="search"/>
                         </th>
                         <th><!-- created_at -->
                             <input st-search="created_at" data-placeholder="@lang('admin::messages.Created at')" class="form-control form-control-sm form-block" type="date"/>
@@ -110,7 +110,7 @@
                         <td colspan="9">
                             <div class="pull-left text-muted">
                                 {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
-                                @lang('a.Selected_s'): {[{ grid.hasSelected }]}
+                                @lang('general.Selected_s'): {[{ grid.hasSelected }]}
                             </div>
                             <div class="pull-right" st-pagination="" st-items-by-page="10"></div>
                             <div class="clearfix"></div>

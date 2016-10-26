@@ -17,7 +17,7 @@
         <tr class="thead-default">
             <th mst-select-all-rows="grid.rows"> </th>
             <th st-sort="id" class="st-sortable">#</th>
-            <th st-sort="title" class="st-sortable">@lang('a.Title')</th>
+            <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
             <th st-sort="path" class="st-sortable">URL</th>
             <th st-sort="created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
             <th> </th>
@@ -26,10 +26,10 @@
             <th><!-- checkbox --></th>
             <th><!-- id --></th>
             <th><!-- title -->
-                <input st-search="name" data-placeholder="@lang('a.Title')" class="form-control form-control-sm form-block" type="search"/>
+                <input st-search="name" data-placeholder="@lang('general.Title')" class="form-control form-control-sm form-block" type="search"/>
             </th>
             <th><!-- path -->
-                <input st-search="path" data-placeholder="@lang('a.Path')" class="form-control form-control-sm form-block" type="search"/>
+                <input st-search="path" data-placeholder="@lang('general.Path')" class="form-control form-control-sm form-block" type="search"/>
             </th>
             <th><!-- created_at -->
                 <input st-search="created_at" data-placeholder="@lang('admin::messages.Created at')" class="form-control form-control-sm form-block" type="date"/>
@@ -65,7 +65,7 @@
             <td colspan="8">
                 <div class="pull-left text-muted">
                     {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
-                    @lang('a.Selected_s'): {[{ grid.hasSelected }]}
+                    @lang('general.Selected_s'): {[{ grid.hasSelected }]}
                 </div>
                 <div class="pull-right" st-pagination="" st-items-by-page="10"></div>
                 <div class="clearfix"></div>

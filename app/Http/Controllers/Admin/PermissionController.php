@@ -64,7 +64,7 @@ class PermissionController extends AdminController
 
         $model->save();
 
-        $this->flashSuccess(trans('a.Saved'));
+        $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect([
             '/permission',

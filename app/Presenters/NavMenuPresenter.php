@@ -115,7 +115,7 @@ class NavMenuPresenter implements MenuPresenterInterface
      */
     public static function title()
     {
-        return 'nav (' . trans('a.Vertical') . ')';
+        return 'nav (' . trans('general.Vertical') . ')';
     }
 
     public static function options()

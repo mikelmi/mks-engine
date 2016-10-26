@@ -10,7 +10,7 @@ class NavInlineMenuPresenter extends NavMenuPresenter
      */
     public static function title()
     {
-        return 'nav-inline (' . trans('a.Horizontal') . ')';
+        return 'nav-inline (' . trans('general.Horizontal') . ')';
     }
 
     public static function options()

@@ -9,7 +9,7 @@ class SiteSettings extends SettingsScope
 {
     public function __construct()
     {
-        parent::__construct('site', trans('a.Site'));
+        parent::__construct('site', trans('general.Site'));
 
         $this->setFields(['title', 'description', 'keywords', 'off', 'theme']);
     }

@@ -10,7 +10,7 @@
                 <i class="fa" ng-class="{'fa-angle-down': $ctrl.collapsed, 'fa-angle-up': !$ctrl.collapsed}"></i>
             </a>
         </div>
-        <h5>@lang('a.Last events')</h5>
+        <h5>@lang('general.Last events')</h5>
         <small>
             <span ng-class="{'text-muted': !$ctrl.unreadCount}">{[{ $ctrl.unreadCount }]}</span>
             /
@@ -32,13 +32,13 @@
 
     <div class="card-footer">
         <button type="button" class="btn btn-sm btn-outline-primary" ng-show="$ctrl.nextUrl" ng-click="$ctrl.load()">
-            <i class="fa fa-ellipsis-h"></i> @lang('a.Show more')
+            <i class="fa fa-ellipsis-h"></i> @lang('general.Show more')
         </button>
         <button type="button" class="btn btn-sm btn-outline-warning" ng-click="$ctrl.deleteRead('{{trans('admin::messages.Delete')}}?')">
-            <i class="fa fa-remove"></i> @lang('a.Delete read')
+            <i class="fa fa-remove"></i> @lang('general.Delete read')
         </button>
         <button type="button" class="btn btn-sm btn-outline-danger" ng-click="$ctrl.deleteAll('{{trans('admin::messages.Delete')}}?')">
-            <i class="fa fa-remove"></i> @lang('a.Delete all')
+            <i class="fa fa-remove"></i> @lang('general.Delete all')
         </button>
     </div>
 </div>
