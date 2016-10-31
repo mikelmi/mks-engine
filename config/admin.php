@@ -28,7 +28,8 @@ return [
         'mks-smart-table',
         'mks-admin-ext',
         'mks-menu-manager',
-        'mks-dashboard'
+        'mks-dashboard',
+        'mks-category-manager',
     ],
 
     'home_button' => '<a class="lc-hide inline title" href="#/home"><i class="fa fa-wrench"></i> Admin</a>',
@@ -62,5 +63,6 @@ return [
         ],
         ['title' => 'general.Menu', 'href' => '#/menuman', 'hash' => 'menuman', 'icon'=>'list-ul', 'nickname'=>'menu'],
         ['title' => 'general.Widgets', 'href' => '#/widget', 'hash' => 'widget', 'icon'=>'th-large', 'nickname'=>'widget'],
+        ['title' => 'general.Categories', 'href' => '#/category', 'hash' => 'category', 'icon'=>'indent', 'nickname'=>'categories'],
     ],
 ];

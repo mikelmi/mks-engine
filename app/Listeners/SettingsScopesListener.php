@@ -5,6 +5,7 @@ namespace App\Listeners;
 
 use App\Events\AdminMenuBuild;
 use App\Events\PagePathChanged;
+use App\Events\CategoryTypesCollect;
 use App\Events\SettingsScopesCollect;
 use App\Settings\CaptchaSettings;
 use App\Settings\FilesSettings;
@@ -52,6 +53,16 @@ class SettingsScopesListener
 
             foreach ($scopes as $scope) {
                 $menuItem->add($scope->title, ['href' => '#/settings/'.$scope->name, 'hash' => 'settings/'.$scope->name]);
+            }
+        }
+
+        if ($categoriesItem = $event->menu->item('categories')) {
+            $categoryTypes = new Collection();
+            event(new CategoryTypesCollect($categoryTypes));
+            if ($categoryTypes->count() == 0) {
+                $event->menu->filter(function($item) {
+                    return $item->nickname != 'categories';
+                });
             }
         }
     }

@@ -142,3 +142,31 @@ $router->group(['prefix'=>'language', 'middleware' => ['permission:admin.languag
     $router->post('set-default/{iso?}', 'LanguageController@setDefault')->name('language.setDefault');
     $router->get('select/{iso?}', 'LanguageController@getSelectList')->name('language.select');
 });
+
+//Category
+$router->group(['prefix' => 'category', 'as' => 'category.', 'middleware' => ['permission:admin.category*']], function(\Illuminate\Routing\Router $router) {
+    $router->get('sections', ['as' => 'sections', 'uses' => 'CategoryController@sections']);
+    $router->post('save-section', ['as' => 'save.section', 'uses' => 'CategoryController@saveSection']);
+    $router->post('delete-section', ['as' => 'delete.section', 'uses' => 'CategoryController@deleteSection']);
+
+    $router->get('categories/{scope}', ['as' => 'categories', 'uses' => 'CategoryController@categories'])->where('scope', '\d+');
+    $router->post('move/{scope}/{id}', ['as' => 'move', 'uses' => 'CategoryController@move'])
+        ->where('scope', '\d+')
+        ->where('id', '\d+');
+
+    $router->post('delete/{id}', ['as' => 'delete', 'uses' => 'CategoryController@delete'])->where('id', '\d+');
+
+    $router->get('edit/{scope}/{id?}', ['as' => 'edit', 'uses' => 'CategoryController@edit'])
+        ->where('scope', '\d+')
+        ->where('id', '\d+');
+
+    $router->post('save/{scope}/{id?}', ['as' => 'save', 'uses' => 'CategoryController@save'])
+        ->where('scope', '\d+')
+        ->where('id', '\d+');
+
+    $router->get('/tree/options/{scope}/{id?}', ['as' => 'tree.options', 'uses' => 'CategoryController@treeOptions'])
+        ->where('scope', '\d+')
+        ->where('id', '\d+');
+
+    $router->get('/{scope?}', ['as' => 'index', 'uses' => 'CategoryController@index'])->where('scope', '\d+');
+});

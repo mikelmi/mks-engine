@@ -45,9 +45,4 @@ class Menu extends Model
     {
         return $query->orderBy('name');
     }
-
-    public function getActiveAttribute($value)
-    {
-        return boolval($value);
-    }
 }

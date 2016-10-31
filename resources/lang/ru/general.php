@@ -100,4 +100,10 @@ return [
     'Deactivate' => 'Блокировать',
     'Active' => 'Активный',
     'Inactive' => 'Неактивный',
+
+    'Categories' => 'Категории',
+    'Category' => 'Категория',
+    'Add Category' => 'Добавить категорию',
+    'Edit Category' => 'Редактировать категорию',
+    'Add Section' => 'Добваить раздел',
 ];

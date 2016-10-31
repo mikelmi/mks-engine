@@ -29,6 +29,8 @@ class MenuItem extends Model
 {
     use NodeTrait, Parametrized;
 
+    public $timestamps = false;
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

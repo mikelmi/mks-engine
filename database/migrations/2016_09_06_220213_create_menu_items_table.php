@@ -15,8 +15,6 @@ class CreateMenuItemsTable extends Migration
     {
         Schema::create('menu_items', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
-            $table->softDeletes();
 
             \Kalnoy\Nestedset\NestedSet::columns($table);
 

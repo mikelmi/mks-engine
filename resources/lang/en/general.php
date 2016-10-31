@@ -100,4 +100,10 @@ return [
     'Deactivate' => 'Deactivate',
     'Active' => 'Active',
     'Inactive' => 'Inactive',
+    
+    'Categories' => 'Categories',
+    'Category' => 'Category',
+    'Add Category' => 'Add Category',
+    'Edit Category' => 'Edit Category',
+    'Add Section' => 'Add Section',
 ];

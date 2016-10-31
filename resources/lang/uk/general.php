@@ -100,4 +100,10 @@ return [
     'Deactivate' => 'Деактивувати',
     'Active' => 'Активний',
     'Inactive' => 'Неактивний',
+
+    'Categories' => 'Категорії',
+    'Category' => 'Категорія',
+    'Add Category' => 'Додати категорію',
+    'Edit Category' => 'Редагувати категорію',
+    'Add Section' => 'Додати розділ'
 ];
