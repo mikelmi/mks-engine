@@ -7,6 +7,7 @@ use App\Events\AdminMenuBuild;
 use App\Events\PagePathChanged;
 use App\Events\CategoryTypesCollect;
 use App\Events\SettingsScopesCollect;
+use App\Services\CategoryManager;
 use App\Settings\CaptchaSettings;
 use App\Settings\FilesSettings;
 use App\Settings\SettingsScope;
@@ -57,9 +58,7 @@ class SettingsScopesListener
         }
 
         if ($categoriesItem = $event->menu->item('categories')) {
-            $categoryTypes = new Collection();
-            event(new CategoryTypesCollect($categoryTypes));
-            if ($categoryTypes->count() == 0) {
+            if (!app(CategoryManager::class)->hasTypes()) {
                 $event->menu->filter(function($item) {
                     return $item->nickname != 'categories';
                 });

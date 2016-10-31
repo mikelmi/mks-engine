@@ -6,15 +6,15 @@ namespace App\Http\Controllers\Admin;
 use App\Events\CategoryTypesCollect;
 use App\Models\Category;
 use App\Models\Section;
+use App\Services\CategoryManager;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class CategoryController extends AdminController
 {
-    public function index($scope = null)
+    public function index(CategoryManager $categoryManager, $scope = null)
     {
-        $types = collect();
-        event(new CategoryTypesCollect($types));
+        $types = $categoryManager->getTypes();
 
         return view('admin.category.index', compact('scope', 'types'));
     }
