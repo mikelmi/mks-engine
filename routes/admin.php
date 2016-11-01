@@ -168,5 +168,7 @@ $router->group(['prefix' => 'category', 'as' => 'category.', 'middleware' => ['p
         ->where('scope', '\d+')
         ->where('id', '\d+');
 
+    $router->get('select/{type?}', ['as' => 'select', 'uses' => 'CategoryController@select'])->where('type', '.+');
+
     $router->get('/{scope?}', ['as' => 'index', 'uses' => 'CategoryController@index'])->where('scope', '\d+');
 });

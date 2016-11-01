@@ -37,4 +37,9 @@ class Category extends Model
     {
         return self::ofSection($section)->defaultOrder()->withDepth()->get()->toTree($root);
     }
+
+    public static function getFlatTree($section, $root = null)
+    {
+        return self::ofSection($section)->defaultOrder()->withDepth()->get()->toFlatTree($root);
+    }
 }
