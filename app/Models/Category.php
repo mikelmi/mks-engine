@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
 
+/**
+ * Class Category
+ * @package App\Models
+ *
+ * @property int $id
+ * @property string $title
+ * @property Section $section
+ * @method Category ofSection($section)
+ */
 class Category extends Model
 {
     use NodeTrait;

@@ -105,5 +105,6 @@ return [
     'Category' => 'Категорія',
     'Add Category' => 'Додати категорію',
     'Edit Category' => 'Редагувати категорію',
-    'Add Section' => 'Додати розділ'
+    'Add Section' => 'Додати розділ',
+    'Without category' => 'Без категорії',
 ];

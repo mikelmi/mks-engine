@@ -40,7 +40,7 @@ class CategoryManager
      * @param string|null $type
      * @return array
      */
-    public function getSelectOptions($type = null)
+    public function getSelectOptions($type = null, $selected = null)
     {
         $sections = Section::select(['id', 'title as text']);
 
@@ -50,11 +50,16 @@ class CategoryManager
 
         $sections = $sections->get()->toArray();
 
+        if ($selected) {
+            $selected = (array) $selected;
+        }
+
         foreach ($sections as &$section) {
-            $section['children'] = Category::getFlatTree($section['id'])->map(function($item) {
+            $section['children'] = Category::getFlatTree($section['id'])->map(function($item) use ($selected) {
                 return [
                     'id' => $item->id,
-                    'text' => str_repeat('-', $item->depth) . $item->title
+                    'text' => str_repeat('-', $item->depth) . $item->title,
+                    'selected' => $selected && in_array($item->id, $selected)
                 ];
             })->toArray();
         }

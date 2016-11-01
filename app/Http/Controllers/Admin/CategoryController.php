@@ -176,8 +176,8 @@ class CategoryController extends AdminController
         return $result;
     }
     
-    public function select(CategoryManager $categoryManager, $type = null)
+    public function select(Request $request, CategoryManager $categoryManager, $type = null)
     {
-        return $categoryManager->getSelectOptions($type);
+        return $categoryManager->getSelectOptions($type, $request->get('selected'));
     }
 }

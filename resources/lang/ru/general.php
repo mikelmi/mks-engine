@@ -106,4 +106,5 @@ return [
     'Add Category' => 'Добавить категорию',
     'Edit Category' => 'Редактировать категорию',
     'Add Section' => 'Добваить раздел',
+    'Without category' => 'Без категории',
 ];
