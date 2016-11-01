@@ -2,12 +2,13 @@
 
 namespace App\Presenters;
 
-
-use App\Models\MenuItem;
+use App\Contracts\NestedMenuInterface;
 use Illuminate\Support\Collection;
 
 class NavMenuPresenter implements MenuPresenterInterface
 {
+    protected $maxDepth = -1;
+
     protected $options = [
         'class_ul' => 'nav', // class for <ul>
         'class_li' => 'nav-item', //class for ul->li
@@ -51,12 +52,18 @@ class NavMenuPresenter implements MenuPresenterInterface
         $class_a_children = $this->option('class_a_children');
         $class_sub_ul = $this->option('class_sub_ul');
 
-        /** @var MenuItem $item */
+        /** @var NestedMenuInterface $item */
         foreach ($items as $item) {
+            $depth = $item->getDepth();
+
+            if ($this->maxDepth > -1 && $depth > $this->maxDepth) {
+                continue;
+            }
+
             $hasChildren = $item->hasChildren();
 
             $li_attr = [
-                'class' => !$item->depth ? $class_li : $class_li_deep,
+                'class' => !$depth ? $class_li : $class_li_deep,
             ];
 
             $a_attr = [
@@ -77,24 +84,35 @@ class NavMenuPresenter implements MenuPresenterInterface
             $result .= $this->renderItem($item, $li_attr, $a_attr) . PHP_EOL;
 
             if ($hasChildren) {
-                $el = $item->depth > 0 ? 'div' : 'ul';
+                $el = $this->maxDepth > -1 && $depth == $this->maxDepth-1 ? 'div' : 'ul';
                 $result .= '<' . $el . ' class="' . $class_sub_ul . '">';
-                $this->renderItems($item->children, $result);
+                $this->renderItems($item->getChildren(), $result);
                 $result .= '</' . $el . '>';
             }
+
+            if ($this->maxDepth > -1 && $depth == $this->maxDepth) {
+                continue;
+            }
+
             $result .= '</li>';
         }
 
         return $result;
     }
 
+    /**
+     * @param NestedMenuInterface $item
+     * @param $li_attr
+     * @param $a_attr
+     * @return string
+     */
     protected function renderItem($item, $li_attr, $a_attr)
     {
-        if ($item->depth > 0) {
-            return '<a '.html_attr(array_merge($a_attr, $li_attr)).'>' . e($item->title) . '</a>';
+        if ($this->maxDepth > -1 && $item->getDepth() == $this->maxDepth) {
+            return '<a '.html_attr(array_merge($a_attr, $li_attr)).'>' . e($item->getTitle()) . '</a>';
         }
 
-        return '<li '.html_attr($li_attr).'><a '.html_attr($a_attr).'>' . e($item->title) . '</a>';
+        return '<li '.html_attr($li_attr).'><a '.html_attr($a_attr).'>' . e($item->getTitle()) . '</a>';
     }
 
     /**

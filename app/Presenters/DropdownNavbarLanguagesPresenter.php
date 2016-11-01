@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Presenters;
-;
 
 class DropdownNavbarLanguagesPresenter extends DropdownLanguagesPresenter
 {

@@ -5,6 +5,8 @@ namespace App\Presenters;
 
 class PillsMenuPresenter extends NavMenuPresenter
 {
+    protected $maxDepth = 1;
+
     /**
      * @return string
      */

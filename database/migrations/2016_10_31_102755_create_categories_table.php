@@ -16,6 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
+            $table->string('slug');
             $table->unsignedInteger('section_id');
 
             \Kalnoy\Nestedset\NestedSet::columns($table);

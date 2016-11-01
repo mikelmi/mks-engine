@@ -12,6 +12,7 @@ use App\Presenters\NavInlineMenuPresenter;
 use App\Presenters\NavMenuPresenter;
 use App\Presenters\PillsMenuPresenter;
 use App\Presenters\PillsStackedMenuPresenter;
+use App\Presenters\SelectMenuPresenter;
 use App\Presenters\TabsMenuPresenter;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,7 @@ class MenuWidget extends WidgetBase implements WidgetInterface
         'pills' => PillsMenuPresenter::class,
         'pills-stacked' => PillsStackedMenuPresenter::class,
         'list' => ListMenuPresenter::class,
+        'select' => SelectMenuPresenter::class,
     ];
 
     public function getPresentersList()
@@ -77,8 +79,12 @@ class MenuWidget extends WidgetBase implements WidgetInterface
         $type = array_get($this->presenters, $this->model->param('type', ''));
 
         $presenter = $this->makePresenter($type);
-
-        $items = MenuItem::getTree($this->model->content);
+        
+        if ($presenter instanceof SelectMenuPresenter) {
+            $items = MenuItem::getFlatTree($this->model->content);
+        } else {
+            $items = MenuItem::getTree($this->model->content);
+        }
 
         $items = $presenter->render($items, ['class' => $this->model->param('css_class')]);
 

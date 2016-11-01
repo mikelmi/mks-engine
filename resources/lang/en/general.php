@@ -107,4 +107,5 @@ return [
     'Edit Category' => 'Edit Category',
     'Add Section' => 'Add Section',
     'Without category' => 'Without category',
+    'Section' => 'Section',
 ];

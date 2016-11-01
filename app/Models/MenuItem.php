@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Contracts\NestedMenuInterface;
 use App\Traits\Parametrized;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -20,12 +21,14 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $url
  * @property string $target
  * @property Menu $menu
+ * @property int depth
+ * @property MenuItem[] $children
  *
  * @method MenuItem ofMenu($menu)
  * @method MenuItem defaultOrder()
  * @method MenuItem widthDepth()
  */
-class MenuItem extends Model
+class MenuItem extends Model implements NestedMenuInterface
 {
     use NodeTrait, Parametrized;
 
@@ -130,5 +133,39 @@ class MenuItem extends Model
     public static function getTree($menu, $root = null)
     {
         return self::ofMenu($menu)->defaultOrder()->withDepth()->get()->toTree($root);
+    }
+
+    /**
+     * @param $menu
+     * @param mixed $root
+     * @return Collection
+     */
+    public static function getFlatTree($menu, $root = null)
+    {
+        return self::ofMenu($menu)->defaultOrder()->withDepth()->get()->toFlatTree($root);
+    }
+
+    /**
+     * @return int
+     */
+    public function getDepth()
+    {
+        return $this->depth;
+    }
+
+    /**
+     * @return array|\Illuminate\Support\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }
