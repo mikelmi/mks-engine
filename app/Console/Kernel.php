@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\ModuleCacheClear;
 use App\Console\Commands\ModuleMakeMigration;
 use App\Console\Commands\ModuleMigrate;
+use App\Console\Commands\ModuleMigrateInstall;
 use App\Console\Commands\ModuleRollback;
 use App\Console\Commands\RoleCreate;
 use App\Console\Commands\RoleRemove;
@@ -33,6 +34,7 @@ class Kernel extends ConsoleKernel
         ModuleMakeMigration::class,
         ModuleMigrate::class,
         ModuleRollback::class,
+        ModuleMigrateInstall::class
     ];
 
     /**

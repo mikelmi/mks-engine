@@ -28,7 +28,7 @@ class ModuleRollback extends RollbackCommand
 
     public function __construct()
     {
-        parent::__construct(app('migrator'));
+        parent::__construct(app('module.migrator'));
     }
 
     protected function getOptions()
@@ -51,5 +51,29 @@ class ModuleRollback extends RollbackCommand
         return [
             ['module', InputArgument::OPTIONAL, 'The name of module will be used.']
         ];
+    }
+
+    public function fire()
+    {
+        if (! $this->confirmToProceed()) {
+            return;
+        }
+
+        $this->migrator->setConnection($this->option('database'));
+
+        $this->migrator->rollback(
+            $this->getMigrationPaths(), [
+                'pretend' => $this->option('pretend'),
+                'step' => (int) $this->option('step'),
+                'module' => $this->argument('module'),
+            ]
+        );
+
+        // Once the migrator has run we will grab the note output and send it out to
+        // the console screen, since the migrator itself functions without having
+        // any instances of the OutputInterface contract passed into the class.
+        foreach ($this->migrator->getNotes() as $note) {
+            $this->output->writeln($note);
+        }
     }
 }

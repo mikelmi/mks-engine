@@ -27,7 +27,7 @@ class ModuleMigrate extends MigrateCommand
 
     public function __construct()
     {
-        parent::__construct(app('migrator'));
+        parent::__construct(app('module.migrator'));
     }
 
     /**
@@ -56,5 +56,16 @@ class ModuleMigrate extends MigrateCommand
         return [
             ['module', InputArgument::OPTIONAL, 'The name of module will be used.']
         ];
+    }
+
+    protected function prepareDatabase()
+    {
+        $this->migrator->setConnection($this->option('database'));
+
+        if (! $this->migrator->repositoryExists()) {
+            $options = ['--database' => $this->option('database')];
+
+            $this->call('module:migrate:install', $options);
+        }
     }
 }

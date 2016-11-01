@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-
-use App\Contracts\ModuleRepositoryInterface;
+use App\Console\Commands\ModuleMigrateInstall;
 use App\Repositories\ModuleRepository;
+use App\Repositories\ModulesMigrationRepository;
+use App\Services\ModuleMigrator;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +23,26 @@ class ModulesLoaderServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(ModuleRepository::class, 'modules');
+
+        $this->app->singleton('module.migration.repository', function ($app) {
+            $table = $app['config']->get('modules.migrations', 'module_migrations');
+
+            return new ModulesMigrationRepository($app['db'], $table);
+        });
+
+        $this->app->singleton('module.migrator', function ($app) {
+            $repository = $app['module.migration.repository'];
+
+            $migrator = new ModuleMigrator($repository, $app['db'], $app['files']);
+            $pattern = '~'.preg_quote($app['config']->get('modules.paths.modules'), '~') . '/([^/\\\]+)/.+~';
+            $migrator->setModulePattern($pattern);
+            
+            return $migrator;
+        });
+
+        $this->app->singleton(ModuleMigrateInstall::class, function ($app) {
+            return new ModuleMigrateInstall($app['module.migration.repository']);
+        });
     }
 
     public function boot()
