@@ -13,8 +13,8 @@
     </nav>
 
     <div class="container-fluid top-pad">
+        @include('_partials.breadcrumbs')
         <div class="row">
-
             <div class="col-sm-3">
                 @widgets(left)
                 @yield('left')

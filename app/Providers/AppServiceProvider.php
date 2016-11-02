@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\PagePathChanged;
+use App\Http\ViewComposers\BreadcrumbComposer;
 use App\Models\Page;
+use App\Repositories\Breadcrumbs;
 use App\Repositories\LanguageRepository;
 use App\Services\CategoryManager;
 use App\Services\Settings;
@@ -24,11 +26,11 @@ class AppServiceProvider extends ServiceProvider
         require_once __DIR__.'/../helpers.php';
 
         \Blade::directive('widgets', function($position) {
-            return "<?php echo app(\App\Services\WidgetManager::class)->render('$position'); ?>";
+            return "<?php echo app(\\App\\Services\\WidgetManager::class)->render('$position'); ?>";
         });
 
         \Blade::directive('widget', function($name) {
-            return "<?php echo app(\App\Services\WidgetManager::class)->renderOne('$name'); ?>";
+            return "<?php echo app(\\App\\Services\\WidgetManager::class)->renderOne('$name'); ?>";
         });
 
         Page::saved(function(Page $page) {
@@ -45,6 +47,8 @@ class AppServiceProvider extends ServiceProvider
         }
 
         \App\Http\Request::setLocales(locales());
+
+        \View::composer('_partials.breadcrumbs', BreadcrumbComposer::class);
     }
 
     /**
@@ -82,6 +86,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(CategoryManager::class, function($app) {
             return new CategoryManager();
+        });
+
+        $this->app->singleton(Breadcrumbs::class, function($app) {
+            return new Breadcrumbs();
         });
     }
 }

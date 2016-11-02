@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Repositories\Breadcrumbs;
 use App\Repositories\LanguageRepository;
 use App\Services\Settings;
 use Artesaos\SEOTools\Traits\SEOTools;
@@ -28,6 +29,13 @@ class SiteController extends Controller
         $this->seo()->metatags()->setTitleDefault($title);
         $this->seo()->setDescription($description);
         $this->seo()->metatags()->setKeywords($keywords);
+
+        $this->init();
+    }
+
+    protected function init()
+    {
+
     }
 
     public function flashMessage($message, $type='info')
@@ -54,5 +62,13 @@ class SiteController extends Controller
     public function flashNotice($message)
     {
         $this->flashMessage($message, 'warning');
+    }
+
+    /**
+     * @return Breadcrumbs
+     */
+    protected function breadcrumbs()
+    {
+        return app(Breadcrumbs::class);
     }
 }
