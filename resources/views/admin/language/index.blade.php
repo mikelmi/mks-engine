@@ -40,7 +40,7 @@
                     <th st-sort="iso" class="st-sortable">ISO</th>
                     <th st-sort="name" class="st-sortable">@lang('general.Name')</th>
                     <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
-                    <th st-sort="enabled" class="st-sortable">@lang('admin::messages.Status')</th>
+                    <th st-sort="enabled" class="st-sortable text-xs-center">@lang('admin::messages.Status')</th>
                     <th> </th>
                 </tr>
                 <tr>

@@ -40,7 +40,7 @@
                     <th st-sort="id" class="st-sortable">#</th>
                     <th st-sort="users.name" class="st-sortable">@lang('general.Name')</th>
                     <th st-sort="email" class="st-sortable">Email</th>
-                    <th st-sort="active" class="st-sortable">@lang('admin::messages.Status')</th>
+                    <th st-sort="active" class="st-sortable text-xs-center">@lang('admin::messages.Status')</th>
                     <th st-sort="rolesList" class="st-sortable">@lang('general.Roles')</th>
                     <th st-sort="users.created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
                     <th> </th>

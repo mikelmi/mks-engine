@@ -50,10 +50,10 @@
                     <th st-sort="id" class="st-sortable">#</th>
                     <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
                     <th st-sort="class" class="st-sortable">@lang('general.Type')</th>
-                    <th st-sort="status" class="st-sortable">@lang('admin::messages.Status')</th>
+                    <th st-sort="status" class="st-sortable text-xs-center">@lang('admin::messages.Status')</th>
                     <th st-sort="position" class="st-sortable">@lang('general.Position')</th>
                     <th st-sort="ordering" class="st-sortable">@lang('general.Order')</th>
-                    <th st-sort="lang" class="st-sortable">@lang('general.Language')</th>
+                    <th st-sort="lang" class="st-sortable text-xs-center">@lang('general.Language')</th>
                     <th> </th>
                 </tr>
                 <tr>
@@ -111,7 +111,7 @@
                             <i class="fa fa-angle-up"></i>
                         </button>
                     </td>
-                    <td>
+                    <td class="text-xs-center">
                         <img ng-if="row.lang" alt="" src="{{$lang_icon_url}}/{[{row.lang}]}" />
                         {[{row.lang}]}
                     </td>

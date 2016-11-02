@@ -48,7 +48,7 @@
                         <th mst-select-all-rows="grid.rows"> </th>
                         <th st-sort="id" class="st-sortable">#</th>
                         <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
-                        <th st-sort="lang" class="st-sortable">@lang('general.Language')</th>
+                        <th st-sort="lang" class="st-sortable text-xs-center">@lang('general.Language')</th>
                         <th st-sort="path" class="st-sortable">URL</th>
                         <th st-sort="created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
                         <th> </th>
@@ -82,7 +82,7 @@
                         <td mst-select-row="row"></td>
                         <td>{[{row.id}]}</td>
                         <td>{[{row.title}]}</td>
-                        <td>
+                        <td class="text-xs-center">
                             <img ng-if="row.lang" alt="" src="{{$lang_icon_url}}/{[{row.lang}]}" />
                             {[{row.lang}]}
                         </td>
@@ -107,7 +107,7 @@
                     <tfoot>
 
                     <tr>
-                        <td colspan="9">
+                        <td colspan="7">
                             <div class="pull-left text-muted">
                                 {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
                                 @lang('general.Selected_s'): {[{ grid.hasSelected }]}

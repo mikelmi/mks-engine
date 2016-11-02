@@ -18,6 +18,7 @@
             <th mst-select-all-rows="grid.rows"> </th>
             <th st-sort="id" class="st-sortable">#</th>
             <th st-sort="title" class="st-sortable">@lang('general.Title')</th>
+            <th st-sort="lang" class="st-sortable text-xs-center">@lang('general.Language')</th>
             <th st-sort="path" class="st-sortable">URL</th>
             <th st-sort="created_at" class="st-sortable">@lang('admin::messages.Created at')</th>
             <th> </th>
@@ -27,6 +28,14 @@
             <th><!-- id --></th>
             <th><!-- title -->
                 <input st-search="name" data-placeholder="@lang('general.Title')" class="form-control form-control-sm form-block" type="search"/>
+            </th>
+            <th><!-- lang -->
+                <select class="form-control form-block" st-search="lang">
+                    <option value=""> </option>
+                    @foreach($languages as $lang)
+                        <option value="{{$lang->iso}}">{{$lang->title}}</option>
+                    @endforeach
+                </select>
             </th>
             <th><!-- path -->
                 <input st-search="path" data-placeholder="@lang('general.Path')" class="form-control form-control-sm form-block" type="search"/>
@@ -43,6 +52,10 @@
             <td mst-select-row="row"></td>
             <td>{[{row.id}]}</td>
             <td>{[{row.title}]}</td>
+            <td class="text-xs-center">
+                <img ng-if="row.lang" alt="" src="{{$lang_icon_url}}/{[{row.lang}]}" />
+                {[{row.lang}]}
+            </td>
             <td>{[{row.path}]}</td>
             <td>{[{row.created_at}]}</td>
             <td>
@@ -62,7 +75,7 @@
         <tfoot>
 
         <tr>
-            <td colspan="8">
+            <td colspan="7">
                 <div class="pull-left text-muted">
                     {[{ grid.start }]} - {[{ grid.end }]} / {[{ grid.total }]}<br />
                     @lang('general.Selected_s'): {[{ grid.hasSelected }]}

@@ -82,7 +82,7 @@ class Category extends Model implements NestedMenuInterface
      */
     public function isCurrent()
     {
-        return $this->id == static::requestCategoryId() && static::class == static::requestCategoryType();
+        return $this->id == static::requestCategoryId();
     }
 
     /**
@@ -118,16 +118,5 @@ class Category extends Model implements NestedMenuInterface
         }
 
         return $catId;
-    }
-
-    protected static function requestCategoryType()
-    {
-        static $catType;
-
-        if (!isset($catType)) {
-            $catType = app('request')->attributes->get('category_type', false);
-        }
-
-        return $catType;
     }
 }
