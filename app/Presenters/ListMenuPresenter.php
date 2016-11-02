@@ -26,4 +26,9 @@ class ListMenuPresenter extends NavMenuPresenter
             'class_sub_ul' => 'submenu', //class for li->ul
         );
     }
+
+    protected function linkWithChildrenAttr()
+    {
+        return [];
+    }
 }

@@ -314,6 +314,18 @@
         };
     }]);
 
+    app.directive('stSearchSelect2', [function() {
+        return {
+            restrict: 'A',
+            require:'^stTable',
+            'link': function(scope, el, attr, ctrl) {
+                el.on('change', function() {
+                    ctrl.search(this.value, attr.stSearchSelect2);
+                });
+            }
+        }
+    }]);
+
     app.component('mksImagesPicker', {
         templateUrl: ['UrlBuilder', function(UrlBuilder) {
             return UrlBuilder.get('templates/images-picker.html');
