@@ -117,4 +117,9 @@ return [
     'Image' => 'Image',
     'Tags' => 'Tags',
     'Amount' => 'Amount',
+
+    'ContactsWidget' => 'Contacts',
+    'Contacts' => 'Contacts',
+    'Send' => 'Send',
+    'Message' => 'Message',
 ];

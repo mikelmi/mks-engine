@@ -13,7 +13,7 @@
     {!! app('seotools')->generate() !!}
 
     @section('css')
-        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/system.css') }}" rel="stylesheet">
     @show
 </head>
 
@@ -26,7 +26,6 @@
     @show
 
     @section('js')
-        <script src="{{ asset('js/bootstrap.js') }}"></script>
         <script src="{{ asset('js/system.js') }}"></script>
     @show
 

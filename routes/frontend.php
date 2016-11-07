@@ -61,3 +61,6 @@ $router->get('lang/{iso?}', function(\Illuminate\Http\Request $request, \App\Rep
     return redirect()->away($root . '/' . $iso . '/' . $path);
 
 })->where('iso', '[A-Za-z-_]+')->name('language.change');
+
+//send feedback form
+$router->post('contacts', 'ContactsController@send')->name('contacts.send');

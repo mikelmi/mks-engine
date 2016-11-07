@@ -24,6 +24,7 @@
                 @include('_partials.notifications')
                 @widgets(page)
                 @yield('content')
+                @widgets(bottom)
             </div>
 
         </div>

@@ -1,22 +1,3 @@
-
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600);
-
-// Variables
-@import "variables";
-
-// Bootstrap
-@import "node_modules/bootstrap/scss/bootstrap";
-
-//Font-awesome
-@import "node_modules/font-awesome/scss/font-awesome";
-
-@import "ekko-lightbox";
-
-.top-pad {
-  padding-top: $top-padding;
-}
-
 .loading {
   .spinner {
     width: 40px;
@@ -61,16 +42,16 @@
     }
 }
 
-.modal-overlay {
+.modal-overlay, .block-overlay {
   display: none;
 }
 
-.modal-form.loading {
-  .modal-content {
+.loading {
+  .modal-content, .ajax-content {
     min-height: 200px;
   }
 
-  .modal-overlay {
+  .modal-overlay, .block-overlay {
     display: block;
     position: absolute;
     left: 0;
@@ -88,4 +69,8 @@
       margin: -40px 0 0 -40px;
     }
   }
+}
+
+.ajax-form {
+  position: relative;
 }

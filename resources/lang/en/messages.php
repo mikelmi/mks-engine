@@ -8,4 +8,6 @@ return [
     'All rights reserved' => 'All rights reserved',
     'Simple' => 'Simple',
     'Captcha' => 'Code',
+    'feedback_subject' => 'Site Feedback',
+    'From' => 'From',
 ];

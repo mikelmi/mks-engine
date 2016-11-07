@@ -8,4 +8,6 @@ return [
     'All rights reserved' => 'Все права защищены',
     'Simple' => 'Простой',
     'Captcha' => 'Код',
+    'feedback_subject' => 'Сообщение с сайта',
+    'From' => 'От',
 ];

@@ -6,7 +6,6 @@ namespace App\Notifications;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 
 class NewUser extends Notification implements ReadableNotification

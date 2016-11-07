@@ -65,17 +65,29 @@ elixir(function(mix) {
         elixir.config.assetsPath + '/sass'
     );
 
-    mix.sass('bootstrap.scss');
+    mix.sass('system-light.scss');
+    mix.sass('system.scss');
 
+    //frontend system js without bootstrap
+    mix.scripts(path_node_rel(
+        [
+            'jquery/dist/jquery.js',
+            'jquery-form/jquery.form.js',
+            'bootstrap-notify/bootstrap-notify.js'
+        ]).concat(['system.js']),
+        'public/js/system-light.js');
+
+    //frontend system js with bootstrap
     mix.scripts(path_node_rel(
         [
             'jquery/dist/jquery.js',
             'tether/dist/js/tether.js',
             'bootstrap/dist/js/bootstrap.js',
             'ekko-lightbox/dist/ekko-lightbox.js',
-            'jquery-form/jquery.form.js'
-        ]).concat(['bootstrap.js']),
-        'public/js/bootstrap.js');
+            'jquery-form/jquery.form.js',
+            'bootstrap-notify/bootstrap-notify.js'
+        ]).concat(['system.js']),
+        'public/js/system.js');
 
     //font-awesome
     mix.copy([
