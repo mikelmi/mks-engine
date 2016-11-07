@@ -9,8 +9,6 @@ use Illuminate\Support\ServiceProvider;
 
 class CaptchaServiceProvider extends ServiceProvider
 {
-    protected $defer = false;
-
     public function register()
     {
         /** @var Settings $settings */
@@ -31,6 +29,8 @@ class CaptchaServiceProvider extends ServiceProvider
             }
 
             $this->app->register(\Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class);
+        } else {
+            $this->app['captcha'] = null;
         }
 
         $this->app->singleton(CaptchaManager::class, function($app) {
@@ -38,13 +38,5 @@ class CaptchaServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(CaptchaManager::class, 'app.captcha');
-    }
-
-    public function provides()
-    {
-        return [
-            CaptchaManager::class,
-            'app.captcha'
-        ];
     }
 }
