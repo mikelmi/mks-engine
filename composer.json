@@ -18,7 +18,8 @@
         "mikelmi/mks-theme": "dev-master",
         "league/glide": "^1.1",
         "league/glide-laravel": "^1.0",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "cviebrock/eloquent-taggable": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

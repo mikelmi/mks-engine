@@ -403,4 +403,110 @@
         }]
     });
 
+    app.component('mksImageSelect', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/image-select.html');
+        }],
+        bindings: {
+            image: '=?',
+            inputName: '@name',
+            pickMain: '@'
+        },
+        controller: ['$http', 'UrlBuilder', '$element', function($http, UrlBuilder, $element) {
+            var ctrl = this;
+
+            this.$onInit = function () {
+                if (!this.inputName) {
+                    this.inputName = 'image';
+                }
+
+                window.pickImageSingle = function(files) {
+                    ctrl.safeApply(function() {
+                        ctrl.image = files[0].relativeUrl || files[0].url;
+                    });
+                };
+            };
+
+            this.browse = function () {
+                CKEDITOR.editor.prototype.popup(UrlBuilder.get('file-manager?type=images&callback=pickImageSingle'));
+            };
+
+            this.clear = function () {
+                this.image = null
+            };
+
+            this.safeApply = function (fn) {
+                var scope = $element.scope();
+                var phase = scope.$$phase;
+                if (phase == '$apply' || phase == '$digest') {
+                    if (fn && (typeof (fn) === 'function')) {
+                        fn();
+                    }
+                } else {
+                    scope.$apply(fn);
+                }
+            };
+        }]
+    });
+
+    app.component('mksCategorySelect', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/category-select.html');
+        }],
+        bindings: {
+            url: '@',
+            sectionField: '@',
+            categoryField: '@',
+            sectionId: '@',
+            categoryId: '@',
+            sectionEmpty: '@',
+            categoryEmpty: '@',
+        },
+        controller: ['$http', '$element', function($http, $element) {
+            var ctrl = this;
+
+            this.items = [];
+            this.section = null;
+            this.category = null;
+
+            this.$onInit = function () {
+                if (!this.url) {
+                    return false;
+                }
+
+                if (!this.sectionField) {
+                    this.sectionField = 'section';
+                }
+
+                if (!this.categoryField) {
+                    this.categoryField = 'category';
+                }
+
+                $http.get(this.url).then(function(r) {
+                    if (r.data) {
+                        ctrl.items = r.data;
+                        if (ctrl.sectionId || ctrl.categoryId) {
+                            angular.forEach(ctrl.items, function (section) {
+                                if (ctrl.sectionId && section.id == ctrl.sectionId) {
+                                    ctrl.section = section;
+                                }
+                                if (ctrl.categoryId && section.children) {
+                                    angular.forEach(section.children, function (category) {
+                                        if (category.id = ctrl.categoryId) {
+                                            ctrl.category = category;
+                                            if (!ctrl.section) {
+                                                ctrl.section = section;
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            };
+
+        }]
+    });
+
 })(window.angular);

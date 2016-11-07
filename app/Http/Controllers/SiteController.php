@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Request;
+use App\Models\Category;
 use App\Repositories\Breadcrumbs;
 use App\Repositories\LanguageRepository;
 use App\Services\Settings;
@@ -70,5 +72,23 @@ class SiteController extends Controller
     protected function breadcrumbs()
     {
         return app(Breadcrumbs::class);
+    }
+
+    protected function setCategoryBreadcrumbs(Category $category, $end = true)
+    {
+        $ancestors = $category->getAncestors();
+
+        $breadcrumbs = $this->breadcrumbs();
+
+        foreach ($ancestors as $item) {
+            $breadcrumbs->add($item->title, $item->getUrl());
+        }
+
+        $breadcrumbs->add($category->title, !$end ? $category->getUrl() : null);
+
+        /** @var Request $request */
+        $request = app('request');
+
+        $request->attributes->set('category_id', $category->id);
     }
 }

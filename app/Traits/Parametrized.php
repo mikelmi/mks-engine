@@ -30,13 +30,20 @@ trait Parametrized
      * 
      * @param null|string $key
      * @param null|string $default
+     * @param $noEmpty
      * @return Collection|mixed
      */
-    public function param($key = null, $default = null)
+    public function param($key = null, $default = null, $noEmpty = false)
     {
         $params = $this->getAttribute($this->params_field);
 
-        return $key === null ? $params : $params->get($key, $default);
+        if ($key === null) {
+            return $params;
+        }
+
+        $result = $params->get($key, $default);
+
+        return $noEmpty && ($result === "" || $result === null) ? $default : $result;
     }
 
     /**

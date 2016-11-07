@@ -172,3 +172,31 @@ $router->group(['prefix' => 'category', 'as' => 'category.', 'middleware' => ['p
 
     $router->get('/{scope?}', ['as' => 'index', 'uses' => 'CategoryController@index'])->where('scope', '\d+');
 });
+
+//Tags list
+$router->get('tags/{type}', function(\Illuminate\Http\Request $request, \Cviebrock\EloquentTaggable\Services\TagService $tagService, $type) {
+
+    /** @var \Illuminate\Database\Eloquent\Collection $tags */
+    $tags = $tagService->getAllTags($type);
+
+    $id = $request->get('id');
+    $selected = [];
+
+    if ($id) {
+        $model = call_user_func([$type, 'find'], $id);
+        if ($model) {
+            $selected = $model->tags->pluck('tag_id')->toArray();
+        }
+    }
+
+    return $tags->map(function($item) use ($selected) {
+        return [
+            'id' => $item->normalized,
+            'text' => $item->name,
+            'selected' => $selected && in_array($item->tag_id, $selected),
+        ];
+    });
+
+})
+    ->name('tags')
+    ->where('type', '.+');

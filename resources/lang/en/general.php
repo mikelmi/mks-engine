@@ -108,4 +108,13 @@ return [
     'Add Section' => 'Add Section',
     'Without category' => 'Without category',
     'Section' => 'Section',
+    
+    'Author' => 'Author',
+    'By default' => 'Default',
+    'Show author' => 'Show author',
+    'Show date' => 'Show date',
+    
+    'Image' => 'Image',
+    'Tags' => 'Tags',
+    'Amount' => 'Amount',
 ];

@@ -173,6 +173,7 @@ return [
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Mikelmi\MksTheme\Providers\MksThemeServiceProvider::class,
         Intervention\Image\ImageServiceProviderLaravel5::class,
+        Cviebrock\EloquentTaggable\ServiceProvider::class,
 
         /*
          * Application Service Providers...
