@@ -48,8 +48,8 @@ class CategoryWidget extends MenuWidget implements WidgetInterface
         } else {
             $items = Category::getTree($this->model->content);
         }
-
-        $items = $presenter->render($items, ['class' => $this->model->param('css_class')]);
+        
+        $items = $presenter->render($items, $this->getGeneralAttributes(true));
 
         return $this->view('widget.menu', [
             'items' => $items

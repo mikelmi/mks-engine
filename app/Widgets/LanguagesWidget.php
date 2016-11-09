@@ -53,7 +53,7 @@ class LanguagesWidget extends MenuWidget implements WidgetInterface
 
         $languages = app(LanguageRepository::class)->enabled();
 
-        $items = $presenter->render($languages, ['class' => $this->model->param('css_class')]);
+        $items = $presenter->render($languages, $this->getGeneralAttributes(true));
 
         return $this->view('widget.languages', [
             'items' => $items

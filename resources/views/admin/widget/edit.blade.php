@@ -133,6 +133,13 @@
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-sm-right">Html id</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="params[html_id]" value="{{$model->param('html_id')}}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-sm-right"> Css Class </label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="params[css_class]" value="{{$model->param('css_class')}}" />

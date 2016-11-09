@@ -86,7 +86,7 @@ class MenuWidget extends WidgetBase implements WidgetInterface
             $items = MenuItem::getTree($this->model->content);
         }
 
-        $items = $presenter->render($items, ['class' => $this->model->param('css_class')]);
+        $items = $presenter->render($items, $this->getGeneralAttributes(true));
 
         return $this->view('widget.menu', [
             'items' => $items
