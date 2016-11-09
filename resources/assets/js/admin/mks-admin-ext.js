@@ -460,7 +460,7 @@
             sectionId: '@',
             categoryId: '@',
             sectionEmpty: '@',
-            categoryEmpty: '@',
+            categoryEmpty: '@'
         },
         controller: ['$http', '$element', function($http, $element) {
             var ctrl = this;
@@ -492,7 +492,7 @@
                                 }
                                 if (ctrl.categoryId && section.children) {
                                     angular.forEach(section.children, function (category) {
-                                        if (category.id = ctrl.categoryId) {
+                                        if (category.id == ctrl.categoryId) {
                                             ctrl.category = category;
                                             if (!ctrl.section) {
                                                 ctrl.section = section;
