@@ -188,13 +188,18 @@ class WidgetManager
         return null;
     }
 
-    public function render($position) {
+    public function render($position, $count = false) {
         $this->load();
+        /** @var Collection $items */
         $items = $this->loaded->get($position);
 
         $content = '';
 
         if ($items) {
+            if ($count) {
+                $items = $count == 1 ? [$items->random(1)] : $items->random($count);
+            }
+
             foreach ($items as $item) {
                 try {
                     $widget = self::make($item->class);
