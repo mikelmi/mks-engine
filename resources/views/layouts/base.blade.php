@@ -14,6 +14,7 @@
 
     @section('css')
         <link href="{{ asset('css/system.css') }}" rel="stylesheet">
+        {!! body_background() !!}
     @show
 </head>
 

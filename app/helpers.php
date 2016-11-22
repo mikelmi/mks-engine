@@ -69,3 +69,40 @@ function language_icon($iso)
     
     return sprintf('<img src="%s" alt="" width="12" height="10">', route('lang.icon', $iso));
 }
+
+function body_background()
+{
+    $background = settings('site.background');
+
+    if ($background) {
+        return sprintf(
+            '<style type="text/css">body{background-image: url("%s");%s}</style>',
+            asset($background),
+            settings('site.background_fixed') ? ' background-attachment: fixed;':''
+        );
+    }
+}
+
+function site_logo($link = true, $title = true) {
+    $logo = settings('site.logo');
+
+    if (!$logo && !$title) {
+        return;
+    }
+
+    if ($title === true) {
+        $title = settings('site.title');
+    }
+
+    $line = $title;
+
+    if ($logo) {
+        $line = '<img src="'.asset($logo).'" alt="" class="site-logo-img" /> ' . $line;
+    }
+
+    if (!$link) {
+        return $line;
+    }
+
+    return '<a href="'.url('/').'" class="site-logo-link">'.$line.'</a>';
+}

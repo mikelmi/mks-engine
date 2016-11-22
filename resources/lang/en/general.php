@@ -122,4 +122,8 @@ return [
     'Contacts' => 'Contacts',
     'Send' => 'Send',
     'Message' => 'Message',
+    
+    'Logo' => 'Logo',
+    'Background' => 'Background',
+    'Fixed Background' => 'Fixed Background',
 ];

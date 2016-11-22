@@ -11,7 +11,7 @@ class SiteSettings extends SettingsScope
     {
         parent::__construct('site', trans('general.Site'));
 
-        $this->setFields(['title', 'description', 'keywords', 'off', 'theme']);
+        $this->setFields(['title', 'description', 'keywords', 'off', 'theme', 'logo', 'background', 'background_fixed']);
     }
 
     public function afterSave(Repository $old, Repository $new)

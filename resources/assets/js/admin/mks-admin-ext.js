@@ -410,7 +410,8 @@
         bindings: {
             image: '=?',
             inputName: '@name',
-            pickMain: '@'
+            pickMain: '@',
+            id: '@'
         },
         controller: ['$http', 'UrlBuilder', '$element', function($http, UrlBuilder, $element) {
             var ctrl = this;
@@ -420,7 +421,9 @@
                     this.inputName = 'image';
                 }
 
-                window.pickImageSingle = function(files) {
+                this.callbackName = 'pickImageSingle' + (this.id||'');
+
+                window[this.callbackName] = function(files) {
                     ctrl.safeApply(function() {
                         ctrl.image = files[0].relativeUrl || files[0].url;
                     });
@@ -428,7 +431,7 @@
             };
 
             this.browse = function () {
-                CKEDITOR.editor.prototype.popup(UrlBuilder.get('file-manager?type=images&callback=pickImageSingle'));
+                CKEDITOR.editor.prototype.popup(UrlBuilder.get('file-manager?type=images&callback=' + this.callbackName));
             };
 
             this.clear = function () {

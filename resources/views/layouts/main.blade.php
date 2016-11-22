@@ -2,7 +2,7 @@
 
 @section('body-wrap')
     <nav class="navbar navbar-fixed-top navbar-light bg-faded">
-        <a class="navbar-brand" href="#">{{settings('site.title')}}</a>
+        {!! site_logo() !!}
         @widget(mainmenu)
         <div class="pull-right" style="margin-left: 20px">
             @include('_partials.user_top_nav')

@@ -35,6 +35,39 @@
             </select>
         </div>
     </div>
+
+    <div class="form-group row" ng-class="{'has-danger':page.errors.logo}">
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Logo') </label>
+        <div class="col-sm-9">
+            <mks-image-select id="logo" name="logo" data-image="'{{$model['logo']}}'"></mks-image-select>
+            <small class="form-control-feedback" ng-show="page.errors.logo">{[{page.errors.logo[0]}]}</small>
+        </div>
+    </div>
+
+    <div class="form-group row" ng-class="{'has-danger':page.errors.background}">
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Background') </label>
+        <div class="col-sm-9">
+            <mks-image-select id="background" name="background" data-image="'{{$model['background']}}'"></mks-image-select>
+            <small class="form-control-feedback" ng-show="page.errors.background">{[{page.errors.background[0]}]}</small>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Fixed Background') </label>
+        <div class="col-sm-9">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-outline-success @if ($model['background_fixed']) active @endif">
+                    <input type="radio" name="background_fixed" autocomplete="off" value="1"@if ($model['background_fixed']) checked @endif >
+                    @lang('general.Yes')
+                </label>
+                <label class="btn btn-outline-danger @if (!$model['background_fixed']) active @endif">
+                    <input type="radio" name="background_fixed" autocomplete="off" value="0"@if (!$model['background_fixed']) checked @endif >
+                    @lang('general.No')
+                </label>
+            </div>
+        </div>
+    </div>
+
     <div class="form-group row">
         <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Site off') </label>
         <div class="col-sm-9">

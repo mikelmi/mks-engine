@@ -122,4 +122,8 @@ return [
     'Contacts' => 'Контакти',
     'Send' => 'Надіслати',
     'Message' => 'Повідомлення',
+
+    'Logo' => 'Логотип',
+    'Background' => 'Фон',
+    'Fixed Background' => 'Закріпити фон',
 ];
