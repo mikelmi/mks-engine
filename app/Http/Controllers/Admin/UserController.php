@@ -35,10 +35,10 @@ class UserController extends AdminController
             $rolesList,
         ])->leftJoin('role_user','users.id','=','role_user.user_id')
             ->leftJoin('roles','role_user.role_id','=','roles.id')
-            ->groupBy('users.id');
+            ->groupBy(['users.id', 'users.name', 'users.email', 'users.active', 'users.created_at']); //Fix FULL_GROUP_BY
 
         return $smartTable->make($items)
-            ->setSearchColumns(['users.name', 'users.email', 'roles.name'])
+            ->setSearchColumns(['users.name', 'users.email'])
             ->setHavingColumns(['rolesList'])
             ->apply()
             ->response();

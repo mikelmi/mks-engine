@@ -5,6 +5,8 @@ namespace App\Widgets;
 
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Presenters\LinksMenuPresenter;
+use App\Presenters\LinksSepMenuPresenter;
 use App\Presenters\ListMenuPresenter;
 use App\Presenters\MenuPresenterInterface;
 use App\Presenters\NavbarMenuPresenter;
@@ -27,6 +29,8 @@ class MenuWidget extends WidgetBase implements WidgetInterface
         'pills-stacked' => PillsStackedMenuPresenter::class,
         'list' => ListMenuPresenter::class,
         'select' => SelectMenuPresenter::class,
+        'links' => LinksMenuPresenter::class,
+        'links-sep' => LinksSepMenuPresenter::class
     ];
 
     public function getPresentersList()

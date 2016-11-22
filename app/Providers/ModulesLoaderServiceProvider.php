@@ -6,6 +6,7 @@ use App\Console\Commands\ModuleMigrateInstall;
 use App\Repositories\ModuleRepository;
 use App\Repositories\ModulesMigrationRepository;
 use App\Services\ModuleMigrator;
+use App\Services\Settings;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
@@ -107,6 +108,11 @@ class ModulesLoaderServiceProvider extends ServiceProvider
 
             //load translations
             $this->loadTranslationsFrom($module->getPath('resources/lang'), lcfirst($name));
+        }
+
+        //set theme
+        if ($theme = $this->app[Settings::class]->get('site.theme')) {
+            $this->app['theme']->set($theme);
         }
 
         //should be at the end of all routes

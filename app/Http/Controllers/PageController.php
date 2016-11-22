@@ -89,12 +89,10 @@ class PageController extends SiteController
         if ($routeName) {
             $params = json_decode($routeParams, true);
 
-            if ($params) {
-                $uri = route($routeName, $params, false);
-                $newRequest = $request->create($uri);
+            $uri = route($routeName, $params ?: [], false);
+            $newRequest = $request->create($uri);
 
-                return $router->dispatch($newRequest);
-            }
+            return $router->dispatch($newRequest);
         }
 
         return view('page.home');

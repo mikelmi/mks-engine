@@ -123,6 +123,8 @@ return [
     'Send' => 'Отправить',
     'Message' => 'Сообщение',
 
+    'cols' => 'Колонки',
+
     'Logo' => 'Логотип',
     'Background' => 'Фон',
     'Fixed Background' => 'Закрепить фон',

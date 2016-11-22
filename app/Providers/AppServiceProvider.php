@@ -41,11 +41,6 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        //set theme
-        if ($theme = $this->app[Settings::class]->get('site.theme')) {
-            $this->app['theme']->set($theme);
-        }
-
         \App\Http\Request::setLocales(locales());
 
         \View::composer('_partials.breadcrumbs', BreadcrumbComposer::class);

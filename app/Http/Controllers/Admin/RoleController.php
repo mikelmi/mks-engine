@@ -34,7 +34,7 @@ class RoleController extends AdminController
             $permissionsList,
         ])->leftJoin('permission_role','roles.id','=','permission_role.role_id')
             ->leftJoin('permissions','permission_role.permission_id','=','permissions.id')
-            ->groupBy('roles.id');
+            ->groupBy(['roles.id', 'roles.name', 'roles.display_name']);
 
         return $smartTable->make($items)
             ->setSearchColumns(['roles.name', 'roles.display_name', 'roles.description'])

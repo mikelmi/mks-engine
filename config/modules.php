@@ -7,6 +7,6 @@ return [
 
     'cache' => [
         'lifetime' => null,
-        'key' => null //null for disable cache
+        'key' => env('APP_DEBUG') ? null : 'app:modules',
     ]
 ];

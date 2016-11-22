@@ -18,7 +18,8 @@ trait MoreText
             $this->intro_text = str_replace('<!--more-->', '', $m[1]).$m[2];
             $this->full_text = str_replace('<!--more-->', '', $m[3]);
         } else {
-            $this->full_text = str_replace('<!--more-->', '', $value);
+            $this->intro_text = str_replace('<!--more-->', '', $value);
+            $this->full_text = '';
         }
     }
 }

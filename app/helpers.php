@@ -70,6 +70,11 @@ function language_icon($iso)
     return sprintf('<img src="%s" alt="" width="12" height="10">', route('lang.icon', $iso));
 }
 
+function theme_asset($path)
+{
+    return Theme::asset($path);
+}
+
 function body_background()
 {
     $background = settings('site.background');

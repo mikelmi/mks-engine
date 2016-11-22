@@ -123,6 +123,8 @@ return [
     'Send' => 'Send',
     'Message' => 'Message',
     
+    'cols' => 'Cols',
+    
     'Logo' => 'Logo',
     'Background' => 'Background',
     'Fixed Background' => 'Fixed Background',

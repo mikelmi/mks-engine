@@ -10,4 +10,5 @@ return [
     'Captcha' => 'Код',
     'feedback_subject' => 'Сообщение с сайта',
     'From' => 'От',
+    'sent_success' => 'Ваше сообщение успешно отправлено',
 ];

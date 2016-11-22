@@ -38,7 +38,7 @@ class Feedback extends Mailable
     {
         return $this
             ->subject(trans('messages.feedback_subject'))
-            ->from($this->userEmail, $this->userName)
+            //->from($this->userEmail, $this->userName)
             ->view('emails.feedback', [
                 'email' => $this->userEmail,
                 'name' => $this->userName,

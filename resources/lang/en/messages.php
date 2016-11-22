@@ -10,4 +10,5 @@ return [
     'Captcha' => 'Code',
     'feedback_subject' => 'Site Feedback',
     'From' => 'From',
+    'sent_success' => 'Your message was successfully sent',
 ];

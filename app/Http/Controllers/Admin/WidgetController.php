@@ -101,7 +101,7 @@ class WidgetController extends AdminController
         $model->title = $request->input('title');
         $model->position = $request->input('position');
         $model->lang = $request->input('lang');
-        $model->ordering = $request->input('ordering', 0);
+        $model->ordering = (int) $request->input('ordering', 0);
         $model->status = $request->input('status', true);
         $model->params = $request->input('params');
 
