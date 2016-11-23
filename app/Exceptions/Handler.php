@@ -2,9 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Models\Page;
+use App\Repositories\LanguageRepository;
+use Artesaos\SEOTools\Contracts\SEOTools;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -61,5 +65,47 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest('login');
+    }
+
+    protected function renderHttpException(HttpException $e)
+    {
+        $status = $e->getStatusCode();
+
+        $page_id = null;
+
+        $locale = app()->getLocale();
+
+        if ($locale) {
+            /** @var LanguageRepository $langs */
+            $langs = app(LanguageRepository::class);
+            if ($language = $langs->get($locale)) {
+                $page_id = $language->get($status);
+            }
+        }
+
+        if (!$page_id) {
+            $page_id = settings('page.' . $status);
+        }
+
+        if ($page_id && ($page = Page::find($page_id))) {
+            /** @var SEOTools $seo */
+            $seo = app('seotools');
+
+            $title = $page->meta_title ?: $page->title;
+
+            if (!$title) {
+                $title = $status . '. ' . $e->getMessage();
+            }
+
+            $seo->setTitle($title);
+
+            return response()->view('page.show', ['exception' => $e, 'page' => $page], $status, $e->getHeaders());
+        }
+
+        if (view()->exists("errors.{$status}")) {
+            return response()->view("errors.{$status}", ['exception' => $e], $status, $e->getHeaders());
+        } else {
+            return $this->convertExceptionToResponse($e);
+        }
     }
 }
