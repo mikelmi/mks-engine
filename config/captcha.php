@@ -34,7 +34,7 @@ return [
         'width'     => 120,
         'height'    => 36,
         'quality'   => 90,
-        'sensitive' => true,
+        'sensitive' => false,
         'angle'     => 12,
         'sharpen'   => 10,
         'blur'      => 2,
