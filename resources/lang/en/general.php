@@ -50,6 +50,7 @@ return [
     'Type' => 'Type',
     'TextWidget' => 'Text/Code',
     'HtmlWidget' => 'HTML',
+    'SearchWidget' => 'Search',
     'Showing' => 'Showing',
     'Show on all' => 'Show on all pages',
     'Show for' => 'Show for',
@@ -128,4 +129,22 @@ return [
     'Logo' => 'Logo',
     'Background' => 'Background',
     'Fixed Background' => 'Fixed Background',
+
+    'image_max_size' => 'Max Image Size',
+    'watermark' => 'Watermark',
+    'watermark_pos' => 'Watermark position',
+    'watermark_alpha' => 'Watermark opacity',
+    'watermark_size' => 'Watermark size',
+
+    'top-left' => 'top-left',
+    'top' => 'top',
+    'top-right' => 'top-right',
+    'left' => 'left',
+    'center' => 'center',
+    'right' => 'right',
+    'bottom-left' => 'bottom-left',
+    'bottom' => 'bottom',
+    'bottom-right' => 'bottom-right',
+
+    'Empty Template' => 'Empty Template',
 ];

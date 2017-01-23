@@ -93,7 +93,7 @@
                 <div class="form-group row" ng-class="{'has-danger':page.errors.page_text}">
                     <label class="col-sm-12 col-form-label"> @lang('general.Text') </label>
                     <div class="col-sm-12">
-                        <textarea name="page_text" class="form-control" rows="5" mks-editor>{{ old('page_text', $model->page_text) }}</textarea>
+                        <textarea name="page_text" class="form-control" rows="5" mks-editor="{allowedContent: true}">{{ old('page_text', $model->page_text) }}</textarea>
                         <small class="form-control-feedback" ng-show="page.errors.page_text">{[{page.errors.page_text[0]}]}</small>
                     </div>
                 </div>
@@ -124,6 +124,21 @@
             </div>
 
             <div class="tab-pane" id="tab-params" role="tabpanel">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Empty Template') </label>
+                    <div class="col-sm-9">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-outline-success @if ($model->param('template') == '-1') active @endif">
+                                <input type="radio" name="params[template]" autocomplete="off" value="-1"@if ($model->param('template') == '-1') checked @endif >
+                                @lang('general.Yes')
+                            </label>
+                            <label class="btn btn-outline-danger @if ($model->param('template') != '-1') active @endif">
+                                <input type="radio" name="params[template]" autocomplete="off" value=""@if ($model->param('template') != '-1') checked @endif >
+                                @lang('general.No')
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Hide Title') </label>
                     <div class="col-sm-9">

@@ -109,7 +109,7 @@ class WidgetManager
             }
 
             //filter by route
-            if (!$this->checkForRoutes($widget, $route)) {
+            if ($route && !$this->checkForRoutes($widget, $route)) {
                 continue;
             }
 

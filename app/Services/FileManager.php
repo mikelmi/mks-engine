@@ -364,8 +364,12 @@ class FileManager
      * @param string $path
      * @return string
      */
-    public function getPath($path = '')
+    public function getPath($path = '', $removeSubPrefix = false)
     {
+        if ($removeSubPrefix) {
+            $path = $this->adapter()->removeSubPrefix($path);
+        }
+        
         return $this->adapter()->applyPathPrefix($path);
     }
 

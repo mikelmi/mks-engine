@@ -66,7 +66,13 @@ class PageController extends SiteController
             $this->seo()->metatags()->setKeywords($keywords);
         }
 
-        return view('page.show', compact('page'));
+        if ($page->param('template') == '-1') {
+            $template = 'page.empty';
+        } else {
+            $template = 'page.show';
+        }
+
+        return view($template, compact('page'));
     }
 
     public function home(Request $request, Settings $settings, Router $router, LanguageRepository $languageRepository)

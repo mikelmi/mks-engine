@@ -43,4 +43,13 @@ class FileManagerAdapter extends Local
 
         return $url;
     }
+
+    public function removeSubPrefix($path)
+    {
+        if (!$this->urlPrefix) {
+            return $path;
+        }
+
+        return substr($path, strlen($this->urlPrefix));
+    }
 }

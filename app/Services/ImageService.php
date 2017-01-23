@@ -62,6 +62,7 @@ class ImageService
                 'response' => new LaravelResponseFactory($request),
                 'source' => $this->root,
                 'cache' => $this->cachePath,
+                'watermarks' => $this->root
             ]);
 
             $defaults = array_get($this->config, 'defaults');

@@ -448,6 +448,37 @@ class FileManagerController extends Controller
         );
     }
 
+    public function imageProxy(Request $request, ImageService $image, $path)
+    {
+        if (!starts_with($path, 'files/')) {
+            $path = 'files/' . $path;
+        }
+
+        $mark = starts_with($path, 'files/public/') ? null : settings('files.watermark');
+
+        if ($mark && $mark != $path) {
+            $params = [
+                'mark' => $mark,
+                'fit' => 'max',
+                'w' => settings('files.max_width'),
+                'h' => settings('files.max_height'),
+                'markpos' => settings('files.mark_pos', 'bottom-right'),
+                'markalpha' => settings('files.mark_aplha', 50),
+                'markw' => settings('files.mark_width'),
+                'markh' => settings('files.mark_height', 50),
+                'markfit' => 'max'
+            ];
+        } else {
+            $params = [];
+        }
+
+        return $image->response(
+            $request,
+            $path,
+            $params
+        );
+    }
+
     private function resultResponse($data, $status = 200)
     {
         return response()->json(['result' => $data], $status);

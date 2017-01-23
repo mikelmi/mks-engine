@@ -31,6 +31,10 @@ $router->get('thumbnail/{path?}', 'FileManagerController@thumbnail')
     ->where('path', '.+')
     ->name('thumbnail');
 
+$router->get('image/{path?}', 'FileManagerController@imageProxy')
+    ->where('path', '.+')
+    ->name('image.proxy');
+
 //language icon
 $router->get('lang-icon/{iso?}', function(\Illuminate\Http\Request $request, \App\Services\ImageService $imageService, $iso = null) {
     $file = 'vendor/mikelmi/mks-admin/img/lang/' . ($iso ?: $request->get('iso')) . '.gif';
@@ -64,3 +68,6 @@ $router->get('lang/{iso?}', function(\Illuminate\Http\Request $request, \App\Rep
 
 //send feedback form
 $router->post('contacts', 'ContactsController@send')->name('contacts.send');
+
+//search
+$router->get('search', 'SearchController@index')->name('search');

@@ -5,7 +5,7 @@ return [
     'site_url' => env('SITE_URL'),
     'materialized' => true,
     'username' => 'email',
-    'reset_enable' => false,
+    'reset_enable' => true,
     'locale' => 'en',
     'locales' => [
         'uk' => 'Українська',

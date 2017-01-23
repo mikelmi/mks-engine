@@ -99,7 +99,13 @@ class Handler extends ExceptionHandler
 
             $seo->setTitle($title);
 
-            return response()->view('page.show', ['exception' => $e, 'page' => $page], $status, $e->getHeaders());
+            if ($page->param('template') == '-1') {
+                $template = 'page.empty';
+            } else {
+                $template = 'page.show';
+            }
+
+            return response()->view($template, ['exception' => $e, 'page' => $page], $status, $e->getHeaders());
         }
 
         if (view()->exists("errors.{$status}")) {

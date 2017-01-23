@@ -50,6 +50,7 @@ return [
     'Type' => 'Тип',
     'TextWidget' => 'Текст/Код',
     'HtmlWidget' => 'HTML',
+    'SearchWidget' => 'Пошук',
     'Parent Item' => 'Батьківський елемент',
     'Showing' => 'Показ',
     'Show on all' => 'Показувати на всіх сторінках',
@@ -128,4 +129,22 @@ return [
     'Logo' => 'Логотип',
     'Background' => 'Фон',
     'Fixed Background' => 'Закріпити фон',
+
+    'image_max_size' => 'Максимальний розмір зображень',
+    'watermark' => 'Водяний знак',
+    'watermark_pos' => 'Позиція водяного знаку',
+    'watermark_alpha' => 'Прозорість водяного знаку',
+    'watermark_size' => 'Розмір водяного знака',
+
+    'top-left' => 'зверху зліва',
+    'top' => 'зверху',
+    'top-right' => 'зверху справа',
+    'left' => 'зліва',
+    'center' => 'по центру',
+    'right' => 'справа',
+    'bottom-left' => 'знизу зліва',
+    'bottom' => 'знизу',
+    'bottom-right' => 'знизу справа',
+
+    'Empty Template' => 'Порожній шаблон',
 ];
