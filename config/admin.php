@@ -30,6 +30,7 @@ return [
         'mks-menu-manager',
         'mks-dashboard',
         'mks-category-manager',
+        'artisan'
     ],
 
     'home_button' => '<a class="lc-hide inline title" href="#/home"><i class="fa fa-wrench"></i> Admin</a>',

@@ -1,2 +1,2888 @@
-!function(){"use strict";angular.module("ui.tree",[]).constant("treeConfig",{treeClass:"angular-ui-tree",emptyTreeClass:"angular-ui-tree-empty",hiddenClass:"angular-ui-tree-hidden",nodesClass:"angular-ui-tree-nodes",nodeClass:"angular-ui-tree-node",handleClass:"angular-ui-tree-handle",placeholderClass:"angular-ui-tree-placeholder",dragClass:"angular-ui-tree-drag",dragThreshold:3,defaultCollapsed:!1,appendChildOnHover:!0})}(),function(){"use strict";angular.module("ui.tree").controller("TreeHandleController",["$scope","$element",function(e,t){this.scope=e,e.$element=t,e.$nodeScope=null,e.$type="uiTreeHandle"}])}(),function(){"use strict";angular.module("ui.tree").controller("TreeNodeController",["$scope","$element",function(e,t){function n(e){if(!e)return 0;var t,o,i,r=0,l=e.childNodes();if(!l||0===l.length)return 0;for(i=l.length-1;i>=0;i--)t=l[i],o=1+n(t),r=Math.max(r,o);return r}this.scope=e,e.$element=t,e.$modelValue=null,e.$parentNodeScope=null,e.$childNodesScope=null,e.$parentNodesScope=null,e.$treeScope=null,e.$handleScope=null,e.$type="uiTreeNode",e.$$allowNodeDrop=!1,e.collapsed=!1,e.expandOnHover=!1,e.init=function(n){var o=n[0];e.$treeScope=n[1]?n[1].scope:null,e.$parentNodeScope=o.scope.$nodeScope,e.$modelValue=o.scope.$modelValue[e.$index],e.$parentNodesScope=o.scope,o.scope.initSubNode(e),t.on("$destroy",function(){o.scope.destroySubNode(e)})},e.index=function(){return e.$parentNodesScope.$modelValue.indexOf(e.$modelValue)},e.dragEnabled=function(){return!(e.$treeScope&&!e.$treeScope.dragEnabled)},e.isSibling=function(t){return e.$parentNodesScope==t.$parentNodesScope},e.isChild=function(t){var n=e.childNodes();return n&&n.indexOf(t)>-1},e.prev=function(){var t=e.index();return t>0?e.siblings()[t-1]:null},e.siblings=function(){return e.$parentNodesScope.childNodes()},e.childNodesCount=function(){return e.childNodes()?e.childNodes().length:0},e.hasChild=function(){return e.childNodesCount()>0},e.childNodes=function(){return e.$childNodesScope&&e.$childNodesScope.$modelValue?e.$childNodesScope.childNodes():null},e.accept=function(t,n){return e.$childNodesScope&&e.$childNodesScope.$modelValue&&e.$childNodesScope.accept(t,n)},e.remove=function(){return e.$parentNodesScope.removeNode(e)},e.toggle=function(){e.collapsed=!e.collapsed,e.$treeScope.$callbacks.toggle(e.collapsed,e)},e.collapse=function(){e.collapsed=!0},e.expand=function(){e.collapsed=!1},e.depth=function(){var t=e.$parentNodeScope;return t?t.depth()+1:1},e.maxSubDepth=function(){return e.$childNodesScope?n(e.$childNodesScope):0}}])}(),function(){"use strict";angular.module("ui.tree").controller("TreeNodesController",["$scope","$element",function(e,t){this.scope=e,e.$element=t,e.$modelValue=null,e.$nodeScope=null,e.$treeScope=null,e.$type="uiTreeNodes",e.$nodesMap={},e.nodropEnabled=!1,e.maxDepth=0,e.cloneEnabled=!1,e.initSubNode=function(t){return t.$modelValue?void(e.$nodesMap[t.$modelValue.$$hashKey]=t):null},e.destroySubNode=function(t){return t.$modelValue?void(e.$nodesMap[t.$modelValue.$$hashKey]=null):null},e.accept=function(t,n){return e.$treeScope.$callbacks.accept(t,e,n)},e.beforeDrag=function(t){return e.$treeScope.$callbacks.beforeDrag(t)},e.isParent=function(t){return t.$parentNodesScope==e},e.hasChild=function(){return e.$modelValue.length>0},e.safeApply=function(e){var t=this.$root.$$phase;"$apply"==t||"$digest"==t?e&&"function"==typeof e&&e():this.$apply(e)},e.removeNode=function(t){var n=e.$modelValue.indexOf(t.$modelValue);return n>-1?(e.safeApply(function(){e.$modelValue.splice(n,1)[0]}),e.$treeScope.$callbacks.removed(t)):null},e.insertNode=function(t,n){e.safeApply(function(){e.$modelValue.splice(t,0,n)})},e.childNodes=function(){var t,n=[];if(e.$modelValue)for(t=0;t<e.$modelValue.length;t++)n.push(e.$nodesMap[e.$modelValue[t].$$hashKey]);return n},e.depth=function(){return e.$nodeScope?e.$nodeScope.depth():0},e.outOfDepth=function(t){var n=e.maxDepth||e.$treeScope.maxDepth;return n>0&&e.depth()+t.maxSubDepth()+1>n}}])}(),function(){"use strict";angular.module("ui.tree").controller("TreeController",["$scope","$element",function(e,t){this.scope=e,e.$element=t,e.$nodesScope=null,e.$type="uiTree",e.$emptyElm=null,e.$callbacks=null,e.dragEnabled=!0,e.emptyPlaceholderEnabled=!0,e.maxDepth=0,e.dragDelay=0,e.cloneEnabled=!1,e.nodropEnabled=!1,e.isEmpty=function(){return e.$nodesScope&&e.$nodesScope.$modelValue&&0===e.$nodesScope.$modelValue.length},e.place=function(t){e.$nodesScope.$element.append(t),e.$emptyElm.remove()},this.resetEmptyElement=function(){e.$nodesScope.$modelValue&&0!==e.$nodesScope.$modelValue.length||!e.emptyPlaceholderEnabled?e.$emptyElm.remove():t.append(e.$emptyElm)},e.resetEmptyElement=this.resetEmptyElement}])}(),function(){"use strict";angular.module("ui.tree").directive("uiTree",["treeConfig","$window",function(e,t){return{restrict:"A",scope:!0,controller:"TreeController",link:function(n,o,i,r){var l,a,d,u={accept:null,beforeDrag:null},c={};angular.extend(c,e),c.treeClass&&o.addClass(c.treeClass),"table"===o.prop("tagName").toLowerCase()?(n.$emptyElm=angular.element(t.document.createElement("tr")),a=o.find("tr"),d=a.length>0?angular.element(a).children().length:1e6,l=angular.element(t.document.createElement("td")).attr("colspan",d),n.$emptyElm.append(l)):n.$emptyElm=angular.element(t.document.createElement("div")),c.emptyTreeClass&&n.$emptyElm.addClass(c.emptyTreeClass),n.$watch("$nodesScope.$modelValue.length",function(e){angular.isNumber(e)&&r.resetEmptyElement()},!0),n.$watch(i.dragEnabled,function(e){"boolean"==typeof e&&(n.dragEnabled=e)}),n.$watch(i.emptyPlaceholderEnabled,function(e){"boolean"==typeof e&&(n.emptyPlaceholderEnabled=e,r.resetEmptyElement())}),n.$watch(i.nodropEnabled,function(e){"boolean"==typeof e&&(n.nodropEnabled=e)}),n.$watch(i.cloneEnabled,function(e){"boolean"==typeof e&&(n.cloneEnabled=e)}),n.$watch(i.maxDepth,function(e){"number"==typeof e&&(n.maxDepth=e)}),n.$watch(i.dragDelay,function(e){"number"==typeof e&&(n.dragDelay=e)}),u.accept=function(e,t,n){return!(t.nodropEnabled||t.$treeScope.nodropEnabled||t.outOfDepth(e))},u.beforeDrag=function(e){return!0},u.expandTimeoutStart=function(){},u.expandTimeoutCancel=function(){},u.expandTimeoutEnd=function(){},u.removed=function(e){},u.dropped=function(e){},u.dragStart=function(e){},u.dragMove=function(e){},u.dragStop=function(e){},u.beforeDrop=function(e){},u.toggle=function(e,t){},n.$watch(i.uiTree,function(e,t){angular.forEach(e,function(e,t){u[t]&&"function"==typeof e&&(u[t]=e)}),n.$callbacks=u},!0)}}}])}(),function(){"use strict";angular.module("ui.tree").directive("uiTreeHandle",["treeConfig",function(e){return{require:"^uiTreeNode",restrict:"A",scope:!0,controller:"TreeHandleController",link:function(t,n,o,i){var r={};angular.extend(r,e),r.handleClass&&n.addClass(r.handleClass),t!=i.scope&&(t.$nodeScope=i.scope,i.scope.$handleScope=t)}}}])}(),function(){"use strict";angular.module("ui.tree").directive("uiTreeNode",["treeConfig","UiTreeHelper","$window","$document","$timeout","$q",function(e,t,n,o,i,r){return{require:["^uiTreeNodes","^uiTree"],restrict:"A",controller:"TreeNodeController",link:function(l,a,d,u){var c,s,p,m,f,h,g,$,v,b,S,y,N,x,E,C,w,T,M,O,k,D,I,A,H,V,Y,X,U={},B="ontouchstart"in window,P=null,_=document.body,L=document.documentElement;angular.extend(U,e),U.nodeClass&&a.addClass(U.nodeClass),l.init(u),l.collapsed=!!t.getNodeAttribute(l,"collapsed")||e.defaultCollapsed,l.expandOnHover=!!t.getNodeAttribute(l,"expandOnHover"),l.scrollContainer=t.getNodeAttribute(l,"scrollContainer")||d.scrollContainer||null,l.sourceOnly=l.nodropEnabled||l.$treeScope.nodropEnabled,l.$watch(d.collapsed,function(e){"boolean"==typeof e&&(l.collapsed=e)}),l.$watch("collapsed",function(e){t.setNodeAttribute(l,"collapsed",e),d.$set("collapsed",e)}),l.$watch(d.expandOnHover,function(e){"boolean"!=typeof e&&"number"!=typeof e||(l.expandOnHover=e)}),l.$watch("expandOnHover",function(e){t.setNodeAttribute(l,"expandOnHover",e),d.$set("expandOnHover",e)}),d.$observe("scrollContainer",function(e){"string"==typeof e&&(l.scrollContainer=e)}),l.$watch("scrollContainer",function(e){t.setNodeAttribute(l,"scrollContainer",e),d.$set("scrollContainer",e),g=document.querySelector(e)}),l.$on("angular-ui-tree:collapse-all",function(){l.collapsed=!0}),l.$on("angular-ui-tree:expand-all",function(){l.collapsed=!1}),y=function(e){if((B||2!==e.button&&3!==e.which)&&!(e.uiTreeDragging||e.originalEvent&&e.originalEvent.uiTreeDragging)){var i,r,d,u,g,$,y,N,x,E=angular.element(e.target);if(i=t.treeNodeHandlerContainerOfElement(E),i&&(E=angular.element(i)),r=a.clone(),N=t.elementIsTreeNode(E),x=t.elementIsTreeNodeHandle(E),(N||x)&&!(N&&t.elementContainsTreeNodeHandler(E)||(d=E.prop("tagName").toLowerCase(),"input"==d||"textarea"==d||"button"==d||"select"==d))){for(V=angular.element(e.target);V&&V[0]&&V[0]!==a&&!Y;){if(V[0].attributes&&(Y=V[0].attributes["ui-tree"]),t.nodrag(V))return;V=V.parent()}l.beforeDrag(l)&&(e.uiTreeDragging=!0,e.originalEvent&&(e.originalEvent.uiTreeDragging=!0),e.preventDefault(),g=t.eventObj(e),c=!0,s=t.dragInfo(l),X=s.source.$treeScope.$id,u=a.prop("tagName"),"tr"===u.toLowerCase()?(m=angular.element(n.document.createElement(u)),$=angular.element(n.document.createElement("td")).addClass(U.placeholderClass).attr("colspan",a[0].children.length),m.append($)):m=angular.element(n.document.createElement(u)).addClass(U.placeholderClass),f=angular.element(n.document.createElement(u)),U.hiddenClass&&f.addClass(U.hiddenClass),p=t.positionStarted(g,a),m.css("height",t.height(a)+"px"),h=angular.element(n.document.createElement(l.$parentNodesScope.$element.prop("tagName"))).addClass(l.$parentNodesScope.$element.attr("class")).addClass(U.dragClass),h.css("width",t.width(a)+"px"),h.css("z-index",9999),y=(a[0].querySelector(".angular-ui-tree-handle")||a[0]).currentStyle,y&&(document.body.setAttribute("ui-tree-cursor",o.find("body").css("cursor")||""),o.find("body").css({cursor:y.cursor+"!important"})),l.sourceOnly&&m.css("display","none"),a.after(m),a.after(f),s.isClone()&&l.sourceOnly?h.append(r):h.append(a),o.find("body").append(h),h.css({left:g.pageX-p.offsetX+"px",top:g.pageY-p.offsetY+"px"}),v={placeholder:m,dragging:h},k(),l.$apply(function(){l.$treeScope.$callbacks.dragStart(s.eventArgs(v,p))}),b=Math.max(_.scrollHeight,_.offsetHeight,L.clientHeight,L.scrollHeight,L.offsetHeight),S=Math.max(_.scrollWidth,_.offsetWidth,L.clientWidth,L.scrollWidth,L.offsetWidth))}}},N=function(e){var o,r,a,d,u,f,y,N,x,E,C,w,T,M,O,k,D,I,V,Y,B,_,L,R=t.eventObj(e);if(h){if(e.preventDefault(),n.getSelection?n.getSelection().removeAllRanges():n.document.selection&&n.document.selection.empty(),a=R.pageX-p.offsetX,d=R.pageY-p.offsetY,a<0&&(a=0),d<0&&(d=0),d+10>b&&(d=b-10),a+10>S&&(a=S-10),h.css({left:a+"px",top:d+"px"}),g?(y=g.getBoundingClientRect(),u=g.scrollTop,f=u+g.clientHeight,y.bottom<R.clientY&&f<g.scrollHeight&&(O=Math.min(g.scrollHeight-f,10),g.scrollTop+=O),y.top>R.clientY&&u>0&&(k=Math.min(u,10),g.scrollTop-=k)):(u=window.pageYOffset||n.document.documentElement.scrollTop,f=u+(window.innerHeight||n.document.clientHeight||n.document.clientHeight),f<R.pageY&&f<b&&(O=Math.min(b-f,10),window.scrollBy(0,O)),u>R.pageY&&(k=Math.min(u,10),window.scrollBy(0,-k))),t.positionMoved(e,p,c),c)return void(c=!1);if(x=R.pageX-(n.pageXOffset||n.document.body.scrollLeft||n.document.documentElement.scrollLeft)-(n.document.documentElement.clientLeft||0),E=R.pageY-(n.pageYOffset||n.document.body.scrollTop||n.document.documentElement.scrollTop)-(n.document.documentElement.clientTop||0),angular.isFunction(h.hide)?h.hide():(C=h[0].style.display,h[0].style.display="none"),n.document.elementFromPoint(x,E),T=angular.element(n.document.elementFromPoint(x,E)),H=t.treeNodeHandlerContainerOfElement(T),H&&(T=angular.element(H)),angular.isFunction(h.show)?h.show():h[0].style.display=C,A=!(t.elementIsTreeNodeHandle(T)||t.elementIsTreeNode(T)||t.elementIsTreeNodes(T)||t.elementIsTree(T)||t.elementIsPlaceholder(T)),A&&(m.remove(),P&&(P.resetEmptyElement(),P=null),s.resetParent()),t.elementIsTree(T)?w=T.controller("uiTree").scope:t.elementIsTreeNodeHandle(T)?w=T.controller("uiTreeHandle").scope:t.elementIsTreeNode(T)?w=T.controller("uiTreeNode").scope:t.elementIsTreeNodes(T)?w=T.controller("uiTreeNodes").scope:t.elementIsPlaceholder(T)?w=T.controller("uiTreeNodes").scope:T.controller("uiTreeNode")&&(w=T.controller("uiTreeNode").scope),V=w&&w.$treeScope&&w.$treeScope.$id&&w.$treeScope.$id===X,V&&p.dirAx)p.distX>0&&(o=s.prev(),o&&!o.collapsed&&o.accept(l,o.childNodesCount())&&(o.$childNodesScope.$element.append(m),s.moveTo(o.$childNodesScope,o.childNodes(),o.childNodesCount()))),p.distX<0&&(r=s.next(),r||(N=s.parentNode(),N&&N.$parentNodesScope.accept(l,N.index()+1)&&(N.$element.after(m),s.moveTo(N.$parentNodesScope,N.siblings(),N.index()+1))));else{if(M=!1,!w)return;if(!w.$treeScope||w.$parent.nodropEnabled||w.$treeScope.nodropEnabled||m.css("display",""),"uiTree"===w.$type&&w.dragEnabled&&(M=w.isEmpty()),"uiTreeHandle"===w.$type&&(w=w.$nodeScope),"uiTreeNode"!==w.$type&&!M)return void(U.appendChildOnHover&&(r=s.next(),!r&&$&&(N=s.parentNode(),N.$element.after(m),s.moveTo(N.$parentNodesScope,N.siblings(),N.index()+1),$=!1)));P&&m.parent()[0]!=P.$element[0]&&(P.resetEmptyElement(),P=null),M?(P=w,w.$nodesScope.accept(l,0)&&(w.place(m),s.moveTo(w.$nodesScope,w.$nodesScope.childNodes(),0))):w.dragEnabled()&&(angular.isDefined(l.expandTimeoutOn)&&l.expandTimeoutOn!==w.id&&(i.cancel(l.expandTimeout),delete l.expandTimeout,delete l.expandTimeoutOn,l.$callbacks.expandTimeoutCancel()),w.collapsed&&(l.expandOnHover===!0||angular.isNumber(l.expandOnHover)&&0===l.expandOnHover?w.collapsed=!1:l.expandOnHover!==!1&&angular.isNumber(l.expandOnHover)&&l.expandOnHover>0&&angular.isUndefined(l.expandTimeoutOn)&&(l.expandTimeoutOn=w.$id,l.$callbacks.expandTimeoutStart(),l.expandTimeout=i(function(){l.$callbacks.expandTimeoutEnd(),w.collapsed=!1},l.expandOnHover))),T=w.$element,D=t.offset(T),B=t.height(T),_=w.$childNodesScope?w.$childNodesScope.$element:null,L=_?t.height(_):0,B-=L,Y=U.appendChildOnHover?.25*B:t.height(T)/2,I=R.pageY<D.top+Y,w.$parentNodesScope.accept(l,w.index())?I?(T[0].parentNode.insertBefore(m[0],T[0]),s.moveTo(w.$parentNodesScope,w.siblings(),w.index())):U.appendChildOnHover&&w.accept(l,w.childNodesCount())?(w.$childNodesScope.$element.prepend(m),s.moveTo(w.$childNodesScope,w.childNodes(),0),$=!0):(T.after(m),s.moveTo(w.$parentNodesScope,w.siblings(),w.index()+1)):!I&&w.accept(l,w.childNodesCount())?(w.$childNodesScope.$element.append(m),s.moveTo(w.$childNodesScope,w.childNodes(),w.childNodesCount())):(A=!0,s.resetParent()))}l.$apply(function(){l.$treeScope.$callbacks.dragMove(s.eventArgs(v,p))})}},x=function(e){var t=s.eventArgs(v,p);e.preventDefault(),D(),i.cancel(l.expandTimeout),l.$treeScope.$apply(function(){r.when(l.$treeScope.$callbacks.beforeDrop(t)).then(function(e){e!==!1&&l.$$allowNodeDrop&&!A?(s.apply(),l.$treeScope.$callbacks.dropped(t)):O()})["catch"](function(){O()})["finally"](function(){f.replaceWith(l.$element),m.remove(),h&&(h.remove(),h=null),l.$treeScope.$callbacks.dragStop(t),l.$$allowNodeDrop=!1,s=null;var e=document.body.getAttribute("ui-tree-cursor");null!==e&&(o.find("body").css({cursor:e}),document.body.removeAttribute("ui-tree-cursor"))})})},E=function(e){l.dragEnabled()&&y(e)},C=function(e){N(e)},w=function(e){l.$$allowNodeDrop=!0,x(e)},T=function(e){x(e)},M=function(){var e;return{exec:function(t,n){n||(n=0),this.cancel(),e=i(t,n)},cancel:function(){i.cancel(e)}}}(),I=function(e){27===e.keyCode&&w(e)},O=function(){a.bind("touchstart mousedown",function(e){l.dragDelay>0?M.exec(function(){E(e)},l.dragDelay):E(e)}),a.bind("touchend touchcancel mouseup",function(){l.dragDelay>0&&M.cancel()})},O(),k=function(){angular.element(o).bind("touchend",w),angular.element(o).bind("touchcancel",w),angular.element(o).bind("touchmove",C),angular.element(o).bind("mouseup",w),angular.element(o).bind("mousemove",C),angular.element(o).bind("mouseleave",T),angular.element(o).bind("keydown",I)},D=function(){angular.element(o).unbind("touchend",w),angular.element(o).unbind("touchcancel",w),angular.element(o).unbind("touchmove",C),angular.element(o).unbind("mouseup",w),angular.element(o).unbind("mousemove",C),angular.element(o).unbind("mouseleave",T),angular.element(o).unbind("keydown",I)}}}}])}(),function(){"use strict";angular.module("ui.tree").directive("uiTreeNodes",["treeConfig","$window",function(e){return{require:["ngModel","?^uiTreeNode","^uiTree"],restrict:"A",scope:!0,controller:"TreeNodesController",link:function(t,n,o,i){var r={},l=i[0],a=i[1],d=i[2];angular.extend(r,e),r.nodesClass&&n.addClass(r.nodesClass),a?(a.scope.$childNodesScope=t,t.$nodeScope=a.scope):d.scope.$nodesScope=t,t.$treeScope=d.scope,l&&(l.$render=function(){t.$modelValue=l.$modelValue}),t.$watch(function(){return o.maxDepth},function(e){"number"==typeof e&&(t.maxDepth=e)}),t.$watch(function(){return o.nodropEnabled},function(e){"undefined"!=typeof e&&(t.nodropEnabled=!0)},!0)}}}])}(),function(){"use strict";function e(e,t){if(void 0===t)return null;for(var n=t.parentNode,o=1,i="function"==typeof n.setAttribute&&n.hasAttribute(e)?n:null;n&&"function"==typeof n.setAttribute&&!n.hasAttribute(e);){if(n=n.parentNode,i=n,n===document.documentElement){i=null;break}o++}return i}angular.module("ui.tree").factory("UiTreeHelper",["$document","$window","treeConfig",function(t,n,o){return{nodesData:{},setNodeAttribute:function(e,t,n){if(!e.$modelValue)return null;var o=this.nodesData[e.$modelValue.$$hashKey];o||(o={},this.nodesData[e.$modelValue.$$hashKey]=o),o[t]=n},getNodeAttribute:function(e,t){if(!e.$modelValue)return null;var n=this.nodesData[e.$modelValue.$$hashKey];return n?n[t]:null},nodrag:function(e){return"undefined"!=typeof e.attr("data-nodrag")&&"false"!==e.attr("data-nodrag")},eventObj:function(e){var t=e;return void 0!==e.targetTouches?t=e.targetTouches.item(0):void 0!==e.originalEvent&&void 0!==e.originalEvent.targetTouches&&(t=e.originalEvent.targetTouches.item(0)),t},dragInfo:function(e){return{source:e,sourceInfo:{cloneModel:e.$treeScope.cloneEnabled===!0?angular.copy(e.$modelValue):void 0,nodeScope:e,index:e.index(),nodesScope:e.$parentNodesScope},index:e.index(),siblings:e.siblings().slice(0),parent:e.$parentNodesScope,resetParent:function(){this.parent=e.$parentNodesScope},moveTo:function(e,t,n){this.parent=e,this.siblings=t.slice(0);var o=this.siblings.indexOf(this.source);o>-1&&(this.siblings.splice(o,1),this.source.index()<n&&n--),this.siblings.splice(n,0,this.source),this.index=n},parentNode:function(){return this.parent.$nodeScope},prev:function(){return this.index>0?this.siblings[this.index-1]:null},next:function(){return this.index<this.siblings.length-1?this.siblings[this.index+1]:null},isClone:function(){return this.source.$treeScope.cloneEnabled===!0},clonedNode:function(e){return angular.copy(e)},isDirty:function(){return this.source.$parentNodesScope!=this.parent||this.source.index()!=this.index},isForeign:function(){return this.source.$treeScope!==this.parent.$treeScope},eventArgs:function(e,t){return{source:this.sourceInfo,dest:{index:this.index,nodesScope:this.parent},elements:e,pos:t}},apply:function(){var e=this.source.$modelValue;this.parent.nodropEnabled||this.parent.$treeScope.nodropEnabled||this.isDirty()&&(this.isClone()&&this.isForeign()?this.parent.insertNode(this.index,this.sourceInfo.cloneModel):(this.source.remove(),this.parent.insertNode(this.index,e)))}}},height:function(e){return e.prop("scrollHeight")},width:function(e){return e.prop("scrollWidth")},offset:function(e){var o=e[0].getBoundingClientRect();return{width:e.prop("offsetWidth"),height:e.prop("offsetHeight"),top:o.top+(n.pageYOffset||t[0].body.scrollTop||t[0].documentElement.scrollTop),left:o.left+(n.pageXOffset||t[0].body.scrollLeft||t[0].documentElement.scrollLeft)}},positionStarted:function(e,t){var n={},o=e.pageX,i=e.pageY;return e.originalEvent&&e.originalEvent.touches&&e.originalEvent.touches.length>0&&(o=e.originalEvent.touches[0].pageX,i=e.originalEvent.touches[0].pageY),n.offsetX=o-this.offset(t).left,n.offsetY=i-this.offset(t).top,n.startX=n.lastX=o,n.startY=n.lastY=i,n.nowX=n.nowY=n.distX=n.distY=n.dirAx=0,n.dirX=n.dirY=n.lastDirX=n.lastDirY=n.distAxX=n.distAxY=0,n},positionMoved:function(e,t,n){var o,i=e.pageX,r=e.pageY;return e.originalEvent&&e.originalEvent.touches&&e.originalEvent.touches.length>0&&(i=e.originalEvent.touches[0].pageX,r=e.originalEvent.touches[0].pageY),t.lastX=t.nowX,t.lastY=t.nowY,t.nowX=i,t.nowY=r,t.distX=t.nowX-t.lastX,t.distY=t.nowY-t.lastY,t.lastDirX=t.dirX,t.lastDirY=t.dirY,t.dirX=0===t.distX?0:t.distX>0?1:-1,t.dirY=0===t.distY?0:t.distY>0?1:-1,o=Math.abs(t.distX)>Math.abs(t.distY)?1:0,n?(t.dirAx=o,void(t.moving=!0)):(t.dirAx!==o?(t.distAxX=0,t.distAxY=0):(t.distAxX+=Math.abs(t.distX),0!==t.dirX&&t.dirX!==t.lastDirX&&(t.distAxX=0),t.distAxY+=Math.abs(t.distY),0!==t.dirY&&t.dirY!==t.lastDirY&&(t.distAxY=0)),void(t.dirAx=o))},elementIsTreeNode:function(e){return"undefined"!=typeof e.attr("ui-tree-node")},elementIsTreeNodeHandle:function(e){return"undefined"!=typeof e.attr("ui-tree-handle")},elementIsTree:function(e){return"undefined"!=typeof e.attr("ui-tree")},elementIsTreeNodes:function(e){return"undefined"!=typeof e.attr("ui-tree-nodes")},elementIsPlaceholder:function(e){return e.hasClass(o.placeholderClass)},elementContainsTreeNodeHandler:function(e){return e[0].querySelectorAll("[ui-tree-handle]").length>=1},treeNodeHandlerContainerOfElement:function(t){return e("ui-tree-handle",t[0])}}}])}(),function(){var e=angular.module("mks-category-manager",["ui.tree"]);e.controller("CategoryController",["$scope","$http","UrlBuilder","$location",function(e,t,n,o){e.sections=[],e.currentSection=null,e.sectionModel=null,e.prevSection=null,e.categories={};var i=this;e.init=function(o){t.get(n.get("category/sections")).then(function(t){e.sections=t.data,e.sections.length&&(o?e.selectSection(i.getSection(o)):e.selectSection(e.sections[0]))})},this.getSection=function(t){for(var n=0;n<e.sections.length;n++)if(e.sections[n].id==t)return e.sections[n];return!1},this.getSectionIndex=function(t){for(var n=0;n<e.sections.length;n++)if(e.sections[n].id==t)return n;return!1},this.loadCategories=function(o){e.categories[o]||t.get(n.get("category/categories/"+o)).then(function(t){e.categories[o]=t.data})},e.selectSection=function(t){e.currentSection=t,e.prevSection=t,e.sectionModel=null,i.loadCategories(t.id)},e.addSection=function(){e.currentSection=null,e.sectionModel={active:!0}},e.editSection=function(t){e.currentSection=null,e.sectionModel=angular.copy(t)},e.saveSection=function(){return!!e.sectionModel&&void t.post(n.get("category/save-section"),e.sectionModel).then(function(t){if(!t.data.id)return!1;if(e.sectionModel.id){var n=i.getSectionIndex(t.data.id);n>=0&&(e.sections[n]=t.data,e.selectSection(e.sections[n]))}else e.sections.push(t.data),e.selectSection(t.data)})},e.cancel=function(){return!(!e.sectionModel||!e.prevSection)&&void e.selectSection(e.prevSection)},e.deleteSection=function(r,l){r.id&&confirm(l||"Delete?")&&t.post(n.get("category/delete-section"),{id:r.id}).then(function(t){e.sections.splice(i.getSectionIndex(r.id),1),o.path()=="/category/"+r.id?o.path("/category"):e.sections.length&&e.selectSection(e.sections[0])})}}]),e.controller("CategoryTreeController",["$http","UrlBuilder",function(e,t){this.category=null;this.toggle=function(e){e.toggle()},this.remove=function(n,o){if(n.$nodeScope&&confirm(o||"Delete?")){var i=n.$nodeScope.$modelValue.id;e.post(t.get("category/delete/"+i)).then(function(e){n.remove()})}},this.treeOptions={beforeDrop:function(n){var o={old:{index:n.source.index,parent:null},"new":{index:n.dest.index,parent:null}};if(n.source.nodeScope.$parentNodeScope&&(o.old.parent=n.source.nodeScope.$parentNodeScope.$modelValue.id),n.dest.nodesScope.$nodeScope&&(o["new"].parent=n.dest.nodesScope.$nodeScope.$modelValue.id),o.old.index==o["new"].index&&o.old.parent==o["new"].parent)return!1;var i=n.source.nodeScope.$modelValue.section_id,r=n.source.nodeScope.$modelValue.id;return e.post(t.get("category/move/"+i+"/"+r),o).then(function(e){return!0})}}}])}(window.angular),function(){var e=angular.module("mks-dashboard",["ngSanitize"]);e.component("dashboardNotifications",{templateUrl:["UrlBuilder",function(e){return e.get("templates/dashboard-notifications.html")}],bindings:{url:"@"},controller:["$http","UrlBuilder","$sce",function(e,t,n){function o(){var e=0;angular.forEach(r.items,function(t){t.read_at||e++}),r.unreadCount=e}function i(t,n){return!(n&&!confirm(n))&&void e.post(t).then(function(e){r.refresh()})}this.items=[],this.nextUrl=null,this.totalCount=0,this.unreadCount=0,this.currentItem=null,this.detailsHtml=null;var r=this;this.load=function(){e.get(this.nextUrl||this.url).then(function(e){e.data&&(r.items=r.items.concat(e.data.data),r.nextUrl=e.data.next_page_url,r.totalCount=e.data.total,o())})},this.details=function(i){e.get(t.get("dashboard/notification-details/"+i.id)).then(function(e){e.data&&(r.detailsHtml=n.trustAsHtml(e.data.details),i.read_at=e.data.read_at,o(),r.currentItem=i)})},this["delete"]=function(n,i){return!(i&&!confirm(i))&&void e.post(t.get("dashboard/notification-delete/"+n.id)).then(function(e){var t=r.items.indexOf(n);t>=0&&(r.items.splice(t,1),r.totalCount--,o())})},this.refresh=function(){this.items=[],this.nextUrl=null,this.load()},this.deleteRead=function(e){i(t.get("dashboard/notifications-delete"),e)},this.deleteAll=function(e){i(t.get("dashboard/notifications-delete/all"),e)},this.load()}]}),e.component("dashboardStatistics",{templateUrl:["UrlBuilder",function(e){return e.get("templates/dashboard-statistics.html")}],bindings:{url:"@"},controller:["$http","UrlBuilder",function(e,t){var n=this;this.items=[],this.load=function(){e.get(this.url).then(function(e){e.data&&(n.items=e.data)})},this.load()}]})}(window.angular),function(){var e=angular.module("mks-menu-manager",["ui.tree"]);e.controller("MenuController",["$scope","$http","UrlBuilder","$location",function(e,t,n,o){e.menu=[],e.currentMenu=null,e.menuModel=null,e.prevMenu=null,e.menuItems={};var i=this;e.init=function(o){t.get(n.get("menuman/list")).then(function(t){e.menu=t.data,e.menu.length&&(o?e.selectMenu(i.getMenu(o)):e.selectMenu(e.menu[0]))})},this.getMenu=function(t){for(var n=0;n<e.menu.length;n++)if(e.menu[n].id==t)return e.menu[n];return!1},this.getMenuIndex=function(t){for(var n=0;n<e.menu.length;n++)if(e.menu[n].id==t)return n;return!1},this.loadMenuItems=function(o){e.menuItems[o]||t.get(n.get("menuman/items/"+o)).then(function(t){e.menuItems[o]=t.data})},e.selectMenu=function(t){e.currentMenu=t,e.prevMenu=t,e.menuModel=null,i.loadMenuItems(t.id)},e.addMenu=function(){e.currentMenu=null,e.menuModel={active:!0}},e.editMenu=function(t){e.currentMenu=null,e.menuModel=angular.copy(t)},e.saveMenu=function(){return!!e.menuModel&&void t.post(n.get("menuman/save"),e.menuModel).then(function(t){if(!t.data.id)return!1;if(e.menuModel.id){var n=i.getMenuIndex(t.data.id);n>=0&&(e.menu[n]=t.data,e.selectMenu(e.menu[n]))}else e.menu.push(t.data),e.selectMenu(t.data)})},e.cancel=function(){return!(!e.menuModel||!e.prevMenu)&&void e.selectMenu(e.prevMenu)},e.deleteMenu=function(r,l){r.id&&confirm(l||"Delete?")&&t.post(n.get("menuman/delete"),{id:r.id}).then(function(t){e.menu.splice(i.getMenuIndex(r.id),1),o.path()=="/menuman/"+r.id?o.path("/menuman"):e.menu.length&&e.selectMenu(e.menu[0])})}}]),e.controller("MenuTreeController",["$http","UrlBuilder",function(e,t){this.menuItem=null;this.toggle=function(e){e.toggle()},this.remove=function(n,o){if(n.$nodeScope&&confirm(o||"Delete?")){var i=n.$nodeScope.$modelValue.id;e.post(t.get("menuman/items/delete/"+i)).then(function(e){n.remove()})}},this.treeOptions={beforeDrop:function(n){var o={old:{index:n.source.index,parent:null},"new":{index:n.dest.index,parent:null}};if(n.source.nodeScope.$parentNodeScope&&(o.old.parent=n.source.nodeScope.$parentNodeScope.$modelValue.id),n.dest.nodesScope.$nodeScope&&(o["new"].parent=n.dest.nodesScope.$nodeScope.$modelValue.id),o.old.index==o["new"].index&&o.old.parent==o["new"].parent)return!1;var i=n.source.nodeScope.$modelValue.menu_id,r=n.source.nodeScope.$modelValue.id;return e.post(t.get("menuman/items/"+i+"/move/"+r),o).then(function(e){return!0})}}}])}(window.angular),function(){var e=angular.module("mks-admin-ext",[]);e.factory("mksLinkService",["$q","$http","UrlBuilder",function(e,t,n){this.getParamsData=function(o){var i=e.defer(),r=t({method:"get",url:n.get("route/params"),params:o,timeout:i.promise}),l=r.then(function(e){return e.data},function(t){return e.reject("Something went wrong")});return l.abort=function(){i.resolve()},l["finally"](function(){l.abort=angular.noop,i=r=l=null}),l};var o=t.get(n.get("route")).then(function(e){return e.data});return this.getRoutes=function(){return o},this}]),e.directive("mksLinkSelect",["$http","mksLinkService","UrlBuilder",function(e,t,n){return{restrict:"E",scope:{model:"@model",rawEnabled:"@rawEnabled",emptyTitle:"@emptyTitle"},templateUrl:n.get("templates/link-selector.html"),link:function(e,n,o){function i(t){angular.forEach(e.items,function(n){n.id==t&&(e.routeOption=n)})}function r(){e.routeOption&&(l&&l.abort&&l.abort(),e.modal.loading=!0,(l=t.getParamsData({name:e.routeOption.id,page:e.modal.current_page||null,q:e.modal.searchQuery||null})).then(function(t){e.modal.data=t,a=e.routeOption.id,d=t.pagination?t.pagination.current_page:1,e.modal.current_page=d})["finally"](function(){e.modal.loading=!1}))}e.field={route:o.fieldRoute||"route[name]",params:o.fieldParams||"route[params]",raw:o.fieldRaw||"route[raw]"},e.items=[],e.routeOption=null,e.routes={},e.model&&e.$watch(e.model,function(t){t&&"undefined"!=typeof t.id&&(e.route=t)}),e.$watch(function(){return e.route},function(t){t&&"undefined"!=typeof t.id&&"undefined"==typeof e.routes[t.id]&&(e.routes[t.id]=t,i(t.id))}),e.route={id:o.route,title:o.title,params:o.params,raw:o.rawValue},t.getRoutes().then(function(t){e.items=t,e.route.id&&i(e.route.id)}),e.modal={id:"modal-"+(new Date).getTime(),loading:!1};var l=null,a=null,d=1;e.modal.open=function(){e.routeOption&&(e.routeOption.extended?a!=e.routeOption.id&&(e.modal.searchQuery="",r()):"undefined"!=typeof e.routes[e.routeOption.id]&&(e.modal.form=e.routes[e.routeOption.id].params),$("#"+e.modal.id).modal("show"))},e.modal.close=function(){$("#"+e.modal.id).modal("hide")},e.modal.select=function(t){if(e.modal.data.params&&e.routeOption){var n={};angular.forEach(e.modal.data.params,function(e){n[e]=t[e]}),e.routes[e.routeOption.id]={title:t.title,params:n},e.modal.close()}},e.modal.save=function(){e.modal.form&&e.routeOption&&(e.routes[e.routeOption.id]={title:e.paramsEncoded(e.modal.form),params:e.modal.form}),e.modal.close()},e.modal.prevPage=function(){"undefined"!=typeof e.modal.current_page&&e.modal.current_page>1&&e.modal.current_page--},e.modal.nextPage=function(){"undefined"!=typeof e.modal.current_page&&"undefined"!=typeof e.modal.data.pagination.last_page&&e.modal.current_page<e.modal.data.pagination.last_page&&e.modal.current_page++},e.$watch("modal.current_page",function(e,t){e&&e>0&&e!=d&&r()}),e.modal.search=function(t){1!=e.modal.current_page?e.modal.current_page=1:r()},e.paramsEncoded=function(e){return e&&"object"==typeof e?angular.toJson(e):e},e.paramsVisible=function(t){return t?t.title?t.title:e.paramsEncoded(t.params):""}}}}]),e.directive("mksModalPaginator",["$http","mksLinkService",function(e,t,n){return{restrict:"E",require:["^","@paginator"],scope:{paginator:"@paginator"},link:function(e,t,n){}}}]),e.directive("mksEditor",["AppConfig","UrlBuilder",function(e,t){return{restrict:"A",link:function(n,o,i){if("undefined"!=typeof CKEDITOR){var r={removePlugins:"forms,audio,Audio,allmedias,base64image,markdown,googledocs",extraPlugins:"wpmore",language:e.getLang("en"),filebrowserBrowseUrl:t.get("file-manager"),filebrowserImageBrowseUrl:t.get("file-manager?type=images"),filebrowserFlashBrowseUrl:t.get("file-manager?type=flash"),
-filebrowserWindowWidth:"85%"};if(i.mksEditor)try{angular.extend(r,n.$eval(i.mksEditor))}catch(l){}CKEDITOR.replace(o[0],r)}}}}]),e.directive("mksPageIframe",["$window",function(e){return{restrict:"A",link:function(t,n,o){var i=angular.element("#sidebar");i.length&&(n.height(i.height()),angular.element(e).on("resize.pageIframe",function(){n.height(i.height())}),t.$on("$destroy",function(){angular.element(e).off("resize.pageIframe")})),n.parent().css({"padding-left":0,"padding-right":0})}}}]),e.directive("mksSelect",[function(){return{restrict:"A",priority:-1,link:function(e,t,n){var o=t.data("langIcon");if(o){var i=function(e){if(!e.id)return e.text;var t=$('<span><img src="'+o+"/"+e.element.value.toLowerCase()+'" class="img-flag" /> '+e.text+"</span>");return t};t.data("templateResult",i),t.data("templateSelection",i)}}}}]),e.directive("stSearchSelect2",[function(){return{restrict:"A",require:"^stTable",link:function(e,t,n,o){t.on("change",function(){o.search(this.value,n.stSearchSelect2)})}}}]),e.component("mksImagesPicker",{templateUrl:["UrlBuilder",function(e){return e.get("templates/images-picker.html")}],bindings:{url:"@",items:"=?",inputName:"@name",pickMain:"@"},controller:["$http","UrlBuilder","$element",function(e,t,n){var o=this;this.$onInit=function(){this.inputName||(this.inputName="images"),this.items||(this.items=[],this.url&&e.get(this.url).then(function(e){e.data&&(o.items=e.data)})),window.pickImageMultiple=function(e){o.safeApply(function(){angular.forEach(e,function(e){o.items.push({url:e.relativeUrl||e.url})})})}},this.add=function(){CKEDITOR.editor.prototype.popup(t.get("file-manager?type=images&multiple=1&callback=pickImageMultiple"))},this["delete"]=function(e){var t=this.items.indexOf(e);t>-1&&this.items.splice(t,1)},this.safeApply=function(e){var t=n.scope(),o=t.$$phase;"$apply"==o||"$digest"==o?e&&"function"==typeof e&&e():t.$apply(e)},this.itemsValue=function(){return angular.toJson(this.items)},this.setMain=function(e){var t=this.items.indexOf(e);if(t>-1)for(var n=0;n<this.items.length;n++)this.items[n].main=n==t}}]}),e.component("mksImageSelect",{templateUrl:["UrlBuilder",function(e){return e.get("templates/image-select.html")}],bindings:{image:"=?",inputName:"@name",pickMain:"@",id:"@"},controller:["$http","UrlBuilder","$element",function(e,t,n){var o=this;this.$onInit=function(){this.inputName||(this.inputName="image"),this.callbackName="pickImageSingle"+(this.id||""),window[this.callbackName]=function(e){o.safeApply(function(){o.image=e[0].relativeUrl||e[0].url})}},this.browse=function(){CKEDITOR.editor.prototype.popup(t.get("file-manager?type=images&callback="+this.callbackName))},this.clear=function(){this.image=null},this.safeApply=function(e){var t=n.scope(),o=t.$$phase;"$apply"==o||"$digest"==o?e&&"function"==typeof e&&e():t.$apply(e)}}]}),e.component("mksCategorySelect",{templateUrl:["UrlBuilder",function(e){return e.get("templates/category-select.html")}],bindings:{url:"@",sectionField:"@",categoryField:"@",sectionId:"@",categoryId:"@",sectionEmpty:"@",categoryEmpty:"@"},controller:["$http","$element",function(e,t){var n=this;this.items=[],this.section=null,this.category=null,this.$onInit=function(){return!!this.url&&(this.sectionField||(this.sectionField="section"),this.categoryField||(this.categoryField="category"),void e.get(this.url).then(function(e){e.data&&(n.items=e.data,(n.sectionId||n.categoryId)&&angular.forEach(n.items,function(e){n.sectionId&&e.id==n.sectionId&&(n.section=e),n.categoryId&&e.children&&angular.forEach(e.children,function(t){t.id==n.categoryId&&(n.category=t,n.section||(n.section=e))})}))}))}}]})}(window.angular),function(){var e=angular.module("mks-admin-ext");e.controller("WidgetRoutesCtrl",["$scope","$http","UrlBuilder",function(e,t,n){e.routes=[];e.init=function(o){t.get(n.get("widget/routes"+(o?"/"+o:""))).then(function(t){e.routes=t.data,e.routes.length||e.addChoice()})},e.addChoice=function(){e.routes.push({id:null})},e.removeChoice=function(t){var n=e.routes.indexOf(t);n>=0&&e.routes.splice(n,1)}}])}(window.angular);
+/**
+ * @license Angular UI Tree v2.22.2
+ * (c) 2010-2016. https://github.com/angular-ui-tree/angular-ui-tree
+ * License: MIT
+ */
+(function () {
+  'use strict';
+
+  angular.module('ui.tree', [])
+    .constant('treeConfig', {
+      treeClass: 'angular-ui-tree',
+      emptyTreeClass: 'angular-ui-tree-empty',
+      hiddenClass: 'angular-ui-tree-hidden',
+      nodesClass: 'angular-ui-tree-nodes',
+      nodeClass: 'angular-ui-tree-node',
+      handleClass: 'angular-ui-tree-handle',
+      placeholderClass: 'angular-ui-tree-placeholder',
+      dragClass: 'angular-ui-tree-drag',
+      dragThreshold: 3,
+      defaultCollapsed: false,
+      appendChildOnHover: true
+    });
+
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+
+    .controller('TreeHandleController', ['$scope', '$element',
+      function ($scope, $element) {
+        this.scope = $scope;
+
+        $scope.$element = $element;
+        $scope.$nodeScope = null;
+        $scope.$type = 'uiTreeHandle';
+
+      }
+    ]);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+    .controller('TreeNodeController', ['$scope', '$element',
+      function ($scope, $element) {
+        this.scope = $scope;
+
+        $scope.$element = $element;
+        $scope.$modelValue = null; // Model value for node;
+        $scope.$parentNodeScope = null; // uiTreeNode Scope of parent node;
+        $scope.$childNodesScope = null; // uiTreeNodes Scope of child nodes.
+        $scope.$parentNodesScope = null; // uiTreeNodes Scope of parent nodes.
+        $scope.$treeScope = null; // uiTree scope
+        $scope.$handleScope = null; // it's handle scope
+        $scope.$type = 'uiTreeNode';
+        $scope.$$allowNodeDrop = false;
+        $scope.collapsed = false;
+        $scope.expandOnHover = false;
+
+        //Called by uiTreeNode Directive on load.
+        $scope.init = function (controllersArr) {
+          var treeNodesCtrl = controllersArr[0];
+          $scope.$treeScope = controllersArr[1] ? controllersArr[1].scope : null;
+
+          //Find the scope of it's parent node.
+          $scope.$parentNodeScope = treeNodesCtrl.scope.$nodeScope;
+
+          //modelValue for current node.
+          $scope.$modelValue = treeNodesCtrl.scope.$modelValue[$scope.$index];
+          $scope.$parentNodesScope = treeNodesCtrl.scope;
+
+          //Init sub nodes.
+          treeNodesCtrl.scope.initSubNode($scope);
+
+          $element.on('$destroy', function () {
+
+            //Destroy sub nodes.
+            treeNodesCtrl.scope.destroySubNode($scope);
+          });
+        };
+
+        //Return the index of child node in parent node (nodesScope).
+        $scope.index = function () {
+          return $scope.$parentNodesScope.$modelValue.indexOf($scope.$modelValue);
+        };
+
+        $scope.dragEnabled = function () {
+          return !($scope.$treeScope && !$scope.$treeScope.dragEnabled);
+        };
+
+        $scope.isSibling = function (targetNode) {
+          return $scope.$parentNodesScope == targetNode.$parentNodesScope;
+        };
+
+        $scope.isChild = function (targetNode) {
+          var nodes = $scope.childNodes();
+          return nodes && nodes.indexOf(targetNode) > -1;
+        };
+
+        //TODO(jcarter): This method is on uiTreeHelper already.
+        $scope.prev = function () {
+          var index = $scope.index();
+          if (index > 0) {
+            return $scope.siblings()[index - 1];
+          }
+          return null;
+        };
+
+        //Calls childNodes on parent.
+        $scope.siblings = function () {
+          return $scope.$parentNodesScope.childNodes();
+        };
+
+        $scope.childNodesCount = function () {
+          return $scope.childNodes() ? $scope.childNodes().length : 0;
+        };
+
+        $scope.hasChild = function () {
+          return $scope.childNodesCount() > 0;
+        };
+
+        $scope.childNodes = function () {
+          return $scope.$childNodesScope && $scope.$childNodesScope.$modelValue ?
+            $scope.$childNodesScope.childNodes() :
+            null;
+        };
+
+        $scope.accept = function (sourceNode, destIndex) {
+          return $scope.$childNodesScope &&
+            $scope.$childNodesScope.$modelValue &&
+            $scope.$childNodesScope.accept(sourceNode, destIndex);
+        };
+
+        $scope.remove = function () {
+          return $scope.$parentNodesScope.removeNode($scope);
+        };
+
+        $scope.toggle = function () {
+          $scope.collapsed = !$scope.collapsed;
+          $scope.$treeScope.$callbacks.toggle($scope.collapsed, $scope);
+        };
+
+        $scope.collapse = function () {
+          $scope.collapsed = true;
+        };
+
+        $scope.expand = function () {
+          $scope.collapsed = false;
+        };
+
+        $scope.depth = function () {
+          var parentNode = $scope.$parentNodeScope;
+          if (parentNode) {
+            return parentNode.depth() + 1;
+          }
+          return 1;
+        };
+
+        /**
+        * Returns the depth of the deepest subtree under this node
+        * @param scope a TreeNodesController scope object
+        * @returns Depth of all nodes *beneath* this node. If scope belongs to a leaf node, the
+        *   result is 0 (it has no subtree).
+        */
+        function countSubTreeDepth(scope) {
+          if (!scope) {
+            return 0;
+          }
+          var thisLevelDepth = 0,
+              childNodes = scope.childNodes(),
+              childNode,
+              childDepth,
+              i;
+          if (!childNodes || childNodes.length === 0) {
+            return 0;
+          }
+          for (i = childNodes.length - 1; i >= 0 ; i--) {
+            childNode = childNodes[i],
+            childDepth = 1 + countSubTreeDepth(childNode);
+            thisLevelDepth = Math.max(thisLevelDepth, childDepth);
+          }
+          return thisLevelDepth;
+        }
+
+        $scope.maxSubDepth = function () {
+          return $scope.$childNodesScope ? countSubTreeDepth($scope.$childNodesScope) : 0;
+        };
+      }
+    ]);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+
+    .controller('TreeNodesController', ['$scope', '$element',
+      function ($scope, $element) {
+        this.scope = $scope;
+
+        $scope.$element = $element;
+        $scope.$modelValue = null;
+        $scope.$nodeScope = null; // the scope of node which the nodes belongs to
+        $scope.$treeScope = null;
+        $scope.$type = 'uiTreeNodes';
+        $scope.$nodesMap = {};
+
+        $scope.nodropEnabled = false;
+        $scope.maxDepth = 0;
+        $scope.cloneEnabled = false;
+
+        $scope.initSubNode = function (subNode) {
+          if (!subNode.$modelValue) {
+            return null;
+          }
+          $scope.$nodesMap[subNode.$modelValue.$$hashKey] = subNode;
+        };
+
+        $scope.destroySubNode = function (subNode) {
+          if (!subNode.$modelValue) {
+            return null;
+          }
+          $scope.$nodesMap[subNode.$modelValue.$$hashKey] = null;
+        };
+
+        $scope.accept = function (sourceNode, destIndex) {
+          return $scope.$treeScope.$callbacks.accept(sourceNode, $scope, destIndex);
+        };
+
+        $scope.beforeDrag = function (sourceNode) {
+          return $scope.$treeScope.$callbacks.beforeDrag(sourceNode);
+        };
+
+        $scope.isParent = function (node) {
+          return node.$parentNodesScope == $scope;
+        };
+
+        $scope.hasChild = function () {
+          return $scope.$modelValue.length > 0;
+        };
+
+        $scope.safeApply = function (fn) {
+          var phase = this.$root.$$phase;
+          if (phase == '$apply' || phase == '$digest') {
+            if (fn && (typeof (fn) === 'function')) {
+              fn();
+            }
+          } else {
+            this.$apply(fn);
+          }
+        };
+
+        //Called in apply method of UiTreeHelper.dragInfo.
+        $scope.removeNode = function (node) {
+          var index = $scope.$modelValue.indexOf(node.$modelValue);
+          if (index > -1) {
+            $scope.safeApply(function () {
+              $scope.$modelValue.splice(index, 1)[0];
+            });
+            return $scope.$treeScope.$callbacks.removed(node);
+          }
+          return null;
+        };
+
+        //Called in apply method of UiTreeHelper.dragInfo.
+        $scope.insertNode = function (index, nodeData) {
+          $scope.safeApply(function () {
+            $scope.$modelValue.splice(index, 0, nodeData);
+          });
+        };
+
+        $scope.childNodes = function () {
+          var i, nodes = [];
+          if ($scope.$modelValue) {
+            for (i = 0; i < $scope.$modelValue.length; i++) {
+              nodes.push($scope.$nodesMap[$scope.$modelValue[i].$$hashKey]);
+            }
+          }
+          return nodes;
+        };
+
+        $scope.depth = function () {
+          if ($scope.$nodeScope) {
+            return $scope.$nodeScope.depth();
+          }
+          return 0; // if it has no $nodeScope, it's root
+        };
+
+        // check if depth limit has reached
+        $scope.outOfDepth = function (sourceNode) {
+          var maxDepth = $scope.maxDepth || $scope.$treeScope.maxDepth;
+          if (maxDepth > 0) {
+            return $scope.depth() + sourceNode.maxSubDepth() + 1 > maxDepth;
+          }
+          return false;
+        };
+
+      }
+    ]);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+
+    .controller('TreeController', ['$scope', '$element',
+      function ($scope, $element) {
+        this.scope = $scope;
+
+        $scope.$element = $element;
+        $scope.$nodesScope = null; // root nodes
+        $scope.$type = 'uiTree';
+        $scope.$emptyElm = null;
+        $scope.$callbacks = null;
+
+        $scope.dragEnabled = true;
+        $scope.emptyPlaceholderEnabled = true;
+        $scope.maxDepth = 0;
+        $scope.dragDelay = 0;
+        $scope.cloneEnabled = false;
+        $scope.nodropEnabled = false;
+
+        // Check if it's a empty tree
+        $scope.isEmpty = function () {
+          return ($scope.$nodesScope && $scope.$nodesScope.$modelValue
+          && $scope.$nodesScope.$modelValue.length === 0);
+        };
+
+        // add placeholder to empty tree
+        $scope.place = function (placeElm) {
+          $scope.$nodesScope.$element.append(placeElm);
+          $scope.$emptyElm.remove();
+        };
+
+        this.resetEmptyElement = function () {
+          if ((!$scope.$nodesScope.$modelValue || $scope.$nodesScope.$modelValue.length === 0) &&
+            $scope.emptyPlaceholderEnabled) {
+            $element.append($scope.$emptyElm);
+          } else {
+            $scope.$emptyElm.remove();
+          }
+        };
+
+        $scope.resetEmptyElement = this.resetEmptyElement;
+      }
+    ]);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+    .directive('uiTree', ['treeConfig', '$window',
+      function (treeConfig, $window) {
+        return {
+          restrict: 'A',
+          scope: true,
+          controller: 'TreeController',
+          link: function (scope, element, attrs, ctrl) {
+            var callbacks = {
+              accept: null,
+              beforeDrag: null
+            },
+            config = {},
+            tdElm,
+            $trElm,
+            emptyElmColspan;
+
+            //Adding configured class to uiTree.
+            angular.extend(config, treeConfig);
+
+            if (config.treeClass) {
+              element.addClass(config.treeClass);
+            }
+
+            //Determining if uiTree is on a table.
+            if (element.prop('tagName').toLowerCase() === 'table') {
+              scope.$emptyElm = angular.element($window.document.createElement('tr'));
+              $trElm = element.find('tr');
+              
+              //If we can find a tr, then we can use its td children as the empty element colspan.
+              if ($trElm.length > 0) {
+                emptyElmColspan = angular.element($trElm).children().length;
+              } else {
+                
+                //If not, by setting a huge colspan we make sure it takes full width.
+                //TODO(jcarter): Check for negative side effects.
+                emptyElmColspan = 1000000;
+              }
+              tdElm = angular.element($window.document.createElement('td'))
+                .attr('colspan', emptyElmColspan);
+              scope.$emptyElm.append(tdElm);
+            } else {
+              scope.$emptyElm = angular.element($window.document.createElement('div'));
+            }
+
+            if (config.emptyTreeClass) {
+              scope.$emptyElm.addClass(config.emptyTreeClass);
+            }
+
+            scope.$watch('$nodesScope.$modelValue.length', function (val) {
+              if (!angular.isNumber(val)) {
+                return;
+              }
+
+              ctrl.resetEmptyElement();
+            }, true);
+
+            scope.$watch(attrs.dragEnabled, function (val) {
+              if ((typeof val) == 'boolean') {
+                scope.dragEnabled = val;
+              }
+            });
+
+            scope.$watch(attrs.emptyPlaceholderEnabled, function (val) {
+              if ((typeof val) == 'boolean') {
+                scope.emptyPlaceholderEnabled = val;
+                ctrl.resetEmptyElement();
+              }
+            });
+
+            scope.$watch(attrs.nodropEnabled, function (val) {
+              if ((typeof val) == 'boolean') {
+                scope.nodropEnabled = val;
+              }
+            });
+
+            scope.$watch(attrs.cloneEnabled, function (val) {
+              if ((typeof val) == 'boolean') {
+                scope.cloneEnabled = val;
+              }
+            });
+
+            scope.$watch(attrs.maxDepth, function (val) {
+              if ((typeof val) == 'number') {
+                scope.maxDepth = val;
+              }
+            });
+
+            scope.$watch(attrs.dragDelay, function (val) {
+              if ((typeof val) == 'number') {
+                scope.dragDelay = val;
+              }
+            });
+
+            /**
+             * Callback checks if the destination node can accept the dragged node.
+             * By default, ui-tree will check that 'data-nodrop-enabled' is not set for the
+             * destination ui-tree-nodes, and that the 'max-depth' attribute will not be exceeded
+             * if it is set on the ui-tree or ui-tree-nodes.
+             * This callback can be overridden, but callers must manually enforce nodrop and max-depth
+             * themselves if they need those to be enforced.
+             * @param sourceNodeScope Scope of the ui-tree-node being dragged
+             * @param destNodesScope Scope of the ui-tree-nodes where the node is hovering
+             * @param destIndex Index in the destination nodes array where the source node will drop
+             * @returns {boolean} True if the node is permitted to be dropped here
+             */
+            callbacks.accept = function (sourceNodeScope, destNodesScope, destIndex) {
+              return !(destNodesScope.nodropEnabled || destNodesScope.$treeScope.nodropEnabled || destNodesScope.outOfDepth(sourceNodeScope));
+            };
+
+            callbacks.beforeDrag = function (sourceNodeScope) {
+              return true;
+            };
+
+            callbacks.expandTimeoutStart = function()
+            {
+
+            };
+
+            callbacks.expandTimeoutCancel = function()
+            {
+
+            };
+
+            callbacks.expandTimeoutEnd = function()
+            {
+
+            };
+
+            callbacks.removed = function (node) {
+
+            };
+
+            /**
+             * Callback is fired when a node is successfully dropped in a new location
+             * @param event
+             */
+            callbacks.dropped = function (event) {
+
+            };
+
+            /**
+             * Callback is fired each time the user starts dragging a node
+             * @param event
+             */
+            callbacks.dragStart = function (event) {
+
+            };
+
+            /**
+             * Callback is fired each time a dragged node is moved with the mouse/touch.
+             * @param event
+             */
+            callbacks.dragMove = function (event) {
+
+            };
+
+            /**
+             * Callback is fired when the tree exits drag mode. If the user dropped a node, the drop may have been
+             * accepted or reverted.
+             * @param event
+             */
+            callbacks.dragStop = function (event) {
+
+            };
+
+            /**
+             * Callback is fired when a user drops a node (but prior to processing the drop action)
+             * beforeDrop can return a Promise, truthy, or falsy (returning nothing is falsy).
+             * If it returns falsy, or a resolve Promise, the node move is accepted
+             * If it returns truthy, or a rejected Promise, the node move is reverted
+             * @param event
+             * @returns {Boolean|Promise} Truthy (or rejected Promise) to cancel node move; falsy (or resolved promise)
+             */
+            callbacks.beforeDrop = function (event) {
+
+            };
+
+            /**
+             * Callback is fired when a user toggles node (but after processing the toggle action)
+             * @param sourceNodeScope
+             * @param collapsed
+             */
+            callbacks.toggle = function (collapsed, sourceNodeScope) {
+
+            };
+
+            scope.$watch(attrs.uiTree, function (newVal, oldVal) {
+              angular.forEach(newVal, function (value, key) {
+                if (callbacks[key]) {
+                  if (typeof value === 'function') {
+                    callbacks[key] = value;
+                  }
+                }
+              });
+
+              scope.$callbacks = callbacks;
+            }, true);
+
+
+          }
+        };
+      }
+    ]);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+    .directive('uiTreeHandle', ['treeConfig',
+      function (treeConfig) {
+        return {
+          require: '^uiTreeNode',
+          restrict: 'A',
+          scope: true,
+          controller: 'TreeHandleController',
+          link: function (scope, element, attrs, treeNodeCtrl) {
+            var config = {};
+            angular.extend(config, treeConfig);
+            if (config.handleClass) {
+              element.addClass(config.handleClass);
+            }
+            // connect with the tree node.
+            if (scope != treeNodeCtrl.scope) {
+              scope.$nodeScope = treeNodeCtrl.scope;
+              treeNodeCtrl.scope.$handleScope = scope;
+            }
+          }
+        };
+      }
+    ]);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+
+    .directive('uiTreeNode', ['treeConfig', 'UiTreeHelper', '$window', '$document', '$timeout', '$q',
+      function (treeConfig, UiTreeHelper, $window, $document, $timeout, $q) {
+        return {
+          require: ['^uiTreeNodes', '^uiTree'],
+          restrict: 'A',
+          controller: 'TreeNodeController',
+          link: function (scope, element, attrs, controllersArr) {
+            var config = {},
+              hasTouch = 'ontouchstart' in window,
+              firstMoving,
+              dragInfo,
+              pos,
+              placeElm,
+              hiddenPlaceElm,
+              dragElm,
+              scrollContainerElm,
+              unhover,
+              treeScope = null,
+              elements, // As a parameter for callbacks
+              dragDelaying = true,
+              dragStarted = false,
+              dragTimer = null,
+              body = document.body,
+              html = document.documentElement,
+              document_height,
+              document_width,
+              dragStart,
+              tagName,
+              dragMove,
+              dragEnd,
+              dragStartEvent,
+              dragMoveEvent,
+              dragEndEvent,
+              dragCancelEvent,
+              dragDelay,
+              bindDragStartEvents,
+              bindDragMoveEvents,
+              unbindDragMoveEvents,
+              keydownHandler,
+              isHandleChild,
+              el,
+              isUiTreeRoot,
+              treeOfOrigin;
+
+            //Adding configured class to ui-tree-node.
+            angular.extend(config, treeConfig);
+
+            if (config.nodeClass) {
+              element.addClass(config.nodeClass);
+            }
+
+            //Call init function in nodeCtrl, sets parent node and sets up sub nodes.
+            scope.init(controllersArr);
+
+            scope.collapsed = !!UiTreeHelper.getNodeAttribute(scope, 'collapsed') || treeConfig.defaultCollapsed;
+            scope.expandOnHover = !!UiTreeHelper.getNodeAttribute(scope, 'expandOnHover');
+            scope.scrollContainer = UiTreeHelper.getNodeAttribute(scope, 'scrollContainer') || attrs.scrollContainer || null;
+            scope.sourceOnly = scope.nodropEnabled || scope.$treeScope.nodropEnabled;
+
+            scope.$watch(attrs.collapsed, function (val) {
+              if ((typeof val) == 'boolean') {
+                scope.collapsed = val;
+              }
+            });
+
+            //Watches to trigger behavior based on actions and settings.
+            scope.$watch('collapsed', function (val) {
+              UiTreeHelper.setNodeAttribute(scope, 'collapsed', val);
+              attrs.$set('collapsed', val);
+            });
+
+            scope.$watch(attrs.expandOnHover, function(val) {
+              if ((typeof val) === 'boolean' || (typeof val) === 'number') {
+                scope.expandOnHover = val;
+              }
+            });
+
+            scope.$watch('expandOnHover', function (val) {
+              UiTreeHelper.setNodeAttribute(scope, 'expandOnHover', val);
+              attrs.$set('expandOnHover', val);
+            });
+
+            attrs.$observe('scrollContainer', function(val) {
+              if ((typeof val) === 'string') {
+                scope.scrollContainer = val;
+              }
+            });
+
+            scope.$watch('scrollContainer', function(val) {
+              UiTreeHelper.setNodeAttribute(scope, 'scrollContainer', val);
+              attrs.$set('scrollContainer', val);
+              scrollContainerElm = document.querySelector(val);
+            });
+
+            scope.$on('angular-ui-tree:collapse-all', function () {
+              scope.collapsed = true;
+            });
+
+            scope.$on('angular-ui-tree:expand-all', function () {
+              scope.collapsed = false;
+            });
+
+            /**
+             * Called when the user has grabbed a node and started dragging it.
+             *
+             * @param {MouseEvent} e event that is triggered by DOM.
+             * @return undefined?
+             */
+            dragStart = function (e) {
+
+              //Disable right click.
+              if (!hasTouch && (e.button === 2 || e.which === 3)) {
+                return;
+              }
+
+              //Event has already fired in other scope.
+              if (e.uiTreeDragging || (e.originalEvent && e.originalEvent.uiTreeDragging)) {
+                return;
+              }
+
+              //The node being dragged.
+              var eventElm = angular.element(e.target),
+                isHandleChild,
+                cloneElm,
+                eventElmTagName,
+                tagName,
+                eventObj,
+                tdElm,
+                hStyle,
+                isTreeNode,
+                isTreeNodeHandle;
+
+              //If the target element is a child element of a ui-tree-handle,
+              // use the containing handle element as target element.
+              isHandleChild = UiTreeHelper.treeNodeHandlerContainerOfElement(eventElm);
+              if (isHandleChild) {
+                eventElm = angular.element(isHandleChild);
+              }
+
+              cloneElm = element.clone();
+              isTreeNode = UiTreeHelper.elementIsTreeNode(eventElm);
+              isTreeNodeHandle = UiTreeHelper.elementIsTreeNodeHandle(eventElm);
+
+              //If we are not triggering mousedown on our uiTree or any of it's parts, return.
+              if (!isTreeNode && !isTreeNodeHandle) {
+                return;
+              }
+
+              //If we are not triggering mousedown on our uiTree or any of it's parts, return.
+              if (isTreeNode && UiTreeHelper.elementContainsTreeNodeHandler(eventElm)) {
+                return;
+              }
+
+              //Dragging not allowed on inputs or buttons.
+              eventElmTagName = eventElm.prop('tagName').toLowerCase();
+              if (eventElmTagName == 'input' ||
+                  eventElmTagName == 'textarea' ||
+                  eventElmTagName == 'button' ||
+                  eventElmTagName == 'select') {
+                return;
+              }
+
+              //Check if it or it's parents has a 'data-nodrag' attribute
+              el = angular.element(e.target);
+              while (el && el[0] && el[0] !== element && !isUiTreeRoot) {
+
+                //Checking that I can access attributes.
+                if (el[0].attributes) {
+                  isUiTreeRoot = el[0].attributes['ui-tree'];
+                }
+
+                //If the node mark as `nodrag`, DONOT drag it.
+                if (UiTreeHelper.nodrag(el)) {
+                  return;
+                }
+                el = el.parent();
+              }
+
+              //If users beforeDrag calback returns falsey, do not initiate.
+              if (!scope.beforeDrag(scope)) {
+                return;
+              }
+
+              //Set property checked at start of function to prevent running logic again.
+              e.uiTreeDragging = true;
+              if (e.originalEvent) {
+                e.originalEvent.uiTreeDragging = true;
+              }
+              e.preventDefault();
+
+              //Get original event if TouchEvent.
+              eventObj = UiTreeHelper.eventObj(e);
+
+              //Set boolean used to specify beginning of move.
+              firstMoving = true;
+
+              //Setting drag info properties and methods in scope of node being moved.
+              dragInfo = UiTreeHelper.dragInfo(scope);
+
+              //Setting original tree to adjust horizontal behavior in drag move.
+              treeOfOrigin = dragInfo.source.$treeScope.$id;
+
+              //Determine tage name of element ui-tree-node is on.
+              tagName = element.prop('tagName');
+
+              if (tagName.toLowerCase() === 'tr') {
+
+                //Create a new table column as placeholder.
+                placeElm = angular.element($window.document.createElement(tagName));
+
+                //Create a column placeholder and set colspan to whole row length.
+                tdElm = angular.element($window.document.createElement('td'))
+                    .addClass(config.placeholderClass)
+                    .attr('colspan', element[0].children.length);
+                placeElm.append(tdElm);
+              } else {
+
+                //If not a table just duplicate element and add placeholder class.
+                placeElm = angular.element($window.document.createElement(tagName))
+                    .addClass(config.placeholderClass);
+              }
+
+              //Create a hidden placeholder and add class from config.
+              hiddenPlaceElm = angular.element($window.document.createElement(tagName));
+              if (config.hiddenClass) {
+                hiddenPlaceElm.addClass(config.hiddenClass);
+              }
+
+              //Getting starting position of element being moved.
+              pos = UiTreeHelper.positionStarted(eventObj, element);
+              placeElm.css('height', UiTreeHelper.height(element) + 'px');
+
+              //Creating drag element to represent node.
+              dragElm = angular.element($window.document.createElement(scope.$parentNodesScope.$element.prop('tagName')))
+                  .addClass(scope.$parentNodesScope.$element.attr('class')).addClass(config.dragClass);
+              dragElm.css('width', UiTreeHelper.width(element) + 'px');
+              dragElm.css('z-index', 9999);
+
+              //Prevents cursor to change rapidly in Opera 12.16 and IE when dragging an element.
+              hStyle = (element[0].querySelector('.angular-ui-tree-handle') || element[0]).currentStyle;
+              if (hStyle) {
+                document.body.setAttribute('ui-tree-cursor', $document.find('body').css('cursor') || '');
+                $document.find('body').css({'cursor': hStyle.cursor + '!important'});
+              }
+
+              //If tree is sourceOnly (noDragDrop) don't show placeholder when moving about it.
+              if (scope.sourceOnly) {
+                placeElm.css('display', 'none');
+              }
+
+              //Insert placeholder.
+              element.after(placeElm);
+              element.after(hiddenPlaceElm);
+              if (dragInfo.isClone() && scope.sourceOnly) {
+                dragElm.append(cloneElm);
+              } else {
+                dragElm.append(element);
+              }
+
+              //Create drag element.
+              $document.find('body').append(dragElm);
+
+              //Set drag elements position on screen.
+              dragElm.css({
+                'left': eventObj.pageX - pos.offsetX + 'px',
+                'top': eventObj.pageY - pos.offsetY + 'px'
+              });
+              elements = {
+                placeholder: placeElm,
+                dragging: dragElm
+              };
+
+              //Create all drag/move bindings.
+              bindDragMoveEvents();
+
+              //Fire dragStart callback.
+              scope.$apply(function () {
+                scope.$treeScope.$callbacks.dragStart(dragInfo.eventArgs(elements, pos));
+              });
+
+              //Get bounds of document.
+              document_height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+              document_width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
+            };
+
+            dragMove = function (e) {
+              var eventObj = UiTreeHelper.eventObj(e),
+                prev,
+                next,
+                leftElmPos,
+                topElmPos,
+                top_scroll,
+                bottom_scroll,
+                scrollContainerElmRect,
+                target,
+                targetX,
+                targetY,
+                displayElm,
+                targetNode,
+                targetElm,
+                isEmpty,
+                scrollDownBy,
+                scrollUpBy,
+                targetOffset,
+                targetBefore,
+                moveWithinTree,
+                targetBeforeBuffer,
+                targetHeight,
+                targetChildElm,
+                targetChildHeight;
+
+              //If check ensures that drag element was created.
+              if (dragElm) {
+                e.preventDefault();
+
+                //Deselect anything (text, etc.) that was selected when move began.
+                if ($window.getSelection) {
+                  $window.getSelection().removeAllRanges();
+                } else if ($window.document.selection) {
+                  $window.document.selection.empty();
+                }
+
+                //Get top left positioning of element being moved.
+                leftElmPos = eventObj.pageX - pos.offsetX;
+                topElmPos = eventObj.pageY - pos.offsetY;
+
+                //dragElm can't leave the screen on the left.
+                if (leftElmPos < 0) {
+                  leftElmPos = 0;
+                }
+
+                //dragElm can't leave the screen on the top.
+                if (topElmPos < 0) {
+                  topElmPos = 0;
+                }
+
+                //dragElm can't leave the screen on the bottom.
+                if ((topElmPos + 10) > document_height) {
+                  topElmPos = document_height - 10;
+                }
+
+                //dragElm can't leave the screen on the right.
+                if ((leftElmPos + 10) > document_width) {
+                  leftElmPos = document_width - 10;
+                }
+
+                //Updating element being moved css.
+                dragElm.css({
+                  'left': leftElmPos + 'px',
+                  'top': topElmPos + 'px'
+                });
+
+                if (scrollContainerElm) {
+                  //Getting position to top and bottom of container element.
+                  scrollContainerElmRect = scrollContainerElm.getBoundingClientRect();
+                  top_scroll = scrollContainerElm.scrollTop;
+                  bottom_scroll = top_scroll + scrollContainerElm.clientHeight;
+
+                  //To scroll down if cursor y-position is greater than the bottom position of the container vertical scroll
+                  if (scrollContainerElmRect.bottom < eventObj.clientY && bottom_scroll < scrollContainerElm.scrollHeight) {
+                    scrollDownBy = Math.min(scrollContainerElm.scrollHeight - bottom_scroll, 10);
+                    scrollContainerElm.scrollTop += scrollDownBy;
+                  }
+
+                  //To scroll top if cursor y-position is less than the top position of the container vertical scroll
+                  if (scrollContainerElmRect.top > eventObj.clientY && top_scroll > 0) {
+                    scrollUpBy = Math.min(top_scroll, 10);
+                    scrollContainerElm.scrollTop -= scrollUpBy;
+                  }
+                } else {
+                  //Getting position to top and bottom of page.
+                  top_scroll = window.pageYOffset || $window.document.documentElement.scrollTop;
+                  bottom_scroll = top_scroll + (window.innerHeight || $window.document.clientHeight || $window.document.clientHeight);
+
+                  //To scroll down if cursor y-position is greater than the bottom position of the window vertical scroll
+                  if (bottom_scroll < eventObj.pageY && bottom_scroll < document_height) {
+                    scrollDownBy = Math.min(document_height - bottom_scroll, 10);
+                    window.scrollBy(0, scrollDownBy);
+                  }
+
+                  //To scroll top if cursor y-position is less than the top position of the window vertical scroll
+                  if (top_scroll > eventObj.pageY) {
+                    scrollUpBy = Math.min(top_scroll, 10);
+                    window.scrollBy(0, -scrollUpBy);
+                  }
+                }
+
+                //Calling service to update position coordinates based on move.
+                UiTreeHelper.positionMoved(e, pos, firstMoving);
+                if (firstMoving) {
+                  firstMoving = false;
+                  return;
+                }
+
+                //Setting X point for elementFromPoint.
+                targetX = eventObj.pageX - ($window.pageXOffset ||
+                    $window.document.body.scrollLeft ||
+                    $window.document.documentElement.scrollLeft) -
+                    ($window.document.documentElement.clientLeft || 0);
+
+                targetY = eventObj.pageY - ($window.pageYOffset ||
+                    $window.document.body.scrollTop ||
+                    $window.document.documentElement.scrollTop) -
+                    ($window.document.documentElement.clientTop || 0);
+
+                //Select the drag target. Because IE does not support CSS 'pointer-events: none', it will always
+                // pick the drag element itself as the target. To prevent this, we hide the drag element while
+                // selecting the target.
+                if (angular.isFunction(dragElm.hide)) {
+                  dragElm.hide();
+                } else {
+                  displayElm = dragElm[0].style.display;
+                  dragElm[0].style.display = 'none';
+                }
+
+                //When using elementFromPoint() inside an iframe, you have to call
+                // elementFromPoint() twice to make sure IE8 returns the correct value
+                //MDN: The elementFromPoint() method of the Document interface returns the topmost element at the specified coordinates.
+                $window.document.elementFromPoint(targetX, targetY);
+
+                //Set target element (element in specified x/y coordinates).
+                targetElm = angular.element($window.document.elementFromPoint(targetX, targetY));
+
+                //If the target element is a child element of a ui-tree-handle,
+                // use the containing handle element as target element
+                isHandleChild = UiTreeHelper.treeNodeHandlerContainerOfElement(targetElm);
+                if (isHandleChild) {
+                  targetElm = angular.element(isHandleChild);
+                }
+
+                if (angular.isFunction(dragElm.show)) {
+                  dragElm.show();
+                } else {
+                  dragElm[0].style.display = displayElm;
+                }
+
+                //Assigning scope to target you are moving draggable over.
+                if (UiTreeHelper.elementIsTree(targetElm)) {
+                  targetNode = targetElm.controller('uiTree').scope;
+                } else if (UiTreeHelper.elementIsTreeNodeHandle(targetElm)) {
+                  targetNode = targetElm.controller('uiTreeHandle').scope;
+                } else if (UiTreeHelper.elementIsTreeNode(targetElm)) {
+                  targetNode = targetElm.controller('uiTreeNode').scope;
+                } else if (UiTreeHelper.elementIsTreeNodes(targetElm)) {
+                  targetNode = targetElm.controller('uiTreeNodes').scope;
+                } else if (UiTreeHelper.elementIsPlaceholder(targetElm)) {
+                  targetNode = targetElm.controller('uiTreeNodes').scope;
+                } else if (targetElm.controller('uiTreeNode')) {
+                  //Is a child element of a node.
+                  targetNode = targetElm.controller('uiTreeNode').scope;
+                }
+
+                moveWithinTree =  (targetNode && targetNode.$treeScope && targetNode.$treeScope.$id && targetNode.$treeScope.$id === treeOfOrigin);
+
+                /* (jcarter) Notes to developers:
+                 *  pos.dirAx is either 0 or 1
+                 *  1 means horizontal movement is happening
+                 *  0 means vertical movement is happening
+                 */
+
+                // Move nodes up and down in nesting level.
+                if (moveWithinTree && pos.dirAx) {
+
+                  // increase horizontal level if previous sibling exists and is not collapsed
+                  // example 1.1.1 becomes 1.2
+                  if (pos.distX > 0) {
+                    prev = dragInfo.prev();
+                    if (prev && !prev.collapsed
+                      && prev.accept(scope, prev.childNodesCount())) {
+                      prev.$childNodesScope.$element.append(placeElm);
+                      dragInfo.moveTo(prev.$childNodesScope, prev.childNodes(), prev.childNodesCount());
+                    }
+                  }
+
+                  // decrease horizontal level
+                  // example 1.2 become 1.1.1
+                  if (pos.distX < 0) {
+                    // we can't decrease a level if an item preceeds the current one
+                    next = dragInfo.next();
+                    if (!next) {
+                      target = dragInfo.parentNode(); // As a sibling of it's parent node
+                      if (target
+                        && target.$parentNodesScope.accept(scope, target.index() + 1)) {
+                        target.$element.after(placeElm);
+                        dragInfo.moveTo(target.$parentNodesScope, target.siblings(), target.index() + 1);
+                      }
+                    }
+                  }
+                } else { //Either in origin tree and moving horizontally OR you are moving within a new tree.
+
+                  //Check it's new position.
+                  isEmpty = false;
+
+                  //Exit if target is not a uiTree or child of one.
+                  if (!targetNode) {
+                    return;
+                  }
+
+                  //Show the placeholder if it was hidden for nodrop-enabled and this is a new tree
+                  if (targetNode.$treeScope && !targetNode.$parent.nodropEnabled && !targetNode.$treeScope.nodropEnabled) {
+                    placeElm.css('display', '');
+                  }
+
+                  //Set whether target tree is empty or not.
+                  if (targetNode.$type === 'uiTree' && targetNode.dragEnabled) {
+                    isEmpty = targetNode.isEmpty();
+                  }
+
+                  //If target is a handle set new target to handle's node.
+                  if (targetNode.$type === 'uiTreeHandle') {
+                    targetNode = targetNode.$nodeScope;
+                  }
+
+                  //Check if it is a uiTreeNode or it's an empty tree.
+                  if (targetNode.$type !== 'uiTreeNode' && !isEmpty) {
+
+                    // Allow node to return to its original position if no longer hovering over target
+                    if (config.appendChildOnHover) {
+                      next = dragInfo.next();
+                      if (!next && unhover) {
+                        target = dragInfo.parentNode();
+                        target.$element.after(placeElm);
+                        dragInfo.moveTo(target.$parentNodesScope, target.siblings(), target.index() + 1);
+                        unhover = false;
+                      }
+                    }
+                    return;
+                  }
+
+                  //If placeholder move from empty tree, reset it.
+                  if (treeScope && placeElm.parent()[0] != treeScope.$element[0]) {
+                    treeScope.resetEmptyElement();
+                    treeScope = null;
+                  }
+
+                  //It's an empty tree
+                  if (isEmpty) {
+                    treeScope = targetNode;
+                    if (targetNode.$nodesScope.accept(scope, 0)) {
+                      targetNode.place(placeElm);
+                      dragInfo.moveTo(targetNode.$nodesScope, targetNode.$nodesScope.childNodes(), 0);
+                    }
+                  //Not empty and drag enabled.
+                  } else if (targetNode.dragEnabled()) {
+
+                      //Setting/Resetting data for exanding on hover.
+                      if (angular.isDefined(scope.expandTimeoutOn) && scope.expandTimeoutOn !== targetNode.id) {
+                        $timeout.cancel(scope.expandTimeout);
+                        delete scope.expandTimeout;
+                        delete scope.expandTimeoutOn;
+
+                        scope.$callbacks.expandTimeoutCancel();
+                      }
+
+                      //Determining if expansion is needed.
+                      if (targetNode.collapsed) {
+                        if (scope.expandOnHover === true || (angular.isNumber(scope.expandOnHover) && scope.expandOnHover === 0)) {
+                          targetNode.collapsed = false;
+                        } else if (scope.expandOnHover !== false && angular.isNumber(scope.expandOnHover) && scope.expandOnHover > 0) {
+
+                          //Triggering expansion.
+                          if (angular.isUndefined(scope.expandTimeoutOn)) {
+                            scope.expandTimeoutOn = targetNode.$id;
+
+                            scope.$callbacks.expandTimeoutStart();
+                            scope.expandTimeout = $timeout(function()
+                            {
+                              scope.$callbacks.expandTimeoutEnd();
+                              targetNode.collapsed = false;
+                            }, scope.expandOnHover);
+                          }
+                        }
+                      }
+
+                    //Get the element of ui-tree-node
+                    targetElm = targetNode.$element;
+                    targetOffset = UiTreeHelper.offset(targetElm);
+                    targetHeight = UiTreeHelper.height(targetElm);
+                    targetChildElm = targetNode.$childNodesScope ? targetNode.$childNodesScope.$element : null;
+                    targetChildHeight = targetChildElm ? UiTreeHelper.height(targetChildElm) : 0;
+                    targetHeight -= targetChildHeight;
+                    targetBeforeBuffer = config.appendChildOnHover ? targetHeight * 0.25 : UiTreeHelper.height(targetElm) / 2;
+                    targetBefore = eventObj.pageY < (targetOffset.top + targetBeforeBuffer);
+
+                    if (targetNode.$parentNodesScope.accept(scope, targetNode.index())) {
+                      if (targetBefore) {
+                        targetElm[0].parentNode.insertBefore(placeElm[0], targetElm[0]);
+                        dragInfo.moveTo(targetNode.$parentNodesScope, targetNode.siblings(), targetNode.index());
+                      } else {
+                        // Try to append as a child if dragged upwards onto targetNode
+                        if (config.appendChildOnHover && targetNode.accept(scope, targetNode.childNodesCount())) {
+                          targetNode.$childNodesScope.$element.prepend(placeElm);
+                          dragInfo.moveTo(targetNode.$childNodesScope, targetNode.childNodes(), 0);
+                          unhover = true;
+                        } else {
+                          targetElm.after(placeElm);
+                          dragInfo.moveTo(targetNode.$parentNodesScope, targetNode.siblings(), targetNode.index() + 1);
+                        }
+                      }
+
+                    //We have to check if it can add the dragging node as a child.
+                    } else if (!targetBefore && targetNode.accept(scope, targetNode.childNodesCount())) {
+                      targetNode.$childNodesScope.$element.append(placeElm);
+                      dragInfo.moveTo(targetNode.$childNodesScope, targetNode.childNodes(), targetNode.childNodesCount());
+                    }
+                  }
+                }
+
+                //Triggering dragMove callback.
+                scope.$apply(function () {
+                  scope.$treeScope.$callbacks.dragMove(dragInfo.eventArgs(elements, pos));
+                });
+              }
+            };
+
+            dragEnd = function (e) {
+
+              var dragEventArgs = dragInfo.eventArgs(elements, pos);
+
+              e.preventDefault();
+
+              //TODO(jcarter): Is dragStart need to be unbound?
+              unbindDragMoveEvents();
+
+              //This cancel the collapse/expand login running.
+              $timeout.cancel(scope.expandTimeout);
+
+              scope.$treeScope.$apply(function () {
+                $q.when(scope.$treeScope.$callbacks.beforeDrop(dragEventArgs))
+
+                     //Promise resolved (or callback didn't return false)
+                    .then(function (allowDrop) {
+                      if (allowDrop !== false && scope.$$allowNodeDrop) {
+                        //Node drop accepted.
+                        dragInfo.apply();
+
+                        //Fire the dropped callback only if the move was successful.
+                        scope.$treeScope.$callbacks.dropped(dragEventArgs);
+                      } else {
+                        //Drop canceled - revert the node to its original position.
+                        bindDragStartEvents();
+                      }
+                    })
+
+                    //Promise rejected - revert the node to its original position.
+                    .catch(function () {
+                      bindDragStartEvents();
+                    })
+                    .finally(function () {
+
+                      //Replace placeholder with newly dropped element.
+                      hiddenPlaceElm.replaceWith(scope.$element);
+                      placeElm.remove();
+
+                      //Remove drag element if still in DOM.
+                      if (dragElm) {
+                        dragElm.remove();
+                        dragElm = null;
+                      }
+
+                      //Fire dragStope callback.
+                      scope.$treeScope.$callbacks.dragStop(dragEventArgs);
+                      scope.$$allowNodeDrop = false;
+                      dragInfo = null;
+
+                      //Restore cursor in Opera 12.16 and IE
+                      var oldCur = document.body.getAttribute('ui-tree-cursor');
+                      if (oldCur !== null) {
+                        $document.find('body').css({'cursor': oldCur});
+                        document.body.removeAttribute('ui-tree-cursor');
+                      }
+                    });
+              });
+            };
+
+            dragStartEvent = function (e) {
+              if (scope.dragEnabled()) {
+                dragStart(e);
+              }
+            };
+
+            dragMoveEvent = function (e) {
+              dragMove(e);
+            };
+
+            dragEndEvent = function (e) {
+              scope.$$allowNodeDrop = true;
+              dragEnd(e);
+            };
+
+            dragCancelEvent = function (e) {
+              dragEnd(e);
+            };
+
+            dragDelay = (function () {
+              var to;
+
+              return {
+                exec: function (fn, ms) {
+                  if (!ms) {
+                    ms = 0;
+                  }
+                  this.cancel();
+                  to = $timeout(fn, ms);
+                },
+                cancel: function () {
+                  $timeout.cancel(to);
+                }
+              };
+            })();
+
+            keydownHandler = function (e) {
+              if (e.keyCode === 27) {
+                dragEndEvent(e);
+              }
+            };
+
+            /**
+             * Binds the mouse/touch events to enable drag start for this node.
+             */
+            //This is outside of bindDragMoveEvents because of the potential for a delay setting.
+            bindDragStartEvents = function () {
+              element.bind('touchstart mousedown', function (e) {
+                //Don't call drag delay if no delay was specified.
+                if (scope.dragDelay > 0) {
+                  dragDelay.exec(function () {
+                    dragStartEvent(e);
+                  }, scope.dragDelay);
+                } else {
+                  dragStartEvent(e);
+                }
+              });
+              element.bind('touchend touchcancel mouseup', function () {
+                if (scope.dragDelay > 0) {
+                  dragDelay.cancel();
+                }
+              });
+            };
+            bindDragStartEvents();
+
+            /**
+             * Binds mouse/touch events that handle moving/dropping this dragged node
+             */
+            bindDragMoveEvents = function () {
+              angular.element($document).bind('touchend', dragEndEvent);
+              angular.element($document).bind('touchcancel', dragEndEvent);
+              angular.element($document).bind('touchmove', dragMoveEvent);
+              angular.element($document).bind('mouseup', dragEndEvent);
+              angular.element($document).bind('mousemove', dragMoveEvent);
+              angular.element($document).bind('mouseleave', dragCancelEvent);
+              angular.element($document).bind('keydown', keydownHandler);
+            };
+
+            /**
+             * Unbinds mouse/touch events that handle moving/dropping this dragged node.
+             */
+            unbindDragMoveEvents = function () {
+              angular.element($document).unbind('touchend', dragEndEvent);
+              angular.element($document).unbind('touchcancel', dragEndEvent);
+              angular.element($document).unbind('touchmove', dragMoveEvent);
+              angular.element($document).unbind('mouseup', dragEndEvent);
+              angular.element($document).unbind('mousemove', dragMoveEvent);
+              angular.element($document).unbind('mouseleave', dragCancelEvent);
+              angular.element($document).unbind('keydown', keydownHandler);
+            };
+          }
+        };
+      }
+    ]);
+})();
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+    .directive('uiTreeNodes', ['treeConfig', '$window',
+      function (treeConfig) {
+        return {
+          require: ['ngModel', '?^uiTreeNode', '^uiTree'],
+          restrict: 'A',
+          scope: true,
+          controller: 'TreeNodesController',
+          link: function (scope, element, attrs, controllersArr) {
+
+            var config = {},
+                ngModel = controllersArr[0],
+                treeNodeCtrl = controllersArr[1],
+                treeCtrl = controllersArr[2];
+
+            angular.extend(config, treeConfig);
+            if (config.nodesClass) {
+              element.addClass(config.nodesClass);
+            }
+
+            if (treeNodeCtrl) {
+              treeNodeCtrl.scope.$childNodesScope = scope;
+              scope.$nodeScope = treeNodeCtrl.scope;
+            } else {
+              // find the root nodes if there is no parent node and have a parent ui-tree
+              treeCtrl.scope.$nodesScope = scope;
+            }
+            scope.$treeScope = treeCtrl.scope;
+
+            if (ngModel) {
+              ngModel.$render = function () {
+                scope.$modelValue = ngModel.$modelValue;
+              };
+            }
+
+            scope.$watch(function () {
+              return attrs.maxDepth;
+            }, function (val) {
+              if ((typeof val) == 'number') {
+                scope.maxDepth = val;
+              }
+            });
+
+            scope.$watch(function () {
+              return attrs.nodropEnabled;
+            }, function (newVal) {
+              if ((typeof newVal) != 'undefined') {
+                scope.nodropEnabled = true;
+              }
+            }, true);
+
+          }
+        };
+      }
+    ]);
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ui.tree')
+
+  /**
+   * @ngdoc service
+   * @name ui.tree.service:UiTreeHelper
+   * @requires ng.$document
+   * @requires ng.$window
+   *
+   * @description
+   * angular-ui-tree.
+   */
+    .factory('UiTreeHelper', ['$document', '$window', 'treeConfig',
+      function ($document, $window, treeConfig) {
+        return {
+
+          /**
+           * A hashtable used to storage data of nodes
+           * @type {Object}
+           */
+          nodesData: {},
+
+          setNodeAttribute: function (scope, attrName, val) {
+            if (!scope.$modelValue) {
+              return null;
+            }
+            var data = this.nodesData[scope.$modelValue.$$hashKey];
+            if (!data) {
+              data = {};
+              this.nodesData[scope.$modelValue.$$hashKey] = data;
+            }
+            data[attrName] = val;
+          },
+
+          getNodeAttribute: function (scope, attrName) {
+            if (!scope.$modelValue) {
+              return null;
+            }
+            var data = this.nodesData[scope.$modelValue.$$hashKey];
+            if (data) {
+              return data[attrName];
+            }
+            return null;
+          },
+
+          /**
+           * @ngdoc method
+           * @methodOf ui.tree.service:$nodrag
+           * @param  {Object} targetElm angular element
+           * @return {Bool} check if the node can be dragged.
+           */
+          nodrag: function (targetElm) {
+            if (typeof targetElm.attr('data-nodrag') != 'undefined') {
+              return targetElm.attr('data-nodrag') !== 'false';
+            }
+            return false;
+          },
+
+          /**
+           * Get the event object for touches.
+           * 
+           * @param  {MouseEvent|TouchEvent} e MouseEvent or TouchEvent that kicked off dragX method.
+           * @return {MouseEvent|TouchEvent} Object returned as original event object.
+           */
+          eventObj: function (e) {
+            var obj = e;
+            if (e.targetTouches !== undefined) {
+              //Set obj equal to the first Touch object in the TouchList.
+              obj = e.targetTouches.item(0);
+            //Logic to set obj to original TouchEvent.
+            } else if (e.originalEvent !== undefined && e.originalEvent.targetTouches !== undefined) {
+              obj = e.originalEvent.targetTouches.item(0);
+            }
+            return obj;
+          },
+
+          /**
+           * Generate object used to store data about node being moved.
+           * 
+           * {angular.$scope} node Scope of the node that is being moved.
+           */
+          dragInfo: function (node) {
+            return {
+              source: node,
+              sourceInfo: {
+                cloneModel: node.$treeScope.cloneEnabled === true ? angular.copy(node.$modelValue) : undefined,
+                nodeScope: node,
+                index: node.index(),
+                nodesScope: node.$parentNodesScope
+              },
+              index: node.index(),
+
+              //Slice(0) just duplicates an array.
+              siblings: node.siblings().slice(0),
+              parent: node.$parentNodesScope,
+
+              //Reset parent to source parent.
+              resetParent: function() {
+                this.parent = node.$parentNodesScope;
+              },
+
+              //Move the node to a new position, determining where the node will be inserted to when dropped happens here.
+              moveTo: function (parent, siblings, index) {
+                this.parent = parent;
+
+                //Duplicate siblings array.
+                this.siblings = siblings.slice(0);
+
+                //If source node is in the target nodes
+                var i = this.siblings.indexOf(this.source);
+                if (i > -1) {
+                  this.siblings.splice(i, 1);
+                  if (this.source.index() < index) {
+                    index--;
+                  }
+                }
+
+                this.siblings.splice(index, 0, this.source);
+                this.index = index;
+              },
+
+              //Get parent nodes nodeScope.
+              parentNode: function () {
+                return this.parent.$nodeScope;
+              },
+
+              //Get previous sibling node.
+              prev: function () {
+                if (this.index > 0) {
+                  return this.siblings[this.index - 1];
+                }
+
+                return null;
+              },
+
+              //Get next sibling node.
+              next: function () {
+                if (this.index < this.siblings.length - 1) {
+                  return this.siblings[this.index + 1];
+                }
+
+                return null;
+              },
+
+              //Return what cloneEnabled is set to on uiTree.
+              isClone: function () {
+                return this.source.$treeScope.cloneEnabled === true;
+              },
+
+              //Returns a copy of node passed in.
+              clonedNode: function (node) {
+                return angular.copy(node);
+              },
+
+              //Returns true if parent or index have changed (move happened within any uiTree).
+              isDirty: function () {
+                return this.source.$parentNodesScope != this.parent ||
+                  this.source.index() != this.index;
+              },
+
+              //Return whether node has a new parent (set on moveTo method).
+              isForeign: function () {
+                return this.source.$treeScope !== this.parent.$treeScope;
+              },
+
+              //Sets arguments passed to user callbacks.
+              eventArgs: function (elements, pos) {
+                return {
+                  source: this.sourceInfo,
+                  dest: {
+                    index: this.index,
+                    nodesScope: this.parent
+                  },
+                  elements: elements,
+                  pos: pos
+                };
+              },
+
+              //Method that actually manipulates the node being moved.
+              apply: function () {
+
+                var nodeData = this.source.$modelValue;
+
+                //Nodrop enabled on tree or parent
+                if (this.parent.nodropEnabled || this.parent.$treeScope.nodropEnabled) {
+                  return;
+                }
+
+                //Node was dropped in the same place - do nothing.
+                if (!this.isDirty()) {
+                  return;
+                }
+
+                //CloneEnabled and cross-tree so copy and do not remove from source.
+                if (this.isClone() && this.isForeign()) {
+                  this.parent.insertNode(this.index, this.sourceInfo.cloneModel);
+                //Any other case, remove and reinsert.
+                } else {
+                  this.source.remove();
+                  this.parent.insertNode(this.index, nodeData);
+                }
+              }
+            };
+          },
+
+          /**
+           * @ngdoc method
+           * @name ui.tree#height
+           * @methodOf ui.tree.service:UiTreeHelper
+           *
+           * @description
+           * Get the height of an element.
+           *
+           * @param {Object} element Angular element.
+           * @returns {String} Height
+           */
+          height: function (element) {
+            return element.prop('scrollHeight');
+          },
+
+          /**
+           * @ngdoc method
+           * @name ui.tree#width
+           * @methodOf ui.tree.service:UiTreeHelper
+           *
+           * @description
+           * Get the width of an element.
+           *
+           * @param {Object} element Angular element.
+           * @returns {String} Width
+           */
+          width: function (element) {
+            return element.prop('scrollWidth');
+          },
+
+          /**
+           * @ngdoc method
+           * @name ui.tree#offset
+           * @methodOf ui.nestedSortable.service:UiTreeHelper
+           *
+           * @description
+           * Get the offset values of an element.
+           *
+           * @param {Object} element Angular element.
+           * @returns {Object} Object with properties width, height, top and left
+           */
+          offset: function (element) {
+            var boundingClientRect = element[0].getBoundingClientRect();
+
+            return {
+              width: element.prop('offsetWidth'),
+              height: element.prop('offsetHeight'),
+              top: boundingClientRect.top + ($window.pageYOffset || $document[0].body.scrollTop || $document[0].documentElement.scrollTop),
+              left: boundingClientRect.left + ($window.pageXOffset || $document[0].body.scrollLeft || $document[0].documentElement.scrollLeft)
+            };
+          },
+
+          /**
+           * @ngdoc method
+           * @name ui.tree#positionStarted
+           * @methodOf ui.tree.service:UiTreeHelper
+           *
+           * @description
+           * Get the start position of the target element according to the provided event properties.
+           *
+           * @param {Object} e Event
+           * @param {Object} target Target element
+           * @returns {Object} Object with properties offsetX, offsetY, startX, startY, nowX and dirX.
+           */
+          positionStarted: function (e, target) {
+            var pos = {},
+            pageX = e.pageX,
+            pageY = e.pageY;
+
+            //Check to set correct data for TouchEvents
+            if (e.originalEvent && e.originalEvent.touches && (e.originalEvent.touches.length > 0)) {
+              pageX = e.originalEvent.touches[0].pageX;
+              pageY = e.originalEvent.touches[0].pageY;
+            }
+            pos.offsetX = pageX - this.offset(target).left;
+            pos.offsetY = pageY - this.offset(target).top;
+            pos.startX = pos.lastX = pageX;
+            pos.startY = pos.lastY = pageY;
+            pos.nowX = pos.nowY = pos.distX = pos.distY = pos.dirAx = 0;
+            pos.dirX = pos.dirY = pos.lastDirX = pos.lastDirY = pos.distAxX = pos.distAxY = 0;
+            return pos;
+          },
+
+          positionMoved: function (e, pos, firstMoving) {
+
+            var pageX = e.pageX,
+            pageY = e.pageY,
+            newAx;
+
+            //If there are multiple touch points, choose one to use as X and Y.
+            if (e.originalEvent && e.originalEvent.touches && (e.originalEvent.touches.length > 0)) {
+              pageX = e.originalEvent.touches[0].pageX;
+              pageY = e.originalEvent.touches[0].pageY;
+            }
+
+            //Mouse position last event.
+            pos.lastX = pos.nowX;
+            pos.lastY = pos.nowY;
+
+            //Mouse position this event.
+            pos.nowX = pageX;
+            pos.nowY = pageY;
+
+            //Distance mouse moved between events.          
+            pos.distX = pos.nowX - pos.lastX;
+            pos.distY = pos.nowY - pos.lastY;
+
+            //Direction mouse was moving.           
+            pos.lastDirX = pos.dirX;
+            pos.lastDirY = pos.dirY;
+
+            //Direction mouse is now moving (on both axis).          
+            pos.dirX = pos.distX === 0 ? 0 : pos.distX > 0 ? 1 : -1;
+            pos.dirY = pos.distY === 0 ? 0 : pos.distY > 0 ? 1 : -1;
+
+            //Axis mouse is now moving on.         
+            newAx = Math.abs(pos.distX) > Math.abs(pos.distY) ? 1 : 0;
+
+            //Do nothing on first move.
+            if (firstMoving) {
+              pos.dirAx = newAx;
+              pos.moving = true;
+              return;
+            }
+
+            //Calc distance moved on this axis (and direction).          
+            if (pos.dirAx !== newAx) {
+              pos.distAxX = 0;
+              pos.distAxY = 0;
+            } else {
+              pos.distAxX += Math.abs(pos.distX);
+              if (pos.dirX !== 0 && pos.dirX !== pos.lastDirX) {
+                pos.distAxX = 0;
+              }
+              pos.distAxY += Math.abs(pos.distY);
+              if (pos.dirY !== 0 && pos.dirY !== pos.lastDirY) {
+                pos.distAxY = 0;
+              }
+            }
+            pos.dirAx = newAx;
+          },
+
+          elementIsTreeNode: function (element) {
+            return typeof element.attr('ui-tree-node') !== 'undefined';
+          },
+
+          elementIsTreeNodeHandle: function (element) {
+            return typeof element.attr('ui-tree-handle') !== 'undefined';
+          },
+          elementIsTree: function (element) {
+            return typeof element.attr('ui-tree') !== 'undefined';
+          },
+          elementIsTreeNodes: function (element) {
+            return typeof element.attr('ui-tree-nodes') !== 'undefined';
+          },
+          elementIsPlaceholder: function (element) {
+            return element.hasClass(treeConfig.placeholderClass);
+          },
+          elementContainsTreeNodeHandler: function (element) {
+            return element[0].querySelectorAll('[ui-tree-handle]').length >= 1;
+          },
+          treeNodeHandlerContainerOfElement: function (element) {
+            return findFirstParentElementWithAttribute('ui-tree-handle', element[0]);
+          }
+        };
+      }
+    ]);
+
+  // TODO: optimize this loop
+  //(Jcarter): Suggest adding a parent element property on uiTree, then all these bubble
+  // to <html> can trigger to stop when they reach the parent.
+  function findFirstParentElementWithAttribute(attributeName, childObj) {
+    //Undefined if the mouse leaves the browser window
+    if (childObj === undefined) {
+      return null;
+    }
+    var testObj = childObj.parentNode,
+    count = 1,
+    //Check for setAttribute due to exception thrown by Firefox when a node is dragged outside the browser window
+    res = (typeof testObj.setAttribute === 'function' && testObj.hasAttribute(attributeName)) ? testObj : null;
+    while (testObj && typeof testObj.setAttribute === 'function' && !testObj.hasAttribute(attributeName)) {
+      testObj = testObj.parentNode;
+      res = testObj;
+      //Stop once we reach top of page.
+      if (testObj === document.documentElement) {
+        res = null;
+        break;
+      }
+      count++;
+    }
+    return res;
+  }
+
+})();
+(function(){
+    var app = angular.module('artisan', []);
+
+    app.controller('ArtisanCtrl', ['$scope', '$http', 'UrlBuilder', function($scope, $http, UrlBuilder) {
+
+        $scope.commands = [];
+        $scope.commandsQuery = '';
+
+        $scope.command = null;
+        $scope.arguments = {};
+        $scope.options = {};
+
+        var self = this;
+
+        $http.get(UrlBuilder.get('artisan/commands')).then(function(r) {
+            $scope.commands = r.data;
+        });
+
+        $scope.commandsFilter = function(item){
+            if (!$scope.commandsQuery
+                || (item.name.toLowerCase().indexOf($scope.commandsQuery) != -1)
+                || (item.description.toLowerCase().indexOf($scope.commandsQuery.toLowerCase()) != -1) ){
+                return true;
+            }
+            return false;
+        };
+
+        $scope.run = function(url) {
+            $scope.inProgress = true;
+            $scope.errors = {};
+
+            $http.post(url, {command: $scope.command.name, arguments: $scope.arguments, options: $scope.options}).then(function(r) {
+                $scope.inProgress = false;
+                $scope.output = r.data;
+            }, function(r) {
+                if (r.status == 422) {
+                    $scope.errors = r.data;
+                }
+                $scope.inProgress = false;
+            });
+        }
+    }]);
+
+})(window.angular);
+
+(function(){
+    var app = angular.module('mks-category-manager', ['ui.tree']);
+
+    app.controller('CategoryController', ['$scope', '$http', 'UrlBuilder', '$location',
+        function($scope, $http, UrlBuilder, $location) {
+
+        $scope.sections = [];
+        $scope.currentSection = null;
+        $scope.sectionModel = null;
+        $scope.prevSection = null;
+        $scope.categories = {};
+
+        var self = this;
+
+        $scope.init = function(sectionId) {
+            $http.get(UrlBuilder.get('category/sections')).then(function(r) {
+                $scope.sections = r.data;
+                if ($scope.sections.length) {
+                    if (sectionId) {
+                        $scope.selectSection(self.getSection(sectionId));
+                    } else {
+                        $scope.selectSection($scope.sections[0]);
+                    }
+                }
+            });
+        };
+
+        this.getSection = function(id) {
+            for (var i = 0; i < $scope.sections.length; i++) {
+                if ($scope.sections[i].id == id) {
+                    return $scope.sections[i];
+                }
+            }
+
+            return false;
+        };
+
+        this.getSectionIndex = function(id) {
+            for (var i = 0; i < $scope.sections.length; i++) {
+                if ($scope.sections[i].id == id) {
+                    return i;
+                }
+            }
+
+            return false;
+        };
+
+        this.loadCategories = function(sectionId) {
+          if (!$scope.categories[sectionId]) {
+              $http.get(UrlBuilder.get('category/categories/'+sectionId)).then(function(r) {
+                  $scope.categories[sectionId] = r.data;
+              });
+          }
+        };
+
+        $scope.selectSection = function(item) {
+            $scope.currentSection = item;
+            $scope.prevSection = item;
+            $scope.sectionModel = null;
+            self.loadCategories(item.id);
+        };
+
+        $scope.addSection = function () {
+            $scope.currentSection = null;
+            $scope.sectionModel = {active: true};
+        };
+
+        $scope.editSection = function (item) {
+            $scope.currentSection = null;
+            $scope.sectionModel = angular.copy(item);
+        };
+
+        $scope.saveSection = function () {
+            if (!$scope.sectionModel) {
+                return false;
+            }
+
+            $http.post(UrlBuilder.get('category/save-section'), $scope.sectionModel).then(function(r) {
+                if (!r.data.id) {
+                    return false;
+                }
+
+                if (!$scope.sectionModel.id) {
+                    $scope.sections.push(r.data);
+                    $scope.selectSection(r.data);
+                } else {
+                    var i = self.getSectionIndex(r.data.id);
+                    if (i >= 0) {
+                        $scope.sections[i] = r.data;
+                        $scope.selectSection($scope.sections[i]);
+                    }
+                }
+            });
+        };
+
+        $scope.cancel = function() {
+            if (!$scope.sectionModel || !$scope.prevSection) {
+                return false;
+            }
+
+            $scope.selectSection($scope.prevSection);
+        };
+
+        $scope.deleteSection = function (item, msg) {
+            if (item.id && confirm(msg||'Delete?')) {
+                $http.post(UrlBuilder.get('category/delete-section'), {id: item.id}).then(function(r) {
+                    $scope.sections.splice(self.getSectionIndex(item.id), 1);
+                    if ($location.path() == '/category/' + item.id) {
+                        $location.path('/category');
+                    } else if ($scope.sections.length) {
+                        $scope.selectSection($scope.sections[0]);
+                    }
+                });
+            }
+        }
+
+    }]);
+    
+    app.controller('CategoryTreeController', ['$http', 'UrlBuilder', function($http, UrlBuilder) {
+        this.category = null;
+
+        var self = this;
+
+        this.toggle = function(scope) {
+            scope.toggle();
+        };
+
+        this.remove = function(scope, msg) {
+            if (scope.$nodeScope && confirm(msg || 'Delete?')) {
+                var id = scope.$nodeScope.$modelValue.id;
+
+                $http.post(UrlBuilder.get('category/delete/' + id))
+                    .then(function(r) {
+                        scope.remove();
+                    });
+            }
+        };
+
+        this.treeOptions = {
+            beforeDrop: function(e) {
+                var params = {
+                    old: {
+                        index: e.source.index,
+                        parent: null
+                    },
+                    new: {
+                        index: e.dest.index,
+                        parent: null
+                    }
+                };
+                if (e.source.nodeScope.$parentNodeScope) {
+                    params.old.parent = e.source.nodeScope.$parentNodeScope.$modelValue.id;
+                }
+
+                if (e.dest.nodesScope.$nodeScope) {
+                    params.new.parent = e.dest.nodesScope.$nodeScope.$modelValue.id;
+                }
+
+                if (params.old.index == params.new.index && params.old.parent == params.new.parent) {
+                    return false;
+                }
+
+                var section_id = e.source.nodeScope.$modelValue.section_id;
+                var id = e.source.nodeScope.$modelValue.id;
+
+                return $http.post(UrlBuilder.get('category/move/' + section_id + '/' + id), params)
+                    .then(function(r) {
+                        return true;
+                    });
+            }
+        };
+    }]);
+
+})(window.angular);
+(function(){
+    var app = angular.module('mks-dashboard', ['ngSanitize']);
+
+    app.component('dashboardNotifications', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/dashboard-notifications.html');
+        }],
+        bindings: {
+            url: '@'
+        },
+        controller: ['$http', 'UrlBuilder', '$sce', function($http, UrlBuilder, $sce) {
+            this.items = [];
+            this.nextUrl = null;
+            this.totalCount = 0;
+            this.unreadCount = 0;
+            this.currentItem = null;
+            this.detailsHtml = null;
+
+            var ctrl = this;
+
+            function updateCounts() {
+                var count = 0;
+                angular.forEach(ctrl.items, function(item) {
+                    if (!item.read_at) {
+                        count++;
+                    }
+                });
+                ctrl.unreadCount = count;
+            }
+
+            this.load = function() {
+                $http.get(this.nextUrl || this.url).then(function(r) {
+                    if (r.data) {
+                        ctrl.items = ctrl.items.concat(r.data.data);
+                        ctrl.nextUrl = r.data.next_page_url;
+                        ctrl.totalCount = r.data.total;
+                        updateCounts();
+                    }
+                });
+            };
+            
+            this.details = function (item) {
+                $http.get(UrlBuilder.get('dashboard/notification-details/' + item.id)).then(function (r) {
+                    if (r.data) {
+                        ctrl.detailsHtml = $sce.trustAsHtml(r.data.details);
+                        item.read_at = r.data.read_at;
+                        updateCounts();
+                        ctrl.currentItem = item;
+                    }
+                });
+            };
+
+            this.delete = function(item, confirmation) {
+                if (confirmation && !confirm(confirmation)) {
+                    return false;
+                }
+
+                $http.post(UrlBuilder.get('dashboard/notification-delete/' + item.id)).then(function (r) {
+                    var i = ctrl.items.indexOf(item);
+                    if (i >= 0) {
+                        ctrl.items.splice(i, 1);
+                        ctrl.totalCount--;
+                        updateCounts();
+                    }
+                });
+            };
+
+            this.refresh = function() {
+                this.items = [];
+                this.nextUrl = null;
+                this.load();
+            };
+
+            function deleteMany(url, confirmation) {
+                if (confirmation && !confirm(confirmation)) {
+                    return false;
+                }
+
+                $http.post(url).then(function (r) {
+                    ctrl.refresh();
+                });
+            }
+
+            this.deleteRead = function(confirmation) {
+                deleteMany(UrlBuilder.get('dashboard/notifications-delete'), confirmation);
+            };
+
+            this.deleteAll = function(confirmation) {
+                deleteMany(UrlBuilder.get('dashboard/notifications-delete/all'), confirmation);
+            };
+
+            this.load();
+        }]
+    });
+
+    app.component('dashboardStatistics', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/dashboard-statistics.html');
+        }],
+        bindings: {
+            url: '@'
+        },
+        controller: ['$http', 'UrlBuilder', function($http, UrlBuilder) {
+            var ctrl = this;
+
+            this.items = [];
+
+            this.load = function() {
+                $http.get(this.url).then(function(r) {
+                    if (r.data) {
+                        ctrl.items = r.data;
+                    }
+                });
+            };
+
+            this.load();
+        }]
+    });
+
+})(window.angular);
+
+(function(){
+    var app = angular.module('mks-menu-manager', ['ui.tree']);
+
+    app.controller('MenuController', ['$scope', '$http', 'UrlBuilder', '$location',
+        function($scope, $http, UrlBuilder, $location) {
+
+        $scope.menu = [];
+        $scope.currentMenu = null;
+        $scope.menuModel = null;
+        $scope.prevMenu = null;
+        $scope.menuItems = {};
+
+        var self = this;
+
+        $scope.init = function(menuId) {
+            $http.get(UrlBuilder.get('menuman/list')).then(function(r) {
+                $scope.menu = r.data;
+                if ($scope.menu.length) {
+                    if (menuId) {
+                        $scope.selectMenu(self.getMenu(menuId));
+                    } else {
+                        $scope.selectMenu($scope.menu[0]);
+                    }
+                }
+            });
+        };
+
+        this.getMenu = function(id) {
+            for (var i = 0; i < $scope.menu.length; i++) {
+                if ($scope.menu[i].id == id) {
+                    return $scope.menu[i];
+                }
+            }
+
+            return false;
+        };
+
+        this.getMenuIndex = function(id) {
+            for (var i = 0; i < $scope.menu.length; i++) {
+                if ($scope.menu[i].id == id) {
+                    return i;
+                }
+            }
+
+            return false;
+        };
+
+        this.loadMenuItems = function(menuId) {
+          if (!$scope.menuItems[menuId]) {
+              $http.get(UrlBuilder.get('menuman/items/'+menuId)).then(function(r) {
+                  $scope.menuItems[menuId] = r.data;
+              });
+          }
+        };
+
+        $scope.selectMenu = function(item) {
+            $scope.currentMenu = item;
+            $scope.prevMenu = item;
+            $scope.menuModel = null;
+            self.loadMenuItems(item.id);
+        };
+
+        $scope.addMenu = function () {
+            $scope.currentMenu = null;
+            $scope.menuModel = {active: true};
+        };
+
+        $scope.editMenu = function (item) {
+            $scope.currentMenu = null;
+            $scope.menuModel = angular.copy(item);
+        };
+
+        $scope.saveMenu = function () {
+            if (!$scope.menuModel) {
+                return false;
+            }
+
+            $http.post(UrlBuilder.get('menuman/save'), $scope.menuModel).then(function(r) {
+                if (!r.data.id) {
+                    return false;
+                }
+
+                if (!$scope.menuModel.id) {
+                    $scope.menu.push(r.data);
+                    $scope.selectMenu(r.data);
+                } else {
+                    var i = self.getMenuIndex(r.data.id);
+                    if (i >= 0) {
+                        $scope.menu[i] = r.data;
+                        $scope.selectMenu($scope.menu[i]);
+                    }
+                }
+            });
+        };
+
+        $scope.cancel = function() {
+            if (!$scope.menuModel || !$scope.prevMenu) {
+                return false;
+            }
+
+            $scope.selectMenu($scope.prevMenu);
+        };
+
+        $scope.deleteMenu = function (item, msg) {
+            if (item.id && confirm(msg||'Delete?')) {
+                $http.post(UrlBuilder.get('menuman/delete'), {id: item.id}).then(function(r) {
+                    $scope.menu.splice(self.getMenuIndex(item.id), 1);
+                    if ($location.path() == '/menuman/' + item.id) {
+                        $location.path('/menuman');
+                    } else if ($scope.menu.length) {
+                        $scope.selectMenu($scope.menu[0]);
+                    }
+                });
+            }
+        }
+
+    }]);
+    
+    app.controller('MenuTreeController', ['$http', 'UrlBuilder', function($http, UrlBuilder) {
+        this.menuItem = null;
+
+        var self = this;
+
+        this.toggle = function(scope) {
+            scope.toggle();
+        };
+
+        this.remove = function(scope, msg) {
+            if (scope.$nodeScope && confirm(msg || 'Delete?')) {
+                var id = scope.$nodeScope.$modelValue.id;
+
+                $http.post(UrlBuilder.get('menuman/items/delete/' + id))
+                    .then(function(r) {
+                        scope.remove();
+                    });
+            }
+        };
+
+        this.treeOptions = {
+            beforeDrop: function(e) {
+                var params = {
+                    old: {
+                        index: e.source.index,
+                        parent: null
+                    },
+                    new: {
+                        index: e.dest.index,
+                        parent: null
+                    }
+                };
+                if (e.source.nodeScope.$parentNodeScope) {
+                    params.old.parent = e.source.nodeScope.$parentNodeScope.$modelValue.id;
+                }
+
+                if (e.dest.nodesScope.$nodeScope) {
+                    params.new.parent = e.dest.nodesScope.$nodeScope.$modelValue.id;
+                }
+
+                if (params.old.index == params.new.index && params.old.parent == params.new.parent) {
+                    return false;
+                }
+
+                var menu_id = e.source.nodeScope.$modelValue.menu_id;
+                var id = e.source.nodeScope.$modelValue.id;
+
+                return $http.post(UrlBuilder.get('menuman/items/' + menu_id + '/move/' + id), params)
+                    .then(function(r) {
+                        return true;
+                    });
+            }
+        };
+    }]);
+
+})(window.angular);
+(function(){
+    var app = angular.module('mks-admin-ext', []);
+
+    app.factory('mksLinkService', ['$q', '$http', 'UrlBuilder', function($q, $http, UrlBuilder) {
+        this.getParamsData = function(params) {
+            var canceler = $q.defer();
+
+            var request = $http({
+                method: "get",
+                url: UrlBuilder.get('route/params'),
+                params: params,
+                timeout: canceler.promise
+            });
+
+            var promise = request.then(
+                function( response ) {
+                    return( response.data );
+                },
+                function( response ) {
+                    return( $q.reject( "Something went wrong" ) );
+                }
+            );
+
+            promise.abort = function() {
+                canceler.resolve();
+            };
+
+            promise.finally(
+                function() {
+                    promise.abort = angular.noop;
+                    canceler = request = promise = null;
+                }
+            );
+
+            return promise;
+        };
+
+        var _routesPromise = $http.get(UrlBuilder.get('route')).then(function(r) {
+            return r.data;
+        });
+
+        this.getRoutes = function () {
+            return _routesPromise;
+        };
+
+        return this;
+    }]);
+
+    app.directive('mksLinkSelect', ['$http', 'mksLinkService', 'UrlBuilder', function($http, mksLinkService, UrlBuilder) {
+        return {
+            restrict: 'E',
+            scope: {
+                model: '@model',
+                rawEnabled: '@rawEnabled',
+                emptyTitle: '@emptyTitle'
+            },
+            templateUrl: UrlBuilder.get('templates/link-selector.html'),
+            link: function(scope, elem, attr) {
+                scope.field = {
+                    route: attr.fieldRoute || 'route[name]',
+                    params: attr.fieldParams || 'route[params]',
+                    raw: attr.fieldRaw || 'route[raw]'
+                };
+
+                scope.items = [];
+                scope.routeOption = null;
+                scope.routes = {};
+
+                function selectRouteOption (id) {
+                    angular.forEach(scope.items, function (i) {
+                        if (i.id == id) {
+                            scope.routeOption = i;
+                        }
+                    });
+                };
+
+                if (scope.model) {
+                    scope.$watch(scope.model, function(val) {
+                        if (val && typeof val['id'] != 'undefined') {
+                            scope.route = val;
+                        }
+                    });
+                }
+
+                scope.$watch(function() {return scope.route; }, function(val) {
+                    if (val && typeof val['id'] != 'undefined' && typeof scope.routes[val.id] == 'undefined') {
+                        scope.routes[val.id] = val;
+                        selectRouteOption(val.id);
+                    }
+                });
+
+                scope.route = {
+                    id: attr.route,
+                    title: attr.title,
+                    params: attr.params,
+                    raw: attr.rawValue
+                };
+
+                mksLinkService.getRoutes().then(function(items) {
+                    scope.items = items;
+                    if (scope.route.id) {
+                        selectRouteOption(scope.route.id);
+                    }
+                });
+
+                scope.modal = {
+                    id: 'modal-' + (new Date()).getTime(),
+                    loading: false
+                };
+
+                var paramsRequest = null;
+                var currentRoute = null;
+                var currentPage = 1;
+
+                function loadItems() {
+                    if (!scope.routeOption) {
+                        return;
+                    }
+
+                    if (paramsRequest && paramsRequest.abort) {
+                        paramsRequest.abort();
+                    }
+
+                    scope.modal.loading = true;
+
+                    (paramsRequest = mksLinkService.getParamsData({
+                        name: scope.routeOption.id,
+                        page: scope.modal.current_page || null,
+                        q: scope.modal.searchQuery || null
+                    })).then(function (data) {
+                        scope.modal.data = data;
+                        currentRoute = scope.routeOption.id;
+                        currentPage = data.pagination ? data.pagination.current_page : 1;
+                        scope.modal.current_page = currentPage;
+                    }).finally(function () {
+                        scope.modal.loading = false;
+                    });
+                }
+
+                scope.modal.open = function() {
+                    if (scope.routeOption) {
+                        if (scope.routeOption.extended) {
+                            if (currentRoute != scope.routeOption.id) {
+                                scope.modal.searchQuery = '';
+                                loadItems();
+                            }
+                        } else {
+                            if (typeof scope.routes[scope.routeOption.id] != 'undefined') {
+                                scope.modal.form = scope.routes[scope.routeOption.id].params;
+                            }
+                        }
+
+                        $('#' + scope.modal.id).modal('show');
+                    }
+                };
+
+                scope.modal.close = function() {
+                    $('#' + scope.modal.id).modal('hide');
+                };
+
+                scope.modal.select = function(item) {
+                    if (scope.modal.data.params && scope.routeOption) {
+                        var params = {};
+                        angular.forEach(scope.modal.data.params, function(p) {
+                            params[p] = item[p];
+                        });
+                        scope.routes[scope.routeOption.id] = {
+                            title: item.title,
+                            params: params
+                        };
+                        scope.modal.close();
+                    }
+                };
+
+                scope.modal.save = function() {
+                    if (scope.modal.form && scope.routeOption) {
+                        scope.routes[scope.routeOption.id] = {
+                            title: scope.paramsEncoded(scope.modal.form),
+                            params: scope.modal.form
+                        };
+                    }
+                    scope.modal.close();
+                };
+
+                scope.modal.prevPage = function(){
+                    if (typeof scope.modal.current_page != 'undefined' && scope.modal.current_page > 1) {
+                        scope.modal.current_page--;
+                    }
+                };
+
+                scope.modal.nextPage = function(){
+                    if (typeof scope.modal.current_page != 'undefined'
+                        && typeof scope.modal.data.pagination.last_page != 'undefined'
+                        && scope.modal.current_page < scope.modal.data.pagination.last_page) {
+                        scope.modal.current_page++;
+                    }
+                };
+
+                scope.$watch('modal.current_page', function(n, o) {
+                    if (n && n > 0 && n != currentPage) {
+                        loadItems();
+                    }
+                });
+
+                scope.modal.search = function(q) {
+                    if (scope.modal.current_page != 1) {
+                        scope.modal.current_page = 1;
+                    } else {
+                        loadItems();
+                    }
+                };
+
+                scope.paramsEncoded = function(params) {
+                    if (params && typeof params == 'object') {
+                        return angular.toJson(params);
+                    }
+                    return params;
+                };
+
+                scope.paramsVisible = function(data) {
+                    if (data) {
+                        if (data.title) {
+                            return data.title;
+                        }
+
+                        return scope.paramsEncoded(data.params);
+                    }
+                    return '';
+                }
+            }
+        };
+    }]);
+
+    app.directive('mksModalPaginator', ['$http', 'mksLinkService', function($http, mksLinkService, UrlBuilder) {
+        return {
+            restrict: 'E',
+            require: ['^', '@paginator'],
+            scope: {
+                paginator: '@paginator'
+            },
+            link: function(scope, elem, attr) {
+
+            }
+        }
+    }]);
+
+    app.directive('mksEditor', ['AppConfig', 'UrlBuilder', function (AppConfig, UrlBuilder) {
+        return {
+            restrict: 'A',
+            link: function (scope, elem, attrs) {
+                if (typeof CKEDITOR !== 'undefined') {
+                    var opt = {
+                        removePlugins: 'forms,audio,Audio,allmedias,base64image,markdown,googledocs',
+                        extraPlugins: 'wpmore',
+                        language: AppConfig.getLang('en'),
+                        filebrowserBrowseUrl: UrlBuilder.get('file-manager'),
+                        filebrowserImageBrowseUrl: UrlBuilder.get('file-manager?type=images'),
+                        filebrowserFlashBrowseUrl: UrlBuilder.get('file-manager?type=flash'),
+                        filebrowserWindowWidth: '85%'
+                    };
+                    if (attrs.mksEditor) {
+                        try {
+                            angular.extend(opt, scope.$eval(attrs.mksEditor));
+                        } catch (err) {
+                        }
+                    }
+                    CKEDITOR.replace(elem[0], opt);
+                }
+            }
+        };
+    }]);
+
+    app.directive('mksPageIframe', ['$window', function ($window) {
+        return {
+            restrict: 'A',
+            link: function (scope, elem, attrs) {
+                var $sidebar = angular.element('#sidebar');
+                if ($sidebar.length) {
+                    elem.height($sidebar.height());
+
+                    angular.element($window).on('resize.pageIframe', function() {
+                        elem.height($sidebar.height());
+                    });
+
+                    scope.$on('$destroy', function() {
+                        angular.element($window).off('resize.pageIframe');
+                    });
+                }
+
+                elem.parent().css({'padding-left': 0, 'padding-right': 0});
+            }
+        };
+    }]);
+
+    app.directive('mksSelect', [function () {
+        return {
+            restrict: 'A',
+            priority: -1,
+            link: function(scope, elem, attrs) {
+                var iconUrl = elem.data('langIcon');
+                if (iconUrl) {
+                    var formatResult = function(item) {
+                        if (!item.id) { return item.text; }
+                        var $item = $(
+                            '<span><img src="' + iconUrl + '/' + item.element.value.toLowerCase() + '" class="img-flag" /> ' + item.text + '</span>'
+                        );
+                        return $item;
+                    };
+
+                    elem.data('templateResult', formatResult);
+                    elem.data('templateSelection', formatResult);
+                }
+            }
+        };
+    }]);
+
+    app.directive('stSearchSelect2', [function() {
+        return {
+            restrict: 'A',
+            require:'^stTable',
+            'link': function(scope, el, attr, ctrl) {
+                el.on('change', function() {
+                    ctrl.search(this.value, attr.stSearchSelect2);
+                });
+            }
+        }
+    }]);
+
+    app.component('mksImagesPicker', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/images-picker.html');
+        }],
+        bindings: {
+            url: '@',
+            items: '=?',
+            inputName: '@name',
+            pickMain: '@'
+        },
+        controller: ['$http', 'UrlBuilder', '$element', function($http, UrlBuilder, $element) {
+            var ctrl = this;
+            
+            this.$onInit = function () {
+                if (!this.inputName) {
+                    this.inputName = 'images';
+                }
+
+                if (!this.items) {
+                    this.items = [];
+
+                    if (this.url) {
+                        $http.get(this.url).then(function(r) {
+                            if (r.data) {
+                                ctrl.items = r.data;
+                            }
+                        });
+                    }
+                }
+
+                window.pickImageMultiple = function(files) {
+                    ctrl.safeApply(function() {
+                        angular.forEach(files, function(file) {
+                            ctrl.items.push({url: file.relativeUrl || file.url});
+                        });
+                    });
+                };
+            };
+            
+            this.add = function () {
+                CKEDITOR.editor.prototype.popup(UrlBuilder.get('file-manager?type=images&multiple=1&callback=pickImageMultiple'));
+            };
+
+            this.delete = function (item) {
+                var index = this.items.indexOf(item);
+                if (index > -1) {
+                    this.items.splice(index, 1);
+                }
+            };
+
+            this.safeApply = function (fn) {
+                var scope = $element.scope();
+                var phase = scope.$$phase;
+                if (phase == '$apply' || phase == '$digest') {
+                    if (fn && (typeof (fn) === 'function')) {
+                        fn();
+                    }
+                } else {
+                    scope.$apply(fn);
+                }
+            };
+
+            this.itemsValue = function () {
+                return angular.toJson(this.items);
+            };
+
+            this.setMain = function (item) {
+                var index = this.items.indexOf(item);
+                if (index > -1) {
+                    for (var i=0; i < this.items.length; i++) {
+                        this.items[i].main = i == index;
+                    }
+                }
+            };
+        }]
+    });
+
+    app.component('mksImageSelect', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/image-select.html');
+        }],
+        bindings: {
+            image: '=?',
+            inputName: '@name',
+            pickMain: '@',
+            id: '@'
+        },
+        controller: ['$http', 'UrlBuilder', '$element', function($http, UrlBuilder, $element) {
+            var ctrl = this;
+
+            this.$onInit = function () {
+                if (!this.inputName) {
+                    this.inputName = 'image';
+                }
+
+                this.callbackName = 'pickImageSingle' + (this.id||'');
+
+                window[this.callbackName] = function(files) {
+                    ctrl.safeApply(function() {
+                        ctrl.image = files[0].relativeUrl || files[0].url;
+                    });
+                };
+            };
+
+            this.browse = function () {
+                CKEDITOR.editor.prototype.popup(UrlBuilder.get('file-manager?type=images&callback=' + this.callbackName));
+            };
+
+            this.clear = function () {
+                this.image = null
+            };
+
+            this.safeApply = function (fn) {
+                var scope = $element.scope();
+                var phase = scope.$$phase;
+                if (phase == '$apply' || phase == '$digest') {
+                    if (fn && (typeof (fn) === 'function')) {
+                        fn();
+                    }
+                } else {
+                    scope.$apply(fn);
+                }
+            };
+        }]
+    });
+
+    app.component('mksCategorySelect', {
+        templateUrl: ['UrlBuilder', function(UrlBuilder) {
+            return UrlBuilder.get('templates/category-select.html');
+        }],
+        bindings: {
+            url: '@',
+            sectionField: '@',
+            categoryField: '@',
+            sectionId: '@',
+            categoryId: '@',
+            sectionEmpty: '@',
+            categoryEmpty: '@'
+        },
+        controller: ['$http', '$element', function($http, $element) {
+            var ctrl = this;
+
+            this.items = [];
+            this.section = null;
+            this.category = null;
+
+            this.$onInit = function () {
+                if (!this.url) {
+                    return false;
+                }
+
+                if (!this.sectionField) {
+                    this.sectionField = 'section';
+                }
+
+                if (!this.categoryField) {
+                    this.categoryField = 'category';
+                }
+
+                $http.get(this.url).then(function(r) {
+                    if (r.data) {
+                        ctrl.items = r.data;
+                        if (ctrl.sectionId || ctrl.categoryId) {
+                            angular.forEach(ctrl.items, function (section) {
+                                if (ctrl.sectionId && section.id == ctrl.sectionId) {
+                                    ctrl.section = section;
+                                }
+                                if (ctrl.categoryId && section.children) {
+                                    angular.forEach(section.children, function (category) {
+                                        if (category.id == ctrl.categoryId) {
+                                            ctrl.category = category;
+                                            if (!ctrl.section) {
+                                                ctrl.section = section;
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            };
+
+        }]
+    });
+
+})(window.angular);
+(function(){
+    var app = angular.module('mks-admin-ext');
+
+    app.controller('WidgetRoutesCtrl', ['$scope', '$http', 'UrlBuilder', function($scope, $http, UrlBuilder) {
+
+        $scope.routes = [];
+
+        var self = this;
+
+        $scope.init = function(widgetId) {
+            $http.get(UrlBuilder.get('widget/routes' + (widgetId ? '/'+widgetId : ''))).then(function(r) {
+                $scope.routes = r.data;
+
+                if (!$scope.routes.length) {
+                    $scope.addChoice();
+                }
+            });
+        };
+
+        $scope.addChoice = function() {
+            $scope.routes.push({id:null});
+        };
+
+        $scope.removeChoice = function (item) {
+            var i = $scope.routes.indexOf(item);
+            if (i >= 0) {
+                $scope.routes.splice(i, 1);
+            }
+        };
+    }]);
+
+})(window.angular);
+
+//# sourceMappingURL=admin.js.map

@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 const elixir = require('laravel-elixir');
 
-require('laravel-elixir-vue');
+//require('laravel-elixir-vue');
 
 var lessToScss = require('gulp-less-to-scss');
 
@@ -49,6 +49,10 @@ function path_bower_rel(path) {
     return '../../../bower_components/' + (path||'');
 }
 
+function public_path(path) {
+    return (elixir.config.publicPath || 'public') + '/' + path;
+}
+
 elixir.extend('lessToSass', function(source, dist) {
     new elixir.Task('lessToSass', function() {
         return gulp.src(source)
@@ -75,7 +79,7 @@ elixir(function(mix) {
             'jquery-form/jquery.form.js',
             'bootstrap-notify/bootstrap-notify.js'
         ]).concat(['system.js']),
-        'public/js/system-light.js');
+        public_path('js/system-light.js'));
 
     //frontend system js with bootstrap
     mix.scripts(path_node_rel(
@@ -87,30 +91,30 @@ elixir(function(mix) {
             'jquery-form/jquery.form.js',
             'bootstrap-notify/bootstrap-notify.js'
         ]).concat(['system.js']),
-        'public/js/system.js');
+        public_path('js/system.js'));
 
     //font-awesome
     mix.copy([
         path_node('font-awesome/fonts')
-    ], 'public/fonts');
+    ], public_path('fonts'));
 
     /** Backend **/
     mix.styles([
         path_node_rel('angular-ui-tree/dist/angular-ui-tree.css'),
         'admin/*.css'
-    ], 'public/admin/css/admin.css');
+    ], public_path('admin/css/admin.css'));
 
     mix.scripts([
         path_node_rel('angular-ui-tree/dist/angular-ui-tree.js'),
         'admin/*.js'
-    ], 'public/admin/js/admin.js');
+    ], public_path('admin/js/admin.js'));
 
     /** FileManager **/
     mix.styles([
         path_bower_rel('bootswatch/flatly/bootstrap.css'),
         path_bower_rel('angular-filemanager/dist/angular-filemanager.min.css'),
         'filemanager.css'
-    ], 'public/filemanager/css/app.css');
+    ], public_path('filemanager/css/app.css'));
 
     mix.scripts([
         path_bower_rel('jquery/dist/jquery.js'),
@@ -120,9 +124,9 @@ elixir(function(mix) {
         path_bower_rel('ng-file-upload/ng-file-upload.js'),
         path_bower_rel('angular-filemanager/dist/angular-filemanager.min.js'),
         'filemanager.js'
-    ], 'public/filemanager/js/app.js');
+    ], public_path('filemanager/js/app.js'));
 
     mix.copy([
         path_bower('bootstrap/dist/fonts')
-    ], 'public/filemanager/fonts');
+    ], public_path('filemanager/fonts'));
 });

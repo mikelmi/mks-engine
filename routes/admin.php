@@ -200,3 +200,7 @@ $router->get('tags/{type}', function(\Illuminate\Http\Request $request, \Cviebro
 })
     ->name('tags')
     ->where('type', '.+');
+
+$router->get('artisan', 'ArtisanController@index')->name('artisan');
+$router->get('artisan/commands', 'ArtisanController@commands')->name('artisan.commands');
+$router->post('artisan', 'ArtisanController@run')->name('artisan.run');
