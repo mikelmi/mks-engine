@@ -6,29 +6,29 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "laravel/framework": "5.3.*",
-        "mikelmi/mks-admin": "dev-master",
-        "zizaco/entrust": "dev-master",
-        "lavary/laravel-menu": "dev-master",
-        "mikelmi/mks-smart-table": "dev-master",
-        "artesaos/seotools": "^0.9.2",
-        "kalnoy/nestedset": "^4.1",
-        "mews/captcha": "^2.1",
-        "anhskohbo/no-captcha": "^2.1",
-        "mikelmi/mks-theme": "dev-master",
-        "league/glide": "^1.1",
-        "league/glide-laravel": "^1.0",
+        "artesaos/seotools": "^0.10.0",
+        "cviebrock/eloquent-taggable": "^2.0",
         "intervention/image": "^2.3",
-        "cviebrock/eloquent-taggable": "^2.0"
+        "kalnoy/nestedset": "^4.2",
+        "laravel/framework": "5.4.*",
+        "laravel/tinker": "~1.0",
+        "lavary/laravel-menu": "dev-master",
+        "league/glide": "^1.2",
+        "league/glide-laravel": "^1.0",
+        "mews/captcha": "^2.1",
+        "mikelmi/mks-admin": "^2.0",
+        "mikelmi/mks-smart-table": "^2.0",
+        "mikelmi/mks-theme": "^2.0",
+        "zizaco/entrust": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~5.0",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*",
+        "symfony/css-selector": "3.2.*",
+        "symfony/dom-crawler": "3.2.*",
         "barryvdh/laravel-ide-helper": "^2.2",
-        "barryvdh/laravel-debugbar": "^2.2"
+        "barryvdh/laravel-debugbar": "^2.3"
     },
     "autoload": {
         "classmap": [
@@ -40,9 +40,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-root-package-install": [
@@ -61,6 +61,7 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }

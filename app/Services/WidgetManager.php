@@ -197,7 +197,7 @@ class WidgetManager
 
         if ($items) {
             if ($count) {
-                $items = $count == 1 ? [$items->random(1)] : $items->random($count);
+                $items = $items->random($count);
             }
 
             foreach ($items as $item) {

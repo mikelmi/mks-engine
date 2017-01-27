@@ -36,7 +36,7 @@ class RouteConfigService
                 continue;
             }
 
-            if (starts_with($route->getUri(), $admin_prefix) || starts_with($route->getUri(), '_')) {
+            if (starts_with($route->uri(), $admin_prefix) || starts_with($route->uri(), '_')) {
                 continue;
             }
 
@@ -48,7 +48,7 @@ class RouteConfigService
 
             $data->put($route->getName(), [
                 'id' => $route->getName(),
-                'text' => $route->getUri(),
+                'text' => $route->uri(),
                 'params' => $paramNames,
                 'hasParams' => count($paramNames) > 0
             ]);

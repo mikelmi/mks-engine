@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AppInstall;
 use App\Console\Commands\ModuleCacheClear;
 use App\Console\Commands\ModuleMakeMigration;
 use App\Console\Commands\ModuleMigrate;
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        AppInstall::class,
         RoleCreate::class,
         RoleUpdate::class,
         RoleRemove::class,

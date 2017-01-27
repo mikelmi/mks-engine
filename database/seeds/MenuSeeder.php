@@ -56,7 +56,7 @@ class MenuSeeder extends Seeder
 
         MenuItem::create([
             'title' => 'Settings',
-            'route' => 'set',
+            'url' => '/set',
             'menu_id' => $left->id
         ]);
         MenuItem::create([

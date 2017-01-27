@@ -6,7 +6,7 @@ return [
     'materialized' => true,
     'username' => 'email',
     'reset_enable' => true,
-    'locale' => 'en',
+    'locale' => env('APP_LOCALE', 'en'),
     'locales' => [
         'uk' => 'Українська',
         'ru' => 'Русский',

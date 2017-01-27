@@ -72,7 +72,7 @@ class ModulesLoaderServiceProvider extends ServiceProvider
 
             //attach middleware resolvers
             foreach ($module->meta('middleware', []) as $aliasName => $aliasClass) {
-                $router->middleware($aliasName, $aliasClass);
+                $router->aliasMiddleware($aliasName, $aliasClass);
             }
 
             //register providers

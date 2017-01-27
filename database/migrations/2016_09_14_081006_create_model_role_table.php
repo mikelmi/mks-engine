@@ -31,6 +31,6 @@ class CreateModelRoleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('widget_role');
+        Schema::dropIfExists('model_role');
     }
 }

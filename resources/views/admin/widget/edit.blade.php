@@ -91,7 +91,7 @@
                     <div class="form-group row" ng-class="{'has-danger':page.errors.ordering}">
                         <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Order') </label>
                         <div class="col-sm-10">
-                            <input type="number" name="ordering" value="{{ old('ordering', $model->ordering) }}" class="form-control" />
+                            <input type="number" name="ordering" value="{{ $model->ordering ?: 0 }}" class="form-control" />
                             <small class="form-control-feedback" ng-show="page.errors.ordering">{[{page.errors.ordering[0]}]}</small>
                         </div>
                     </div>

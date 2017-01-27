@@ -24,8 +24,10 @@ class AddStatusToUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->removeColumn('active');
-        });
+        if (Schema::hasColumn('users', 'active')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->removeColumn('active');
+            });
+        }
     }
 }
