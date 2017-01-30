@@ -59,11 +59,47 @@ class CategoryManager
                 return [
                     'id' => $item->id,
                     'text' => str_repeat('-', $item->depth) . $item->title,
+                    'slug' => $item->slug,
                     'selected' => $selected && in_array($item->id, $selected)
                 ];
             })->toArray();
         }
 
         return $sections;
+    }
+
+    /**
+     * @param null $type
+     * @param null $selected
+     * @return array
+     */
+    public function getSelectOptionsFlat($type = null, $selected = null)
+    {
+        $sections = Section::select(['id', 'title']);
+
+        if ($type) {
+            $sections->where('type', $type);
+        }
+
+        if ($selected) {
+            $selected = (array) $selected;
+        }
+
+        $result = [];
+
+        foreach ($sections->get() as $section) {
+            $group = $section->title;
+            $result = Category::getFlatTree($section['id'])->map(function($item) use ($selected, $group) {
+                return [
+                    'id' => $item->id,
+                    'text' => str_repeat('-', $item->depth) . $item->title,
+                    'slug' => $item->slug,
+                    'selected' => $selected && in_array($item->id, $selected),
+                    'group' => $group
+                ];
+            })->toArray();
+        }
+
+        return $result;
     }
 }

@@ -2,12 +2,12 @@
     var app = angular.module('mks-admin-ext', []);
 
     app.factory('mksLinkService', ['$q', '$http', 'UrlBuilder', function($q, $http, UrlBuilder) {
-        this.getParamsData = function(params) {
+        this.getParamsData = function(params, url) {
             var canceler = $q.defer();
 
             var request = $http({
                 method: "get",
-                url: UrlBuilder.get('route/params'),
+                url: url||(UrlBuilder.get('route/params')),
                 params: params,
                 timeout: canceler.promise
             });
@@ -127,7 +127,7 @@
                         name: scope.routeOption.id,
                         page: scope.modal.current_page || null,
                         q: scope.modal.searchQuery || null
-                    })).then(function (data) {
+                    }, scope.routeOption.selectUrl)).then(function (data) {
                         scope.modal.data = data;
                         currentRoute = scope.routeOption.id;
                         currentPage = data.pagination ? data.pagination.current_page : 1;

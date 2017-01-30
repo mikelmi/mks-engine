@@ -28,7 +28,7 @@
                 </button>
                 <h4 class="modal-title" ng-if="routeOption.extended">
                     <span>{[{ modal.data.title }]}&nbsp;&nbsp;&nbsp;</span>
-                    <div class="input-group" style="width: 250px; display: inline-flex">
+                    <div class="input-group" style="width: 250px; display: inline-flex" ng-if="routeOption.extended==true">
                         <input placeholder="@lang('general.Search')..." type="search" ng-model="modal.searchQuery" class="form-control" />
                         <span class="input-group-btn">
                             <button class="btn btn-secondary" type="submit" ng-click="$event.preventDefault(); modal.search(modal.searchQuery)"><i class="fa fa-search"></i></button>
@@ -37,7 +37,15 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <div ng-if="routeOption.extended">
+                <div ng-if="routeOption.extended=='select'" class="form-block">
+                    <select class="form-control" name="lang" mks-select
+                            ng-change="modal.select(modal.selectedItem)"
+                            ng-model="modal.selectedItem"
+                            ng-options="item.text group by item.group for item in modal.data.items"
+                    >
+                    </select>
+                </div>
+                <div ng-if="routeOption.extended===true">
                     <table class="table table-hover table-sm">
                         <thead>
                         <tr>
