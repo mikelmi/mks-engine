@@ -9,6 +9,7 @@ use App\Repositories\Breadcrumbs;
 use App\Repositories\LanguageRepository;
 use App\Services\CategoryManager;
 use App\Services\Settings;
+use App\Services\TagService;
 use App\Services\WidgetManager;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Http\Request;
@@ -94,5 +95,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Breadcrumbs::class, function($app) {
             return new Breadcrumbs();
         });
+
+        $this->app->singleton(TagService::class);
+        $this->app->alias(TagService::class, \Cviebrock\EloquentTaggable\Services\TagService::class);
     }
 }

@@ -174,7 +174,7 @@ $router->group(['prefix' => 'category', 'as' => 'category.', 'middleware' => ['p
 });
 
 //Tags list
-$router->get('tags/{type}', function(\Illuminate\Http\Request $request, \Cviebrock\EloquentTaggable\Services\TagService $tagService, $type) {
+$router->get('tags/{type}', function(\Illuminate\Http\Request $request, \App\Services\TagService $tagService, $type) {
 
     /** @var \Illuminate\Database\Eloquent\Collection $tags */
     $tags = $tagService->getAllTags($type);

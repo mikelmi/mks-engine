@@ -2,12 +2,19 @@
 
 namespace App\Traits;
 
-use Cviebrock\EloquentTaggable\Services\TagService;
+use App\Services\TagService;
+use Cviebrock\EloquentTaggable\Models\Tag;
 use Illuminate\Support\Collection;
 
 trait Taggable
 {
     use \Cviebrock\EloquentTaggable\Taggable;
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable', 'taggable_taggables', 'taggable_id', 'tag_id')
+            ->withTimestamps();
+    }
 
     public function syncTags($tags)
     {

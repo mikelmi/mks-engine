@@ -150,12 +150,12 @@
                             }
                         }
 
-                        $('#' + scope.modal.id).modal('show');
+                        angular.element('#' + scope.modal.id).modal('show');
                     }
                 };
 
                 scope.modal.close = function() {
-                    $('#' + scope.modal.id).modal('hide');
+                    angular.element('#' + scope.modal.id).modal('hide');
                 };
 
                 scope.modal.select = function(item) {
@@ -301,7 +301,7 @@
                 if (iconUrl) {
                     var formatResult = function(item) {
                         if (!item.id) { return item.text; }
-                        var $item = $(
+                        var $item = angular.element(
                             '<span><img src="' + iconUrl + '/' + item.element.value.toLowerCase() + '" class="img-flag" /> ' + item.text + '</span>'
                         );
                         return $item;

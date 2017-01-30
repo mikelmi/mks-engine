@@ -71,7 +71,6 @@ mix.js(path_node(
 //font-awesome
 mix.copy(path_node('font-awesome/fonts'), public_path('fonts'));
 
-
 /** Backend **/
 mix.combine([
     path_node('angular-ui-tree/dist/angular-ui-tree.css'),
