@@ -1,4 +1,77 @@
-/*!
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "./";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * jQuery JavaScript Library v3.1.1
  * https://jquery.com/
  *
@@ -10176,10 +10249,11 @@ jQuery.parseJSON = JSON.parse;
 // AMD loader is present. jQuery is a special case. For more information, see
 // https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
 
-if ( typeof define === "function" && define.amd ) {
-	define( "jquery", [], function() {
+if ( true ) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
 		return jQuery;
-	} );
+	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 }
 
 
@@ -10219,7 +10293,383 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-/*!
+
+/***/ }),
+
+/***/ 1:
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+* Project: Bootstrap Notify = v3.1.3
+* Description: Turns standard Bootstrap alerts into "Growl-like" notifications.
+* Author: Mouse0270 aka Robert McIntosh
+* License: MIT License
+* Website: https://github.com/mouse0270/bootstrap-growl
+*/
+(function (factory) {
+	if (true) {
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof exports === 'object') {
+		// Node/CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+	// Create the defaults once
+	var defaults = {
+			element: 'body',
+			position: null,
+			type: "info",
+			allow_dismiss: true,
+			newest_on_top: false,
+			showProgressbar: false,
+			placement: {
+				from: "top",
+				align: "right"
+			},
+			offset: 20,
+			spacing: 10,
+			z_index: 1031,
+			delay: 5000,
+			timer: 1000,
+			url_target: '_blank',
+			mouse_over: null,
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			onShow: null,
+			onShown: null,
+			onClose: null,
+			onClosed: null,
+			icon_type: 'class',
+			template: '<div data-notify="container" class="col-xs-11 col-sm-4 alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>'
+		};
+
+	String.format = function() {
+		var str = arguments[0];
+		for (var i = 1; i < arguments.length; i++) {
+			str = str.replace(RegExp("\\{" + (i - 1) + "\\}", "gm"), arguments[i]);
+		}
+		return str;
+	};
+
+	function Notify ( element, content, options ) {
+		// Setup Content of Notify
+		var content = {
+			content: {
+				message: typeof content == 'object' ? content.message : content,
+				title: content.title ? content.title : '',
+				icon: content.icon ? content.icon : '',
+				url: content.url ? content.url : '#',
+				target: content.target ? content.target : '-'
+			}
+		};
+
+		options = $.extend(true, {}, content, options);
+		this.settings = $.extend(true, {}, defaults, options);
+		this._defaults = defaults;
+		if (this.settings.content.target == "-") {
+			this.settings.content.target = this.settings.url_target;
+		}
+		this.animations = {
+			start: 'webkitAnimationStart oanimationstart MSAnimationStart animationstart',
+			end: 'webkitAnimationEnd oanimationend MSAnimationEnd animationend'
+		}
+
+		if (typeof this.settings.offset == 'number') {
+		    this.settings.offset = {
+		    	x: this.settings.offset,
+		    	y: this.settings.offset
+		    };
+		}
+
+		this.init();
+	};
+
+	$.extend(Notify.prototype, {
+		init: function () {
+			var self = this;
+
+			this.buildNotify();
+			if (this.settings.content.icon) {
+				this.setIcon();
+			}
+			if (this.settings.content.url != "#") {
+				this.styleURL();
+			}
+			this.styleDismiss();
+			this.placement();
+			this.bind();
+
+			this.notify = {
+				$ele: this.$ele,
+				update: function(command, update) {
+					var commands = {};
+					if (typeof command == "string") {
+						commands[command] = update;
+					}else{
+						commands = command;
+					}
+					for (var command in commands) {
+						switch (command) {
+							case "type":
+								this.$ele.removeClass('alert-' + self.settings.type);
+								this.$ele.find('[data-notify="progressbar"] > .progress-bar').removeClass('progress-bar-' + self.settings.type);
+								self.settings.type = commands[command];
+								this.$ele.addClass('alert-' + commands[command]).find('[data-notify="progressbar"] > .progress-bar').addClass('progress-bar-' + commands[command]);
+								break;
+							case "icon":
+								var $icon = this.$ele.find('[data-notify="icon"]');
+								if (self.settings.icon_type.toLowerCase() == 'class') {
+									$icon.removeClass(self.settings.content.icon).addClass(commands[command]);
+								}else{
+									if (!$icon.is('img')) {
+										$icon.find('img');
+									}
+									$icon.attr('src', commands[command]);
+								}
+								break;
+							case "progress":
+								var newDelay = self.settings.delay - (self.settings.delay * (commands[command] / 100));
+								this.$ele.data('notify-delay', newDelay);
+								this.$ele.find('[data-notify="progressbar"] > div').attr('aria-valuenow', commands[command]).css('width', commands[command] + '%');
+								break;
+							case "url":
+								this.$ele.find('[data-notify="url"]').attr('href', commands[command]);
+								break;
+							case "target":
+								this.$ele.find('[data-notify="url"]').attr('target', commands[command]);
+								break;
+							default:
+								this.$ele.find('[data-notify="' + command +'"]').html(commands[command]);
+						};
+					}
+					var posX = this.$ele.outerHeight() + parseInt(self.settings.spacing) + parseInt(self.settings.offset.y);
+					self.reposition(posX);
+				},
+				close: function() {
+					self.close();
+				}
+			};
+		},
+		buildNotify: function () {
+			var content = this.settings.content;
+			this.$ele = $(String.format(this.settings.template, this.settings.type, content.title, content.message, content.url, content.target));
+			this.$ele.attr('data-notify-position', this.settings.placement.from + '-' + this.settings.placement.align);
+			if (!this.settings.allow_dismiss) {
+				this.$ele.find('[data-notify="dismiss"]').css('display', 'none');
+			}
+			if ((this.settings.delay <= 0 && !this.settings.showProgressbar) || !this.settings.showProgressbar) {
+				this.$ele.find('[data-notify="progressbar"]').remove();
+			}
+		},
+		setIcon: function() {
+			if (this.settings.icon_type.toLowerCase() == 'class') {
+				this.$ele.find('[data-notify="icon"]').addClass(this.settings.content.icon);
+			}else{
+				if (this.$ele.find('[data-notify="icon"]').is('img')) {
+					this.$ele.find('[data-notify="icon"]').attr('src', this.settings.content.icon);
+				}else{
+					this.$ele.find('[data-notify="icon"]').append('<img src="'+this.settings.content.icon+'" alt="Notify Icon" />');
+				}
+			}
+		},
+		styleDismiss: function() {
+			this.$ele.find('[data-notify="dismiss"]').css({
+				position: 'absolute',
+				right: '10px',
+				top: '5px',
+				zIndex: this.settings.z_index + 2
+			});
+		},
+		styleURL: function() {
+			this.$ele.find('[data-notify="url"]').css({
+				backgroundImage: 'url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)',
+				height: '100%',
+				left: '0px',
+				position: 'absolute',
+				top: '0px',
+				width: '100%',
+				zIndex: this.settings.z_index + 1
+			});
+		},
+		placement: function() {
+			var self = this,
+				offsetAmt = this.settings.offset.y,
+				css = {
+					display: 'inline-block',
+					margin: '0px auto',
+					position: this.settings.position ?  this.settings.position : (this.settings.element === 'body' ? 'fixed' : 'absolute'),
+					transition: 'all .5s ease-in-out',
+					zIndex: this.settings.z_index
+				},
+				hasAnimation = false,
+				settings = this.settings;
+
+			$('[data-notify-position="' + this.settings.placement.from + '-' + this.settings.placement.align + '"]:not([data-closing="true"])').each(function() {
+				return offsetAmt = Math.max(offsetAmt, parseInt($(this).css(settings.placement.from)) +  parseInt($(this).outerHeight()) +  parseInt(settings.spacing));
+			});
+			if (this.settings.newest_on_top == true) {
+				offsetAmt = this.settings.offset.y;
+			}
+			css[this.settings.placement.from] = offsetAmt+'px';
+
+			switch (this.settings.placement.align) {
+				case "left":
+				case "right":
+					css[this.settings.placement.align] = this.settings.offset.x+'px';
+					break;
+				case "center":
+					css.left = 0;
+					css.right = 0;
+					break;
+			}
+			this.$ele.css(css).addClass(this.settings.animate.enter);
+			$.each(Array('webkit-', 'moz-', 'o-', 'ms-', ''), function(index, prefix) {
+				self.$ele[0].style[prefix+'AnimationIterationCount'] = 1;
+			});
+
+			$(this.settings.element).append(this.$ele);
+
+			if (this.settings.newest_on_top == true) {
+				offsetAmt = (parseInt(offsetAmt)+parseInt(this.settings.spacing)) + this.$ele.outerHeight();
+				this.reposition(offsetAmt);
+			}
+
+			if ($.isFunction(self.settings.onShow)) {
+				self.settings.onShow.call(this.$ele);
+			}
+
+			this.$ele.one(this.animations.start, function(event) {
+				hasAnimation = true;
+			}).one(this.animations.end, function(event) {
+				if ($.isFunction(self.settings.onShown)) {
+					self.settings.onShown.call(this);
+				}
+			});
+
+			setTimeout(function() {
+				if (!hasAnimation) {
+					if ($.isFunction(self.settings.onShown)) {
+						self.settings.onShown.call(this);
+					}
+				}
+			}, 600);
+		},
+		bind: function() {
+			var self = this;
+
+			this.$ele.find('[data-notify="dismiss"]').on('click', function() {
+				self.close();
+			})
+
+			this.$ele.mouseover(function(e) {
+				$(this).data('data-hover', "true");
+			}).mouseout(function(e) {
+				$(this).data('data-hover', "false");
+			});
+			this.$ele.data('data-hover', "false");
+
+			if (this.settings.delay > 0) {
+				self.$ele.data('notify-delay', self.settings.delay);
+				var timer = setInterval(function() {
+					var delay = parseInt(self.$ele.data('notify-delay')) - self.settings.timer;
+					if ((self.$ele.data('data-hover') === 'false' && self.settings.mouse_over == "pause") || self.settings.mouse_over != "pause") {
+						var percent = ((self.settings.delay - delay) / self.settings.delay) * 100;
+						self.$ele.data('notify-delay', delay);
+						self.$ele.find('[data-notify="progressbar"] > div').attr('aria-valuenow', percent).css('width', percent + '%');
+					}
+					if (delay <= -(self.settings.timer)) {
+						clearInterval(timer);
+						self.close();
+					}
+				}, self.settings.timer);
+			}
+		},
+		close: function() {
+			var self = this,
+				$successors = null,
+				posX = parseInt(this.$ele.css(this.settings.placement.from)),
+				hasAnimation = false;
+
+			this.$ele.data('closing', 'true').addClass(this.settings.animate.exit);
+			self.reposition(posX);
+
+			if ($.isFunction(self.settings.onClose)) {
+				self.settings.onClose.call(this.$ele);
+			}
+
+			this.$ele.one(this.animations.start, function(event) {
+				hasAnimation = true;
+			}).one(this.animations.end, function(event) {
+				$(this).remove();
+				if ($.isFunction(self.settings.onClosed)) {
+					self.settings.onClosed.call(this);
+				}
+			});
+
+			setTimeout(function() {
+				if (!hasAnimation) {
+					self.$ele.remove();
+					if (self.settings.onClosed) {
+						self.settings.onClosed(self.$ele);
+					}
+				}
+			}, 600);
+		},
+		reposition: function(posX) {
+			var self = this,
+				notifies = '[data-notify-position="' + this.settings.placement.from + '-' + this.settings.placement.align + '"]:not([data-closing="true"])',
+				$elements = this.$ele.nextAll(notifies);
+			if (this.settings.newest_on_top == true) {
+				$elements = this.$ele.prevAll(notifies);
+			}
+			$elements.each(function() {
+				$(this).css(self.settings.placement.from, posX);
+				posX = (parseInt(posX)+parseInt(self.settings.spacing)) + $(this).outerHeight();
+			});
+		}
+	});
+
+	$.notify = function ( content, options ) {
+		var plugin = new Notify( this, content, options );
+		return plugin.notify;
+	};
+	$.notifyDefaults = function( options ) {
+		defaults = $.extend(true, {}, defaults, options);
+		return defaults;
+	};
+	$.notifyClose = function( command ) {
+		if (typeof command === "undefined" || command == "all") {
+			$('[data-notify]').find('[data-notify="dismiss"]').trigger('click');
+		}else{
+			$('[data-notify-position="'+command+'"]').find('[data-notify="dismiss"]').trigger('click');
+		}
+	};
+
+}));
+
+
+/***/ }),
+
+/***/ 19:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * jQuery Form Plugin
  * version: 3.50.0-2014.02.05
  * Requires jQuery v1.5 or later
@@ -10234,9 +10684,12 @@ return jQuery;
 // AMD support
 (function (factory) {
     "use strict";
-    if (typeof define === 'function' && define.amd) {
+    if (true) {
         // using AMD; register as anon module
-        define(['jquery'], factory);
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
     } else {
         // no AMD; invoke directly
         factory( (typeof(jQuery) != 'undefined') ? jQuery : window.Zepto );
@@ -11498,576 +11951,26 @@ function log() {
 }));
 
 
-/*
-* Project: Bootstrap Notify = v3.1.3
-* Description: Turns standard Bootstrap alerts into "Growl-like" notifications.
-* Author: Mouse0270 aka Robert McIntosh
-* License: MIT License
-* Website: https://github.com/mouse0270/bootstrap-growl
-*/
-(function (factory) {
-	if (typeof define === 'function' && define.amd) {
-		// AMD. Register as an anonymous module.
-		define(['jquery'], factory);
-	} else if (typeof exports === 'object') {
-		// Node/CommonJS
-		factory(require('jquery'));
-	} else {
-		// Browser globals
-		factory(jQuery);
-	}
-}(function ($) {
-	// Create the defaults once
-	var defaults = {
-			element: 'body',
-			position: null,
-			type: "info",
-			allow_dismiss: true,
-			newest_on_top: false,
-			showProgressbar: false,
-			placement: {
-				from: "top",
-				align: "right"
-			},
-			offset: 20,
-			spacing: 10,
-			z_index: 1031,
-			delay: 5000,
-			timer: 1000,
-			url_target: '_blank',
-			mouse_over: null,
-			animate: {
-				enter: 'animated fadeInDown',
-				exit: 'animated fadeOutUp'
-			},
-			onShow: null,
-			onShown: null,
-			onClose: null,
-			onClosed: null,
-			icon_type: 'class',
-			template: '<div data-notify="container" class="col-xs-11 col-sm-4 alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>'
-		};
 
-	String.format = function() {
-		var str = arguments[0];
-		for (var i = 1; i < arguments.length; i++) {
-			str = str.replace(RegExp("\\{" + (i - 1) + "\\}", "gm"), arguments[i]);
-		}
-		return str;
-	};
+/***/ }),
 
-	function Notify ( element, content, options ) {
-		// Setup Content of Notify
-		var content = {
-			content: {
-				message: typeof content == 'object' ? content.message : content,
-				title: content.title ? content.title : '',
-				icon: content.icon ? content.icon : '',
-				url: content.url ? content.url : '#',
-				target: content.target ? content.target : '-'
-			}
-		};
+/***/ 20:
+/***/ (function(module, exports) {
 
-		options = $.extend(true, {}, content, options);
-		this.settings = $.extend(true, {}, defaults, options);
-		this._defaults = defaults;
-		if (this.settings.content.target == "-") {
-			this.settings.content.target = this.settings.url_target;
-		}
-		this.animations = {
-			start: 'webkitAnimationStart oanimationstart MSAnimationStart animationstart',
-			end: 'webkitAnimationEnd oanimationend MSAnimationEnd animationend'
-		}
+// removed by extract-text-webpack-plugin
 
-		if (typeof this.settings.offset == 'number') {
-		    this.settings.offset = {
-		    	x: this.settings.offset,
-		    	y: this.settings.offset
-		    };
-		}
+/***/ }),
 
-		this.init();
-	};
+/***/ 24:
+/***/ (function(module, exports, __webpack_require__) {
 
-	$.extend(Notify.prototype, {
-		init: function () {
-			var self = this;
+__webpack_require__(0);
+__webpack_require__(2);
+__webpack_require__(1);
+__webpack_require__(19);
+module.exports = __webpack_require__(20);
 
-			this.buildNotify();
-			if (this.settings.content.icon) {
-				this.setIcon();
-			}
-			if (this.settings.content.url != "#") {
-				this.styleURL();
-			}
-			this.styleDismiss();
-			this.placement();
-			this.bind();
 
-			this.notify = {
-				$ele: this.$ele,
-				update: function(command, update) {
-					var commands = {};
-					if (typeof command == "string") {
-						commands[command] = update;
-					}else{
-						commands = command;
-					}
-					for (var command in commands) {
-						switch (command) {
-							case "type":
-								this.$ele.removeClass('alert-' + self.settings.type);
-								this.$ele.find('[data-notify="progressbar"] > .progress-bar').removeClass('progress-bar-' + self.settings.type);
-								self.settings.type = commands[command];
-								this.$ele.addClass('alert-' + commands[command]).find('[data-notify="progressbar"] > .progress-bar').addClass('progress-bar-' + commands[command]);
-								break;
-							case "icon":
-								var $icon = this.$ele.find('[data-notify="icon"]');
-								if (self.settings.icon_type.toLowerCase() == 'class') {
-									$icon.removeClass(self.settings.content.icon).addClass(commands[command]);
-								}else{
-									if (!$icon.is('img')) {
-										$icon.find('img');
-									}
-									$icon.attr('src', commands[command]);
-								}
-								break;
-							case "progress":
-								var newDelay = self.settings.delay - (self.settings.delay * (commands[command] / 100));
-								this.$ele.data('notify-delay', newDelay);
-								this.$ele.find('[data-notify="progressbar"] > div').attr('aria-valuenow', commands[command]).css('width', commands[command] + '%');
-								break;
-							case "url":
-								this.$ele.find('[data-notify="url"]').attr('href', commands[command]);
-								break;
-							case "target":
-								this.$ele.find('[data-notify="url"]').attr('target', commands[command]);
-								break;
-							default:
-								this.$ele.find('[data-notify="' + command +'"]').html(commands[command]);
-						};
-					}
-					var posX = this.$ele.outerHeight() + parseInt(self.settings.spacing) + parseInt(self.settings.offset.y);
-					self.reposition(posX);
-				},
-				close: function() {
-					self.close();
-				}
-			};
-		},
-		buildNotify: function () {
-			var content = this.settings.content;
-			this.$ele = $(String.format(this.settings.template, this.settings.type, content.title, content.message, content.url, content.target));
-			this.$ele.attr('data-notify-position', this.settings.placement.from + '-' + this.settings.placement.align);
-			if (!this.settings.allow_dismiss) {
-				this.$ele.find('[data-notify="dismiss"]').css('display', 'none');
-			}
-			if ((this.settings.delay <= 0 && !this.settings.showProgressbar) || !this.settings.showProgressbar) {
-				this.$ele.find('[data-notify="progressbar"]').remove();
-			}
-		},
-		setIcon: function() {
-			if (this.settings.icon_type.toLowerCase() == 'class') {
-				this.$ele.find('[data-notify="icon"]').addClass(this.settings.content.icon);
-			}else{
-				if (this.$ele.find('[data-notify="icon"]').is('img')) {
-					this.$ele.find('[data-notify="icon"]').attr('src', this.settings.content.icon);
-				}else{
-					this.$ele.find('[data-notify="icon"]').append('<img src="'+this.settings.content.icon+'" alt="Notify Icon" />');
-				}
-			}
-		},
-		styleDismiss: function() {
-			this.$ele.find('[data-notify="dismiss"]').css({
-				position: 'absolute',
-				right: '10px',
-				top: '5px',
-				zIndex: this.settings.z_index + 2
-			});
-		},
-		styleURL: function() {
-			this.$ele.find('[data-notify="url"]').css({
-				backgroundImage: 'url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)',
-				height: '100%',
-				left: '0px',
-				position: 'absolute',
-				top: '0px',
-				width: '100%',
-				zIndex: this.settings.z_index + 1
-			});
-		},
-		placement: function() {
-			var self = this,
-				offsetAmt = this.settings.offset.y,
-				css = {
-					display: 'inline-block',
-					margin: '0px auto',
-					position: this.settings.position ?  this.settings.position : (this.settings.element === 'body' ? 'fixed' : 'absolute'),
-					transition: 'all .5s ease-in-out',
-					zIndex: this.settings.z_index
-				},
-				hasAnimation = false,
-				settings = this.settings;
+/***/ })
 
-			$('[data-notify-position="' + this.settings.placement.from + '-' + this.settings.placement.align + '"]:not([data-closing="true"])').each(function() {
-				return offsetAmt = Math.max(offsetAmt, parseInt($(this).css(settings.placement.from)) +  parseInt($(this).outerHeight()) +  parseInt(settings.spacing));
-			});
-			if (this.settings.newest_on_top == true) {
-				offsetAmt = this.settings.offset.y;
-			}
-			css[this.settings.placement.from] = offsetAmt+'px';
-
-			switch (this.settings.placement.align) {
-				case "left":
-				case "right":
-					css[this.settings.placement.align] = this.settings.offset.x+'px';
-					break;
-				case "center":
-					css.left = 0;
-					css.right = 0;
-					break;
-			}
-			this.$ele.css(css).addClass(this.settings.animate.enter);
-			$.each(Array('webkit-', 'moz-', 'o-', 'ms-', ''), function(index, prefix) {
-				self.$ele[0].style[prefix+'AnimationIterationCount'] = 1;
-			});
-
-			$(this.settings.element).append(this.$ele);
-
-			if (this.settings.newest_on_top == true) {
-				offsetAmt = (parseInt(offsetAmt)+parseInt(this.settings.spacing)) + this.$ele.outerHeight();
-				this.reposition(offsetAmt);
-			}
-
-			if ($.isFunction(self.settings.onShow)) {
-				self.settings.onShow.call(this.$ele);
-			}
-
-			this.$ele.one(this.animations.start, function(event) {
-				hasAnimation = true;
-			}).one(this.animations.end, function(event) {
-				if ($.isFunction(self.settings.onShown)) {
-					self.settings.onShown.call(this);
-				}
-			});
-
-			setTimeout(function() {
-				if (!hasAnimation) {
-					if ($.isFunction(self.settings.onShown)) {
-						self.settings.onShown.call(this);
-					}
-				}
-			}, 600);
-		},
-		bind: function() {
-			var self = this;
-
-			this.$ele.find('[data-notify="dismiss"]').on('click', function() {
-				self.close();
-			})
-
-			this.$ele.mouseover(function(e) {
-				$(this).data('data-hover', "true");
-			}).mouseout(function(e) {
-				$(this).data('data-hover', "false");
-			});
-			this.$ele.data('data-hover', "false");
-
-			if (this.settings.delay > 0) {
-				self.$ele.data('notify-delay', self.settings.delay);
-				var timer = setInterval(function() {
-					var delay = parseInt(self.$ele.data('notify-delay')) - self.settings.timer;
-					if ((self.$ele.data('data-hover') === 'false' && self.settings.mouse_over == "pause") || self.settings.mouse_over != "pause") {
-						var percent = ((self.settings.delay - delay) / self.settings.delay) * 100;
-						self.$ele.data('notify-delay', delay);
-						self.$ele.find('[data-notify="progressbar"] > div').attr('aria-valuenow', percent).css('width', percent + '%');
-					}
-					if (delay <= -(self.settings.timer)) {
-						clearInterval(timer);
-						self.close();
-					}
-				}, self.settings.timer);
-			}
-		},
-		close: function() {
-			var self = this,
-				$successors = null,
-				posX = parseInt(this.$ele.css(this.settings.placement.from)),
-				hasAnimation = false;
-
-			this.$ele.data('closing', 'true').addClass(this.settings.animate.exit);
-			self.reposition(posX);
-
-			if ($.isFunction(self.settings.onClose)) {
-				self.settings.onClose.call(this.$ele);
-			}
-
-			this.$ele.one(this.animations.start, function(event) {
-				hasAnimation = true;
-			}).one(this.animations.end, function(event) {
-				$(this).remove();
-				if ($.isFunction(self.settings.onClosed)) {
-					self.settings.onClosed.call(this);
-				}
-			});
-
-			setTimeout(function() {
-				if (!hasAnimation) {
-					self.$ele.remove();
-					if (self.settings.onClosed) {
-						self.settings.onClosed(self.$ele);
-					}
-				}
-			}, 600);
-		},
-		reposition: function(posX) {
-			var self = this,
-				notifies = '[data-notify-position="' + this.settings.placement.from + '-' + this.settings.placement.align + '"]:not([data-closing="true"])',
-				$elements = this.$ele.nextAll(notifies);
-			if (this.settings.newest_on_top == true) {
-				$elements = this.$ele.prevAll(notifies);
-			}
-			$elements.each(function() {
-				$(this).css(self.settings.placement.from, posX);
-				posX = (parseInt(posX)+parseInt(self.settings.spacing)) + $(this).outerHeight();
-			});
-		}
-	});
-
-	$.notify = function ( content, options ) {
-		var plugin = new Notify( this, content, options );
-		return plugin.notify;
-	};
-	$.notifyDefaults = function( options ) {
-		defaults = $.extend(true, {}, defaults, options);
-		return defaults;
-	};
-	$.notifyClose = function( command ) {
-		if (typeof command === "undefined" || command == "all") {
-			$('[data-notify]').find('[data-notify="dismiss"]').trigger('click');
-		}else{
-			$('[data-notify-position="'+command+'"]').find('[data-notify="dismiss"]').trigger('click');
-		}
-	};
-
-}));
-
-function execFunc(functionName/*, args */) {
-    var args = [].slice.call(arguments).splice(1),
-        namespaces = functionName.split("."),
-        func = namespaces.pop(),
-        context = window;
-
-    if (namespaces.length) {
-        for (var i = 0; i < namespaces.length; i++) {
-            context = context[namespaces[i]];
-        }
-    }
-
-    if (context) {
-        return context[func].apply(context, args);
-    }
-}
-
-$(document).ready(function() {
-
-    /**
-     * Lightbox
-     */
-    if (typeof $.fn.ekkoLightbox != 'undefined') {
-        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        });
-    }
-
-    /**
-     * Refresh captcha
-     */
-    $(document).on('click', '[data-toggle=captcha-refresh]', function(e) {
-        e.preventDefault();
-
-        var url = $(this).data('url') || $(this).prop('href');
-
-        if (url) {
-            $(this).closest('.captcha-row').find('img:first').attr('src', url + '?' + (new Date()).getTime());
-        }
-
-        return false;
-    });
-
-    /**
-     * Ajax Modal Form
-     */
-    if (typeof $.fn.modal != 'undefined') {
-        $(document).on('click', '[data-toggle="modal-form"]', function (event) {
-            event.preventDefault();
-
-            var $this = $(this),
-                size = $this.data('size') || 'lg';
-
-            var $modal = $('<div class="modal fade modal-form" tabindex="-1" role="dialog">' +
-                '<div class="modal-dialog modal-' + size + '" role="document">' +
-                '<div class="modal-content"></div>' +
-                '<div class="modal-overlay"><div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>' +
-                '</div></div>').appendTo('body');
-
-            $modal.on('show.bs.modal', function (e) {
-                $modal.addClass('loading');
-                var url = $this.attr('href') || $this.data('url');
-
-                if (url) {
-                    $modal.find('.modal-content').load(url, function (r, status, xhr) {
-                        $modal.removeClass('loading');
-                        if (status == 'error') {
-                            $(this).html('<div class="alert alert-danger" style="margin: 0">' +
-                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
-                                + xhr.status + " " + xhr.statusText +
-                                '</div>');
-                        } else {
-                            var onInit = $this.data('init');
-                            if (onInit) {
-                                execFunc(onInit);
-                            }
-
-                            var $form = $(this).find('form:first');
-
-                            $form.ajaxForm({
-                                beforeSubmit: function (arr, $form) {
-                                    $modal.addClass('loading');
-                                    $form.find('.has-danger').removeClass('has-danger');
-                                    $form.find('.feedback-error').remove();
-                                },
-                                complete: function () {
-                                    $modal.removeClass('loading');
-                                },
-                                error: function (xhr) {
-                                    if (xhr.responseJSON) {
-                                        if (xhr.status == 302) {
-                                            var url = xhr.responseJSON.redirect;
-                                            if (url) {
-                                                document.location.href = url;
-                                            }
-
-                                            return;
-                                        } else if (xhr.status = 422) {
-                                            $.each(xhr.responseJSON, function (k, v) {
-                                                if (k == 'captcha') {
-                                                    var el = $modal.find('[name=' + k + ']').first().closest('.captcha-row');
-                                                } else {
-                                                    var el = $modal.find('[name=' + k + ']').first();
-                                                }
-                                                el.after(
-                                                    '<div class="form-control-feedback feedback-error">' + v[0] + '</div>'
-                                                ).closest('.form-group').addClass('has-danger');
-                                            });
-
-                                            return;
-                                        }
-                                    }
-
-                                    $modal.find('.modal-content').html('<div class="alert alert-danger" style="margin: 0">' +
-                                        '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
-                                        + xhr.status + " " + xhr.statusText +
-                                        '</div>');
-                                }
-                            });
-
-                            $(this).find('[type=submit]').on('click', function (e) {
-                                e.preventDefault();
-                                $form.submit();
-                            });
-                        }
-                    });
-                }
-            });
-
-            $modal.on('hidden.bs.modal', function (e) {
-                $(this).remove();
-            });
-
-            $modal.modal();
-        });
-    }
-
-    /**
-     * Ajax forms
-     */
-    if (typeof $.fn.ajaxForm != 'undefined') {
-        $.fn.setupAjaxForm = function () {
-            var form = this;
-
-            this.prepend('<div class="block-overlay"><div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>');
-
-            this.ajaxForm({
-                beforeSubmit: function (arr, $form) {
-                    if ($form.hasClass('loading')) {
-                        return false;
-                    }
-
-                    $form.addClass('loading');
-                    $form.find('.has-danger').removeClass('has-danger');
-                    $form.find('.feedback-error').remove();
-                    $form.find('[type=submit]').prop('disabled', true);
-                },
-                complete: function () {
-                    form.removeClass('loading');
-                    form.find('[type=submit]').prop('disabled', false);
-                    form.find('[data-toggle=captcha-refresh]').click();
-                },
-                error: function (xhr) {
-                    if (xhr.responseJSON) {
-                        if (xhr.status == 302) {
-                            var url = xhr.responseJSON.redirect;
-                            if (url) {
-                                document.location.href = url;
-                            }
-
-                            return;
-                        } else if (xhr.status = 422) {
-                            $.each(xhr.responseJSON, function (k, v) {
-                                if (k == 'captcha') {
-                                    var el = form.find('[name=' + k + ']').first().closest('.captcha-row');
-                                } else {
-                                    var el = form.find('[name=' + k + ']').first();
-                                }
-                                el.after(
-                                    '<div class="form-control-feedback feedback-error">' + v[0] + '</div>'
-                                ).closest('.form-group').addClass('has-danger');
-                            });
-
-                            return;
-                        }
-                    }
-
-                    if (typeof $.notify != 'undefined') {
-                        $.notify({message: xhr.status + " " + xhr.statusText},{type: 'danger'});
-
-                        return;
-                    }
-
-                    alert(xhr.status + " " + xhr.statusText);
-                },
-
-                success: function (data) {
-                    form[0].reset();
-
-                    if (data && data.message) {
-                        if (typeof $.notify != 'undefined') {
-                            $.notify({message: data.message},{type: 'success'});
-
-                            return;
-                        }
-
-                        alert(data.message);
-                    }
-                }
-            });
-
-            return this;
-        };
-
-        $('form.ajax-form').setupAjaxForm();
-    }
-});
-//# sourceMappingURL=system-light.js.map
+/******/ });
