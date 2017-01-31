@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,9 +13,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $type
  * @property string $title
+ * @property string $slug
  */
 class Section extends Model
 {
+    use Sluggable;
+
     public $timestamps = false;
 
     /**
@@ -22,5 +27,10 @@ class Section extends Model
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function scopeByType(Builder $query, $type)
+    {
+        return $query->where('type', $type);
     }
 }

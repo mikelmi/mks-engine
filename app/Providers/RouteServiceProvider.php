@@ -92,7 +92,7 @@ class RouteServiceProvider extends ServiceProvider
         parent::register();
 
         $this->app->singleton(RouteConfigService::class, function($app) {
-            return new RouteConfigService($app['router']);
+            return new RouteConfigService($app['router'], true);
         });
 
         //Override UrlGenerator

@@ -10,11 +10,7 @@ trait Sluggable
 
     protected static function bootSluggable()
     {
-        static::creating(function (Model $model) {
-            $model->addSlug();
-        });
-
-        static::updating(function (Model $model) {
+        static::saving(function (Model $model) {
             $model->addSlug();
         });
     }

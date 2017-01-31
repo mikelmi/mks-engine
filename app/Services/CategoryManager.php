@@ -102,4 +102,31 @@ class CategoryManager
 
         return $result;
     }
+
+    /**
+     * @param null $type
+     * @param null $selected
+     * @return array
+     */
+    public function getSelectSections($type = null, $selected = null)
+    {
+        $sections = Section::select(['id', 'title', 'slug'])->orderBy('title');
+
+        if ($type) {
+            $sections->where('type', $type);
+        }
+
+        if ($selected) {
+            $selected = (array) $selected;
+        }
+
+        return $sections->get()->map(function($item) use ($selected) {
+            return [
+                'id' => $item->id,
+                'text' => $item->title,
+                'slug' => $item->slug,
+                'selected' => $selected && in_array($item->id, $selected),
+            ];
+        })->toArray();
+    }
 }

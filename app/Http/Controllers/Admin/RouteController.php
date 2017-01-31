@@ -19,7 +19,7 @@ class RouteController extends AdminController
             }
 
             return $item;
-        })->values();
+        })->sortBy('text')->values();
 
         return $result;
     }
