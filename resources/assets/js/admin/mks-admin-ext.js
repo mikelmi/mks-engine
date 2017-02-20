@@ -512,4 +512,17 @@
         }]
     });
 
+    app.directive('mksDataId', [function () {
+        return {
+            restrict: 'A',
+            priority: -1,
+            link: function (scope, elem, attrs) {
+                var id = attrs['mksDataId'];
+                if (id) {
+                    elem.prop('id', id);
+                }
+            }
+        }
+    }]);
+
 })(window.angular);
