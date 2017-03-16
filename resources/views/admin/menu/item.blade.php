@@ -1,7 +1,7 @@
 @extends('admin::page')
 
 @section('header')
-    <div class="breadcrumb">
+    <div class="breadcrumb mr-auto">
         <a href="#/menuman" class="breadcrumb-item">@lang('general.Menu')</a>
         <a href="#/menuman/{{$menu->id}}" class="breadcrumb-item">{{$menu->name}}</a>
         <span class="breadcrumb-item">
@@ -19,8 +19,8 @@
         <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="#" mks-submit data-flag="1">@lang('admin::messages.Save and New')</a>
         </div>
-        <a class="btn btn-secondary" href="#/menuman/{{$menu->id}}">@lang('admin::messages.Cancel')</a>
     </div>
+    <a class="btn btn-secondary" href="#/menuman/{{$menu->id}}">@lang('admin::messages.Cancel')</a>
 @endsection
 
 @section('content')
@@ -42,7 +42,7 @@
             <label class="col-sm-2 col-form-label text-sm-right"> @lang('general.Title') </label>
             <div class="col-sm-10">
                 <input type="text" name="title" value="{{ old('title', $model->title) }}" class="form-control" />
-                <small class="form-control-feedback" ng-show="page.errors.title">{[{page.errors.title[0]}]}</small>
+                <small class="form-control-feedback" ng-show="page.errors.title">@{{ page.errors.title[0] }}</small>
             </div>
         </div>
 

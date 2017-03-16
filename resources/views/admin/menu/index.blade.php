@@ -33,7 +33,7 @@
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs pull-xs-left">
                 <li class="nav-item" ng-repeat="item in menu">
-                    <a class="nav-link" ng-class="{'active': item.id==currentMenu.id || item.id==menuModel.id}" href="#" ng-click="selectMenu(item)">{[{ item.name }]}</a>
+                    <a class="nav-link" ng-class="{'active': item.id==currentMenu.id || item.id==menuModel.id}" href="#" ng-click="selectMenu(item)">@{{ item.name }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" ng-class="{'active': menuModel && !menuModel.id}" href="#" title="@lang('admin::messages.Add')" ng-click="addMenu()">
@@ -47,7 +47,7 @@
             <div ng-if="currentMenu && !menuModel" ng-controller="MenuTreeController as tree">
 
                 <div>
-                    <a class="btn btn-link" ng-href="#/menuman/items/{[{currentMenu.id}]}/edit">
+                    <a class="btn btn-link" ng-href="#/menuman/items/@{{currentMenu.id}}/edit">
                         <i class="fa fa-plus"></i>
                         @lang('general.Add Menu Item')
                     </a>
@@ -72,12 +72,12 @@
             <button class="btn btn-link btn-sm text-muted tree-toggle" ng-if="node.children && node.children.length > 0" data-nodrag ng-click="tree.toggle(this)">
                 <i class="fa" ng-class="{'fa-chevron-right': collapsed, 'fa-chevron-down': !collapsed}"></i>
             </button>
-            {[{node.title}]}
+            @{{node.title}}
             <span class="pull-right btn-group btn-group-sm tree-tools" data-nodrag>
-                <a class="btn btn-success btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/menuman/items/{[{currentMenu.id}]}/edit/{[{node.id}]}">
+                <a class="btn btn-outline-primary no-b btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/menuman/items/@{{currentMenu.id}}/edit/@{{node.id}}">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <button class="btn btn-danger" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
+                <button class="btn btn-outline-danger no-b btn-sm" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
                     <i class="fa fa-remove"></i>
                 </button>
             </span>
