@@ -2,6 +2,11 @@ const { mix } = require('laravel-mix');
 
 const publicPath = 'public';
 
+mix.autoload({
+    'jquery': ['$', 'window.jQuery', 'jQuery'],
+    'tether': ['window.Tether', 'Tether'],
+});
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -46,30 +51,10 @@ mix.sass(asset('sass/system-light.scss'), public_path('css'));
 mix.sass(asset('sass/system.scss'), public_path('css'));
 
 //frontend system js without bootstrap
-mix.js(path_node(
-    [
-        'jquery/dist/jquery.js',
-        'jquery-form/jquery.form.js',
-        'bootstrap-notify/bootstrap-notify.js',
-        'ekko-lightbox/dist/ekko-lightbox.js'
-    ])//.concat(asset('js/system.js'))
-    ,
-    public_path('js/system-light.js')
-);
+mix.js(asset('js/system-light.js'), public_path('js/system-light.js'));
 
 //frontend system js with bootstrap
-mix.js(path_node(
-    [
-        'jquery/dist/jquery.js',
-        'tether/dist/js/tether.js',
-        'bootstrap/dist/js/bootstrap.js',
-        'ekko-lightbox/dist/ekko-lightbox.js',
-        'jquery-form/jquery.form.js',
-        'bootstrap-notify/bootstrap-notify.js'
-    ])//.concat(asset('js/system.js'))
-    ,
-    public_path('js/system.js')
-);
+mix.js(asset('js/system.js'), public_path('js/system.js'));
 
 //TODO: move to combined version
 mix.copy(asset('js/system.js'), public_path('js/app.js'));
@@ -84,15 +69,7 @@ mix.combine([
     asset('css/admin/*.css')
 ], public_path('admin/css/admin.css'));
 
-mix.js([
-    path_node('angular-ui-tree/dist/angular-ui-tree.js'),
-    asset('js/admin/artisan.js'),
-    asset('js/admin/category-manager.js'),
-    asset('js/admin/dashboard.js'),
-    asset('js/admin/menu-manager.js'),
-    asset('js/admin/mks-admin-ext.js'),
-    asset('js/admin/widget-manager.js')
-], public_path('admin/js/admin.js'));
+mix.js(asset('js/admin/admin-app.js'), public_path('admin/js/admin-app.js'));
 
 /** FileManager **/
 mix.combine([

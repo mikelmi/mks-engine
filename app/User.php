@@ -9,7 +9,9 @@ use App\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Cache;
+use Mikelmi\MksAdmin\Contracts\AdminableUserInterface;
 use Mikelmi\MksAdmin\Notifications\ResetAdminPassword;
+use Mikelmi\MksAdmin\Traits\AdminableUser;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -25,13 +27,14 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property \DateTime updated_at
  * @property string activation_token
  */
-class User extends Authenticatable
+class User extends Authenticatable implements AdminableUserInterface
 {
     use Notifiable;
     use EntrustUserTrait {
         can as entrustCan;
         cachedRoles as entrustCachedRoles;
     }
+    use AdminableUser;
 
     /**
      * The attributes that are mass assignable.
@@ -53,7 +56,7 @@ class User extends Authenticatable
 
     protected $appends = ['is_current', 'non_selectable'];
 
-    public function isAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->hasRole(Role::ADMIN);
     }
@@ -86,7 +89,7 @@ class User extends Authenticatable
 
     public function can($ability, $arguments = false)
     {
-        if ($this->isAdmin()) {
+        if ($this->isSuperAdmin()) {
             return true;
         }
 
@@ -105,7 +108,7 @@ class User extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        if (!$this->isAdmin()) {
+        if (!$this->isSuperAdmin()) {
             return $this->notify(new ResetPassword($token));
         }
 

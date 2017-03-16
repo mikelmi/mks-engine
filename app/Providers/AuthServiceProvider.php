@@ -28,14 +28,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::before(function(Authenticatable $user, $ability) {
-            if ($user->isAdmin()) {
-                return true;
-            }
-
-            return null;
-        });
-
         Gate::define('upload', function (Authenticatable $user) {
             $mode = settings('files.upload');
 

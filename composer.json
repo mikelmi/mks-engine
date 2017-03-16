@@ -5,9 +5,9 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
+        "php": ">=7.0",
         "artesaos/seotools": "^0.10.0",
-        "cviebrock/eloquent-taggable": "^2.0",
+        "cviebrock/eloquent-taggable": "^2.1",
         "intervention/image": "^2.3",
         "kalnoy/nestedset": "^4.2",
         "laravel/framework": "5.4.*",
@@ -16,9 +16,8 @@
         "league/glide": "^1.2",
         "league/glide-laravel": "^1.0",
         "mews/captcha": "^2.1",
-        "mikelmi/mks-admin": "^2.0",
-        "mikelmi/mks-smart-table": "^2.0",
-        "mikelmi/mks-theme": "^2.0",
+        "mikelmi/mks-admin": "^3.0",
+        "mikelmi/mks-theme": "^2.1",
         "zizaco/entrust": "dev-master"
     },
     "require-dev": {

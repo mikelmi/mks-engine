@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'url' => env('ADMIN_URL', 'admin'),
+    'url' => env('ADMIN_URL', 'admin-panel'),
     'site_url' => env('SITE_URL'),
-    'materialized' => true,
+    'materialized' => false,
     'username' => 'email',
     'reset_enable' => true,
     'locale' => env('APP_LOCALE', 'en'),
@@ -16,7 +16,6 @@ return [
 
     'scripts' => [
         'vendor/ckeditor/ckeditor.js',
-        'vendor/mikelmi/mks-smart-table/js/mks-smart-table.js',
         'admin/js/admin.js',
     ],
 
@@ -25,7 +24,6 @@ return [
     ],
 
     'appModules' => [
-        'mks-smart-table',
         'mks-admin-ext',
         'mks-menu-manager',
         'mks-dashboard',

@@ -6,6 +6,7 @@ body {
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     font-size: 1rem;
     line-height: 1.5;
+    color: #333333;
 }
 
 .light-theme {
@@ -32,7 +33,7 @@ body {
 }
 
 .light-theme .breadcrumb>li>span {
-    color: #6186A8;
+    color: #364d67;
 }
 
 .dark-theme .navbar-inverse {
@@ -41,7 +42,7 @@ body {
 
 .light-theme .navbar-inverse .breadcrumb a,
 .light-theme .navbar-inverse .btn-flat {
-    color: #3A5269;
+    color: #507299;
 }
 
 .dark-theme .navbar-inverse .breadcrumb a,
@@ -51,7 +52,7 @@ body {
 
 .light-theme .navbar-inverse .breadcrumb a:hover,
 .light-theme .navbar-inverse .btn-flat:hover {
-    color: #6186A8;
+    color: #364d67;
 }
 
 .dark-theme .navbar-inverse .breadcrumb a:hover,
@@ -60,11 +61,12 @@ body {
 }
 
 .dropdown-menu > li > a {
-    color: #3A5269;
+    color: #507299;
 }
 
 .dropdown-menu > li.active > a, .dropdown-menu > li > a:hover {
-    color: #ffffff;
+    color: #364d67;
+    background-color: #f0f2f5;
 }
 
 .light-theme .sidebar {
@@ -78,12 +80,12 @@ body {
 }
 
 .light-theme .nav-sidebar>li>a {
-    color: #3A5269;
+    color: #507299;
 }
 
 .light-theme .nav-sidebar>li.active>a,
 .light-theme .nav-sidebar>li>a:hover {
-    color: #6186A8;
+    color: #364d67;
     background-color: #ECEFF1;
 }
 
@@ -95,7 +97,7 @@ body {
 .dark-theme .nav-sidebar>li.active>a,
 .dark-theme .nav-sidebar>li>a:hover {
     color: #fff;
-    background-color: #3A5269;
+    background-color: #507299;
 }
 
 .light-theme .card {
@@ -121,12 +123,12 @@ body {
 }
 
 .iconset a, .table-files a {
-    color: #3A5269;
+    color: #507299;
     text-decoration: none !important;
 }
 
 .iconset a:hover, .table-files a:hover {
-    color: #6186A8;
+    color: #364d67;
 }
 
 a.item-file {
@@ -134,15 +136,15 @@ a.item-file {
 }
 
 a.item-file:hover {
-    color: #6186A8;
+    color: #364d67;
 }
 
 .iconset .thumbnail.selected, .table-files .selected {
-    background: #6186A8;
+    background: #507299;
 }
 
 .modal .modal-header {
-    background-color: #3A5269;
+    background-color: #507299;
 }
 
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
@@ -184,4 +186,22 @@ a.item-file:hover {
     background-color: #dff0d8;
     border-color: #d0e9c6;
     color: #3c763d;
+}
+
+.btn-primary {
+    background-color: #507299;
+    border-color: #507299;
+}
+
+.btn-primary:hover {
+    background-color: #3e5978;
+    border-color: #3b5471;
+}
+
+.form-control, input {
+    border-width: 1px;
+}
+
+.form-control:focus {
+    border-color: #9db3cc;
 }
