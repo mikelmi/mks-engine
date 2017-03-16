@@ -119,4 +119,12 @@ class User extends Authenticatable implements AdminableUserInterface
     {
         return hash_hmac('sha256', str_random(40), config('app.key'));
     }
+
+    /**
+     * @return bool
+     */
+    public function isCurrent()
+    {
+        return $this->getIsCurrentAttribute();
+    }
 }

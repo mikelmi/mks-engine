@@ -14,15 +14,11 @@ $router->group(['prefix'=>'dashboard', 'middleware' => ['permission:admin.dashbo
 });
 
 //Users
-$router->group(['prefix'=>'user', 'middleware' => ['permission:admin.user*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('/', ['as' => 'users', 'uses' => 'UserController@index']);
-    $router->get('data.json', ['as' => 'users.data', 'uses' => 'UserController@data']);
-    $router->post('delete/{id?}', ['as' => 'user.delete', 'uses' => 'UserController@delete']);
-    $router->get('edit/{id?}', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
-    $router->post('save/{id?}', ['as' => 'user.save', 'uses' => 'UserController@save']);
-    $router->get('roles/{id?}', ['as' => 'user.roles', 'uses' => 'UserController@roles']);
-    $router->post('toggle/{id?}', ['as' => 'user.toggle', 'uses' => 'UserController@toggle']);
-    $router->post('toggle-batch/{status}', ['as'=>'user.toggleBatch', 'uses'=>'UserController@toggleBatch']);
+\Mikelmi\MksAdmin\Services\AdminRoute::group('UserController', 'user', null, [
+    'middleware' => ['permission:admin.user*'],
+    'toggle' => true,
+], function($router) {
+    $router->get('/roles/{userId?}', 'UserController@roles')->name('roles');
 });
 
 //Roles

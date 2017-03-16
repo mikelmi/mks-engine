@@ -6,17 +6,26 @@ use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
+use Mikelmi\MksAdmin\Traits\DataGridRequests;
+use Mikelmi\MksAdmin\Traits\DeleteRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class UserController extends AdminController
 {
-    public function index()
+    use DataGridRequests,
+        DeleteRequests;
+
+    public $modelClass = User::class;
+    public $toggleField = 'active';
+
+    protected function dataGridUrl(): string
     {
-        return view('admin.user.index');
+        return route('admin::user.index');
     }
 
-    public function data(SmartTable $smartTable)
+    protected function dataGridJson(SmartTable $smartTable)
     {
         $conn = \DB::getName();
 
@@ -44,53 +53,101 @@ class UserController extends AdminController
             ->response();
     }
 
-    public function delete(Request $request, $id = null)
+    protected function dataGridOptions(): array
     {
-        if ($id === null) {
-            $id = $request->get('id', []);
-        }
-
-        $res = User::notCurrent()->whereIn('id',(array)$id)->delete();
-
-        if (!$res) {
-            app()->abort(422);
-        }
-
-        return response()->json($res);
+        return [
+            'title' => __('general.Users'),
+            'createLink' => '#/user/edit',
+            'toggleButton' => [route('admin::user.toggle.batch', 1), route('admin::user.toggle.batch', 0)],
+            'deleteButton' => route('admin::user.delete'),
+            'columns' => [
+                ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => '#/user/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'email', 'title' => 'E-mail', 'sortable' => true, 'searchable' => true],
+                ['key' => 'active', 'title' => __('general.Status'), 'type' => 'status', 'url' => route('admin::user.toggle'),
+                    'sortable' => true, 'searchable' => true,
+                    'buttonAttributes' => ['ng-disabled' => 'row.is_current']
+                ],
+                ['key' => 'rolesList', 'title' => __('general.Roles'), 'searchable' => true],
+                ['key' => 'created_at', 'title' => __('general.Created at'), 'type' => 'date', 'sortable' => true, 'searchable' => true],
+                ['type' => 'actions', 'actions' => [
+                    ['type' => 'edit', 'url' => '#/user/edit/{{row.id}}'],
+                    ['type' => 'delete', 'url' => route('admin::user.delete'),
+                        'attributes' => ['ng-if' => '!row.is_current']
+                    ]
+                ]],
+            ],
+            'rowAttributes' => [
+                'ng-class' => "{'table-warning': !row.active}"
+            ]
+        ];
     }
 
-    public function edit($id = null)
+    protected function deletableQuery()
     {
-        $model = $id ? User::findOrFail($id) : new User();
-
-        return view('admin.user.edit', compact('model'));
+        return User::notCurrent();
     }
 
-    public function save(Request $request, $id = null)
+    public function edit(User $model)
     {
+        $form = new AdminModelForm($model);
+
+        $form->setAction(route('admin::user.save', $model->id));
+        $form->addBreadCrumb(__('general.Users'), '#/user');
+        $form->setBackUrl('#/user');
+        $form->setNewUrl('#/user/edit');
+
+        if ($model->id) {
+            $form->addModelField('id', 'ID');
+            if (!$model->isCurrent()) {
+                $form->setDeleteUrl(route('admin::user.delete', $model->id));
+            }
+        }
+
+        $fields = [
+            ['name' => 'name', 'required' => true, 'label' => __('general.Name')],
+            ['name' => 'email', 'type' => 'email', 'required' => true, 'label' => 'E-mail'],
+            ['name' => 'active', 'type' => 'toggle', 'disabled' => $model->isCurrent(), 'label' => __('general.Active')],
+            ['name' => 'roles', 'type' => 'select2', 'url' => route('admin::user.roles', $model->id),
+                'label' => __('general.Roles'),
+                'disabled' => $model->isCurrent()
+            ],
+            ['name' => 'password', 'label' => __('general.Password'), 'type' => 'changePassword'],
+            ['name' => 'created_at', 'type' => 'staticText', 'label' => __('general.Created at')],
+            ['name' => 'updated_at', 'type' => 'staticText', 'label' => __('general.Updated at')],
+        ];
+
+        $form->setFields($fields);
+
+        return $form->response();
+    }
+
+    public function save(Request $request, User $model)
+    {
+        $id = $model->id;
+
         $this->validate($request, [
             'email' => 'required|email|unique:users,email' . ($id ? ','.$id : ''),
             'name' => 'required',
             'password' => 'confirmed' . (!$id ? '|required' : '')
         ]);
 
-        $model = $id ? User::findOrFail($id) : new User();
-
         \DB::beginTransaction();
 
         $model->email = $request->input('email');
         $model->name = $request->input('name');
+
         if ($password = $request->input('password')) {
             $model->password = bcrypt($password);
         }
 
-        if (!$model->is_current) {
+        if (!$model->isCurrent()) {
             $model->active = $request->input('active', false);
         }
 
         $model->save();
 
-        if (!$model->is_current) {
+        if (!$model->isCurrent()) {
             $model->roles()->sync((array)$request->input('roles'));
         }
 

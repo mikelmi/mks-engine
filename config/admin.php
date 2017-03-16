@@ -31,6 +31,13 @@ return [
         'artisan'
     ],
 
+    'form' => [
+        'layout' => 'row',
+        'fields' => [
+            'changePassword' => \App\Form\Field\ChangePassword::class
+        ]
+    ],
+
     'home_button' => '<a class="lc-hide inline title" href="#/home"><i class="fa fa-wrench"></i> Admin</a>',
 
     'menu_manager' => \App\Services\AdminMenu::class,

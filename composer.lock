@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f954a3c210ae36d9ca6447774d1701b4",
+    "content-hash": "9624b47b7ad1238f4dcbf936f9061535",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -1041,16 +1041,16 @@
         },
         {
             "name": "mikelmi/mks-admin",
-            "version": "v3.0",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikelmi/mks-admin.git",
-                "reference": "3212e25f6ebc738351db3265f9567ce92f271a89"
+                "reference": "d5d4ba1a11b0c61606051def462a0b755a0f66c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/3212e25f6ebc738351db3265f9567ce92f271a89",
-                "reference": "3212e25f6ebc738351db3265f9567ce92f271a89",
+                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/d5d4ba1a11b0c61606051def462a0b755a0f66c4",
+                "reference": "d5d4ba1a11b0c61606051def462a0b755a0f66c4",
                 "shasum": ""
             },
             "require": {
@@ -1080,20 +1080,20 @@
                 "angular",
                 "laravel"
             ],
-            "time": "2017-03-15T19:53:31+00:00"
+            "time": "2017-03-16T13:36:56+00:00"
         },
         {
             "name": "mikelmi/mks-smart-table",
-            "version": "v2.1",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikelmi/mks-smart-table.git",
-                "reference": "1d91cf6320dba17ecc3dc2c641a3c85f4b56d88a"
+                "reference": "a784e4a3a7976e24253b7672274f8cc03e4a80a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikelmi/mks-smart-table/zipball/1d91cf6320dba17ecc3dc2c641a3c85f4b56d88a",
-                "reference": "1d91cf6320dba17ecc3dc2c641a3c85f4b56d88a",
+                "url": "https://api.github.com/repos/mikelmi/mks-smart-table/zipball/a784e4a3a7976e24253b7672274f8cc03e4a80a8",
+                "reference": "a784e4a3a7976e24253b7672274f8cc03e4a80a8",
                 "shasum": ""
             },
             "require": {
@@ -1124,7 +1124,7 @@
                 "mks",
                 "smart-table"
             ],
-            "time": "2017-02-21T15:34:51+00:00"
+            "time": "2017-03-04T14:56:03+00:00"
         },
         {
             "name": "mikelmi/mks-theme",

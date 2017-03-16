@@ -53,16 +53,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        //admin routes
-        Route::group([
-            'middleware' => 'web',
-            'prefix' => config('admin.url', 'admin'),
-            'namespace' => $this->namespace . '\Admin',
-            'as' => 'admin::'
-        ], function ($router) {
-            require base_path('routes/admin.php');
-        });
-
         //frontend routes
         Route::group([
             'middleware' => ['web', 'frontend'],
