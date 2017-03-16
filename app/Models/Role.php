@@ -41,4 +41,12 @@ class Role extends EntrustRole
     {
         return $query->orderBy('name');
     }
+
+    /**
+     * @return bool
+     */
+    public function isSystem(): bool
+    {
+        return $this->getIsSystemAttribute();
+    }
 }

@@ -22,14 +22,11 @@ $router->group(['prefix'=>'dashboard', 'middleware' => ['permission:admin.dashbo
 });
 
 //Roles
-$router->group(['prefix'=>'role', 'middleware' => ['permission:admin.role*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('/', ['as' => 'roles', 'uses' => 'RoleController@index']);
-    $router->get('data.json', ['as' => 'roles.data', 'uses' => 'RoleController@data']);
-    $router->post('delete/{id?}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
-    $router->get('edit/{id?}', ['as' => 'role.edit', 'uses' => 'RoleController@edit']);
-    $router->post('save/{id?}', ['as' => 'role.save', 'uses' => 'RoleController@save']);
-    $router->get('permissions/{id?}', ['as' => 'role.permissions', 'uses' => 'RoleController@permissions']);
-    $router->get('for-model/{model?}/{id?}', ['as' => 'roles.forModel', 'uses' => 'RoleController@listForModel']);
+\Mikelmi\MksAdmin\Services\AdminRoute::group('RoleController', 'role', null, [
+    'middleware' => ['permission:admin.role*'],
+], function($router) {
+    $router->get('permissions/{id?}', 'RoleController@permissions')->name('permissions');
+    $router->get('for-model/{model?}/{id?}', 'RoleController@listForModel')->name('forModel');
 });
 
 //Permissions

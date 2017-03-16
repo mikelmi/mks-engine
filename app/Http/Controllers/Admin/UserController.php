@@ -108,8 +108,9 @@ class UserController extends AdminController
             ['name' => 'name', 'required' => true, 'label' => __('general.Name')],
             ['name' => 'email', 'type' => 'email', 'required' => true, 'label' => 'E-mail'],
             ['name' => 'active', 'type' => 'toggle', 'disabled' => $model->isCurrent(), 'label' => __('general.Active')],
-            ['name' => 'roles', 'type' => 'select2', 'url' => route('admin::user.roles', $model->id),
+            ['name' => 'roles[]', 'type' => 'select2', 'url' => route('admin::user.roles', $model->id),
                 'label' => __('general.Roles'),
+                'multiple' => true,
                 'disabled' => $model->isCurrent()
             ],
             ['name' => 'password', 'label' => __('general.Password'), 'type' => 'changePassword'],

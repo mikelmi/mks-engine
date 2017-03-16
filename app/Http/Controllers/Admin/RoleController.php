@@ -7,17 +7,46 @@ use App\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
+use Mikelmi\MksAdmin\Traits\DataGridRequests;
+use Mikelmi\MksAdmin\Traits\DeleteRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class RoleController extends AdminController
 {
-    public function index()
+    use DataGridRequests,
+        DeleteRequests;
+
+    public $modelClass = Role::class;
+
+    protected function dataGridUrl(): string
     {
-        return view('admin.role.index');
+        return route('admin::role.index');
     }
 
-    public function data(SmartTable $smartTable)
+    protected function dataGridOptions(): array
+    {
+        return [
+            'title' => __('general.Roles'),
+            'createLink' => '#/role/edit',
+            'deleteButton' => route('admin::role.delete'),
+            'columns' => [
+                ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => '#/role/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'display_name', 'title' => __('general.Display Title'), 'sortable' => true, 'searchable' => true],
+                ['key' => 'permissionsList', 'title' => __('general.Permissions'), 'searchable' => true],
+                ['type' => 'actions', 'actions' => [
+                    ['type' => 'edit', 'url' => '#/role/edit/{{row.id}}'],
+                    ['type' => 'delete', 'url' => route('admin::role.delete'),
+                        'attributes' => ['ng-if' => '!row.is_system']
+                    ]
+                ]],
+            ]
+        ];
+    }
+
+    public function dataGridJson(SmartTable $smartTable)
     {
         $conn = \DB::getDefaultConnection();
 
@@ -43,35 +72,50 @@ class RoleController extends AdminController
             ->response();
     }
 
-    public function delete(Request $request, $id = null)
+    protected function deletableQuery()
     {
-        if ($id === null) {
-            $id = $request->get('id', []);
-        }
-
-        $res = Role::notSystem()->whereIn('id',(array)$id)->delete();
-
-        if (!$res) {
-            app()->abort(422);
-        }
-
-        return response()->json($res);
+        return Role::notSystem();
     }
 
-    public function edit($id = null)
+    public function edit(Role $model)
     {
-        $model = $id ? Role::findOrFail($id) : new Role();
+        $form = new AdminModelForm($model);
 
-        return view('admin.role.edit', compact('model'));
+        $form->setAction(route('admin::role.save', $model->id));
+        $form->addBreadCrumb(__('general.Roles'), '#/role');
+        $form->setBackUrl('#/role');
+        $form->setNewUrl('#/role/edit');
+
+        if ($model->id) {
+            $form->addModelField('id', 'ID');
+            if (!$model->isSystem()) {
+                $form->setDeleteUrl(route('admin::role.delete', $model->id));
+            }
+        }
+
+        $fields = [
+            ['name' => 'name', 'required' => true, 'label' => __('general.Title')],
+            ['name' => 'display_name', 'label' => __('general.Display Title')],
+            ['name' => 'description', 'type' => 'textarea', 'label' => __('general.Description')],
+            ['name' => 'permissions[]', 'type' => 'select2', 'url' => route('admin::role.permissions', $model->id),
+                'label' => __('general.Permissions'),
+                'multiple' => true,
+                'disabled' => $model->isSystem()
+            ],
+        ];
+
+        $form->setFields($fields);
+
+        return $form->response();
     }
 
-    public function save(Request $request, $id = null)
+    public function save(Request $request, Role $model)
     {
+        $id = $model->id;
+
         $this->validate($request, [
             'name' => 'required|unique:roles,name' . ($id ? ','.$id : ''),
         ]);
-
-        $model = $id ? Role::findOrFail($id) : new Role();
 
         \DB::beginTransaction();
 
@@ -81,7 +125,7 @@ class RoleController extends AdminController
 
         $model->save();
 
-        if (!$model->is_system) {
+        if (!$model->isSystem()) {
             $model->perms()->sync((array)$request->input('permissions'));
         }
 

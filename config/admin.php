@@ -47,16 +47,16 @@ return [
             'title' => 'general.System', 'icon'=>'cogs',
             'children' => [
                 ['title' => 'general.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
-                [
-                    'title' => 'general.Users', 'href' => '#/user', 'hash'=>'user', 'icon'=>'users',
-                    'children' => [
-                        ['title' => 'general.Users', 'href' => '#/user', 'hash' => 'user'],
-                        ['title' => 'general.Roles', 'href' => '#/role', 'hash' => 'role'],
-                        ['title' => 'general.Permissions', 'href' => '#/permission', 'hash' => 'permission'],
-                    ]
-                ],
                 ['title' => 'general.Languages', 'href' => '#/language', 'hash' => 'language', 'icon'=>'language', 'nickname'=>'language'],
                 ['title' => 'filemanager.page_title', 'href' => '#/file-manager', 'icon'=>'folder', 'hash' => 'file-manager'],
+            ]
+        ],
+        [
+            'title' => 'general.Users', 'hash'=>'user', 'icon'=>'user',
+            'children' => [
+                ['title' => 'general.Users', 'href' => '#/user', 'hash' => 'user'],
+                ['title' => 'general.Roles', 'href' => '#/role', 'hash' => 'role'],
+                ['title' => 'general.Permissions', 'href' => '#/permission', 'hash' => 'permission'],
             ]
         ],
         [
