@@ -4,17 +4,43 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
+use Mikelmi\MksAdmin\Traits\DataGridRequests;
+use Mikelmi\MksAdmin\Traits\DeleteRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class PermissionController extends AdminController
 {
-    public function index()
+    use DataGridRequests,
+        DeleteRequests;
+
+    public $modelClass = Permission::class;
+
+    protected function dataGridUrl(): string
     {
-        return view('admin.permission.index');
+        return route('admin::permission.index');
     }
 
-    public function data(SmartTable $smartTable)
+    protected function dataGridOptions(): array
+    {
+        return [
+            'title' => __('general.Permission'),
+            'createLink' => '#/permission/edit',
+            'deleteButton' => route('admin::permission.delete'),
+            'columns' => [
+                ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => '#/permission/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'display_name', 'title' => __('general.Display Title'), 'sortable' => true, 'searchable' => true],
+                ['type' => 'actions', 'actions' => [
+                    ['type' => 'edit', 'url' => '#/permission/edit/{{row.id}}'],
+                    ['type' => 'delete', 'url' => route('admin::permission.delete')]
+                ]],
+            ]
+        ];
+    }
+
+    public function dataGridJson(SmartTable $smartTable)
     {
         $items = Permission::select([
             'id',
@@ -28,35 +54,38 @@ class PermissionController extends AdminController
             ->response();
     }
 
-    public function delete(Request $request, $id = null)
+    public function edit(Permission $model)
     {
-        if ($id === null) {
-            $id = $request->get('id', []);
+        $form = new AdminModelForm($model);
+
+        $form->setAction(route('admin::permission.save', $model->id));
+        $form->addBreadCrumb(__('general.Permissions'), '#/permission');
+        $form->setBackUrl('#/permission');
+        $form->setNewUrl('#/permission/edit');
+
+        if ($model->id) {
+            $form->addModelField('id', 'ID');
+            $form->setDeleteUrl(route('admin::permission.delete', $model->id));
         }
 
-        $res = Permission::whereIn('id',(array)$id)->delete();
+        $fields = [
+            ['name' => 'name', 'required' => true, 'label' => __('general.Title')],
+            ['name' => 'display_name', 'label' => __('general.Display Title')],
+            ['name' => 'description', 'type' => 'textarea', 'label' => __('general.Description')],
+        ];
 
-        if (!$res) {
-            app()->abort(422);
-        }
+        $form->setFields($fields);
 
-        return response()->json($res);
+        return $form->response();
     }
 
-    public function edit($id = null)
+    public function save(Request $request, Permission $model)
     {
-        $model = $id ? Permission::findOrFail($id) : new Permission();
+        $id = $model->id;
 
-        return view('admin.permission.edit', compact('model'));
-    }
-
-    public function save(Request $request, $id = null)
-    {
         $this->validate($request, [
             'name' => 'required|unique:permissions,name' . ($id ? ','.$id : ''),
         ]);
-
-        $model = $id ? Permission::findOrFail($id) : new Permission();
 
         $model->name = $request->input('name');
         $model->display_name = $request->input('display_name');

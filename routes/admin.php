@@ -30,13 +30,9 @@ $router->group(['prefix'=>'dashboard', 'middleware' => ['permission:admin.dashbo
 });
 
 //Permissions
-$router->group(['prefix'=>'permission', 'middleware' => ['permission:admin.permission*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('/', ['as' => 'permissions', 'uses' => 'PermissionController@index']);
-    $router->get('data.json', ['as' => 'permissions.data', 'uses' => 'PermissionController@data']);
-    $router->post('delete/{id?}', ['as' => 'permission.delete', 'uses' => 'PermissionController@delete']);
-    $router->get('edit/{id?}', ['as' => 'permission.edit', 'uses' => 'PermissionController@edit']);
-    $router->post('save/{id?}', ['as' => 'permission.save', 'uses' => 'PermissionController@save']);
-});
+\Mikelmi\MksAdmin\Services\AdminRoute::group('PermissionController', 'permission', null, [
+    'middleware' => ['permission:admin.permission*'],
+]);
 
 //Settings
 $router->get('settings/{scope?}', ['as' => 'settings', 'uses' => 'SettingsController@index'])->where('scope', '[a-z]+');
