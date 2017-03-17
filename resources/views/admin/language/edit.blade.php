@@ -37,7 +37,7 @@
                         <label class="col-sm-3 col-form-label text-sm-right"> @lang('general.Title') </label>
                         <div class="col-sm-9">
                             <input type="text" name="title" value="{{ $model->title }}" class="form-control" />
-                            <small class="form-control-feedback" ng-show="page.errors.title">{[{page.errors.title[0]}]}</small>
+                            <small class="form-control-feedback" ng-show="page.errors.title">@{{page.errors.title[0]}}</small>
                         </div>
                     </div>
                     <div class="form-group row">

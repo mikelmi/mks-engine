@@ -1,10 +1,5 @@
 /* --- Tree --- */
 
-.page-header+.page-content {
-    margin-top: 0;
-    padding-top: 72px;
-}
-
 .angular-ui-tree-handle {
     border: 1px solid #eceeef;
     padding: 10px 15px;

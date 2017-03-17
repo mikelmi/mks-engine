@@ -39,15 +39,10 @@ $router->get('settings/{scope?}', ['as' => 'settings', 'uses' => 'SettingsContro
 $router->post('settings/{scope?}', ['as' => 'settings.save', 'uses' => 'SettingsController@save'])->where('scope', '[a-z]+');
 
 //Page
-$router->group(['prefix'=>'page', 'middleware' => ['permission:admin.page*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('/{scope?}', ['as' => 'pages', 'uses' => 'PageController@index'])->where('scope', 'trash');
-    $router->get('data/{scope?}', ['as' => 'pages.data', 'uses' => 'PageController@data']);
-    $router->post('delete/{id?}', ['as' => 'page.delete', 'uses' => 'PageController@delete']);
-    $router->get('edit/{id?}', ['as' => 'page.edit', 'uses' => 'PageController@edit']);
-    $router->post('save/{id?}', ['as' => 'page.save', 'uses' => 'PageController@save']);
-    $router->post('trash/{id?}', ['as' => 'page.toTrash', 'uses' => 'PageController@toTrash']);
-    $router->post('restore/{id?}', ['as' => 'page.restore', 'uses' => 'PageController@restore']);
-});
+\Mikelmi\MksAdmin\Services\AdminRoute::group('PageController', 'page', null, [
+    'middleware' => ['permission:admin.page*'],
+    'trash' => true
+]);
 
 //Routes
 $router->group(['prefix'=>'route'], function(\Illuminate\Routing\Router $router) {
@@ -118,18 +113,15 @@ $router->get('file-manager', function(\Illuminate\Http\Request $request) {
 })->middleware('admin.locale');
 
 //Languages
-$router->group(['prefix'=>'language', 'middleware' => ['permission:admin.language*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('/', 'LanguageController@index')->name('languages');
-    $router->get('data.json', 'LanguageController@data')->name('languages.data');
-    $router->get('all.json', 'LanguageController@all')->name('languages.all');
-    $router->post('toggle/{iso?}', 'LanguageController@toggle')->name('language.toggle');
-    $router->post('toggle-batch/{status}', 'LanguageController@toggleBatch')->name('language.toggleBatch');
-    $router->post('delete/{iso?}', 'LanguageController@delete')->name('language.delete');
-    $router->post('add', 'LanguageController@add')->name('language.add');
-    $router->get('edit/{iso}', 'LanguageController@edit')->name('language.edit');
-    $router->post('save/{iso}', 'LanguageController@save')->name('language.save');
-    $router->post('set-default/{iso?}', 'LanguageController@setDefault')->name('language.setDefault');
-    $router->get('select/{iso?}', 'LanguageController@getSelectList')->name('language.select');
+\Mikelmi\MksAdmin\Services\AdminRoute::group('LanguageController', 'language', null, [
+    'middleware' => ['permission:admin.language*'],
+    'toggle' => true
+], function($router) {
+    $router->post('/add', 'LanguageController@add')->name('add');
+    $router->get('data.json', 'LanguageController@data')->name('data');
+    $router->get('all.json', 'LanguageController@all')->name('all');
+    $router->post('set-default/{iso?}', 'LanguageController@setDefault')->name('setDefault');
+    $router->get('select/{iso?}', 'LanguageController@getSelectList')->name('select');
 });
 
 //Category

@@ -1041,16 +1041,16 @@
         },
         {
             "name": "mikelmi/mks-admin",
-            "version": "v3.0.2",
+            "version": "v3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikelmi/mks-admin.git",
-                "reference": "d5d4ba1a11b0c61606051def462a0b755a0f66c4"
+                "reference": "8c5bba1f869b4f21f45066d345505c1cd62342e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/d5d4ba1a11b0c61606051def462a0b755a0f66c4",
-                "reference": "d5d4ba1a11b0c61606051def462a0b755a0f66c4",
+                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/8c5bba1f869b4f21f45066d345505c1cd62342e2",
+                "reference": "8c5bba1f869b4f21f45066d345505c1cd62342e2",
                 "shasum": ""
             },
             "require": {
@@ -1080,7 +1080,7 @@
                 "angular",
                 "laravel"
             ],
-            "time": "2017-03-16T13:36:56+00:00"
+            "time": "2017-03-17T11:34:27+00:00"
         },
         {
             "name": "mikelmi/mks-smart-table",

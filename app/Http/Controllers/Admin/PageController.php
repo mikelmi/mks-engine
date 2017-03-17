@@ -9,11 +9,24 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
+use Mikelmi\MksAdmin\Traits\CountItemsResponse;
+use Mikelmi\MksAdmin\Traits\DataGridRequests;
+use Mikelmi\MksAdmin\Traits\DeleteRequests;
+use Mikelmi\MksAdmin\Traits\TrashRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class PageController extends AdminController
 {
-    public function index($scope = null)
+    use DataGridRequests,
+        DeleteRequests,
+        TrashRequests,
+        CountItemsResponse;
+
+    public $modelClass = Page::class;
+
+    public $countScopes = ['all', 'trash'];
+
+    /*public function index($scope = null)
     {
         $viewPath = $scope == 'trash' ? 'admin.page.trash' : 'admin.page.index';
 
@@ -29,16 +42,16 @@ class PageController extends AdminController
         );
 
         return $this->setCountsHeader(response($view));
+    }*/
+
+    protected function dataGridUrl($scope = null): string
+    {
+        return route('admin::page.index', $scope);
     }
 
-    public function trash()
+    protected function dataGridJson(SmartTable $smartTable, $scope = null)
     {
-        return $this->index('trash');
-    }
-
-    public function data(SmartTable $smartTable, $scope = null)
-    {
-        $items = $scope == 'trash' ? Page::onlyTrashed() : new Page();
+        $query = $scope == 'trash' ? Page::onlyTrashed() : Page::query();
 
         $conn = \DB::getName();
 
@@ -50,7 +63,7 @@ class PageController extends AdminController
 
         $path = \DB::raw(str_replace('{table}', \DB::getTablePrefix().'pages', $path));
 
-        $items = $items->select([
+        $items = $query->select([
             'id',
             'title',
             'lang',
@@ -66,13 +79,43 @@ class PageController extends AdminController
             ->response();
     }
 
-    public function getCount($scope = null)
+    protected function dataGridOptions($scope = null): array
     {
+        $actions = [
+            ['type' => 'edit', 'url' => '#/page/edit/{{row.id}}']
+        ];
+
+        $tools = [];
+
         if ($scope == 'trash') {
-            return Page::onlyTrashed()->count();
+            $actions[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
+            $tools[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
+        } else {
+            $actions[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
+            $tools[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
         }
 
-        return Page::all()->count();
+        $actions[] = ['type' => 'delete', 'url' => route('admin::page.delete')];
+
+        return [
+            'title' => __('general.Pages'),
+            'createLink' => '#/page/edit',
+            'tools' => $tools,
+            'deleteButton' => route('admin::page.delete'),
+            'columns' => [
+                ['key' => 'id', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => '#/page/edit/{{row.id}}'],
+                ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
+                ['key' => 'path', 'type' => 'link', 'title' => __('general.Path'), 'target' => '_blank'],
+                ['key' => 'created_at', 'type' => 'date'],
+                ['type' => 'actions', 'actions' => $actions],
+            ],
+            'baseUrl' => '#/page',
+            'scopes' => [
+                ['title' => __('general.Pages'), 'badge'=>'{{page.model.count_all}}'],
+                ['name' => 'trash', 'title' => __('general.Trash'), 'icon' => 'trash', 'badge'=>'{{page.model.count_trash}}']
+            ]
+        ];
     }
 
     public function edit($id = null)
@@ -141,47 +184,5 @@ class PageController extends AdminController
             '/page/edit',
             '/page'
         ]);
-    }
-
-    public function toTrash(Request $request, $id = null)
-    {
-        $ids = $id ? $id : $request->input('id');
-        $res = Page::destroy($ids);
-
-        $response = response()->json($res);
-
-        return $this->setCountsHeader($response);
-    }
-
-    public function restore(Request $request, $id = null)
-    {
-        $ids = $id ? $id : $request->input('id');
-        $res = Page::onlyTrashed()->whereIn('id', (array)$ids)->restore();
-
-        $response = response()->json($res);
-
-        return $this->setCountsHeader($response);
-    }
-
-    public function delete(Request $request, $id = null)
-    {
-        $ids = $id ? $id : $request->input('id');
-        $res = Page::withTrashed()->whereIn('id', (array)$ids)->forceDelete();
-
-        $response = response()->json($res);
-
-        return $this->setCountsHeader($response);
-    }
-
-    /**
-     * @param Response|JsonResponse $response
-     * @return Response|JsonResponse
-     */
-    private function setCountsHeader($response)
-    {
-        return $response->header('X-Model-Data', json_encode([
-            'pages_count' => $this->getCount(),
-            'trash_count' => $this->getCount('trash')
-        ]));
     }
 }

@@ -8,24 +8,43 @@ use App\Repositories\LanguageRepository;
 use App\Services\Settings;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
+use Mikelmi\MksAdmin\Traits\DataGridRequests;
+use Mikelmi\MksAdmin\Traits\DeleteRequests;
+use Mikelmi\MksAdmin\Traits\ToggleRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class LanguageController extends AdminController
 {
-    public function index()
+    use DataGridRequests,
+        ToggleRequests,
+        DeleteRequests;
+
+    public $toggleField = 'active';
+
+    /**
+     * @var LanguageRepository
+     */
+    protected $langRepo;
+
+    public function __construct()
     {
-        return view('admin.language.index');
+        parent::__construct();
+
+        $this->langRepo = app(LanguageRepository::class);
     }
 
-    public function data(SmartTable $smartTable, LanguageRepository $languageRepository)
+    protected function dataGridUrl(): string
     {
-        $iconUrl = route('lang.icon');
+        return route('admin::language.index');
+    }
 
+    protected function dataGridJson(SmartTable $smartTable)
+    {
         $locale = settings('locale');
 
-        $items = $languageRepository->available()->map(function($item) use ($iconUrl, $locale) {
+        $items = $this->langRepo->available()->map(function($item) use ($locale) {
             $item = array_only($item->toArray(), ['iso', 'name', 'title', 'enabled']);
-            $item['icon'] = $iconUrl . '/' . $item['iso'];
+            $item['id'] = $item['iso'];
             $item['default'] = $item['iso'] === $locale;
 
             return $item;
@@ -35,6 +54,53 @@ class LanguageController extends AdminController
             ->setSearchColumns(['name'])
             ->apply()
             ->response();
+    }
+
+    protected function dataGridOptions(): array
+    {
+        return [
+            'title' => __('general.Languages'),
+            'links' => [
+                [
+                    'title' => __('admin::messages.Add'),
+                    'type' => 'link',
+                    'btnType' => 'primary',
+                    'icon' => 'plus',
+                    'url' => '#addLangModal',
+                    'attributes' => [
+                        'data-toggle' => 'modal',
+                    ]
+                ]
+            ],
+            'toggleButton' => [route('admin::language.toggle.batch', 1), route('admin::language.toggle.batch', 0)],
+            'deleteButton' => route('admin::language.delete'),
+            'columns' => [
+                ['key' => 'iso', 'title' => 'ISO', 'sortable' => true, 'searchable' => true,
+                    'type' => 'language',
+                    'searchType' => 'search',
+                ],
+                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => '#/language/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'title', 'title' => __('general.Title'), 'sortable' => true, 'searchable' => true],
+                ['key' => 'enabled', 'title' => __('general.Status'), 'type' => 'status', 'url' => route('admin::language.toggle'),
+                    'sortable' => true, 'searchable' => true,
+                ],
+                ['type' => 'actions', 'actions' => [
+                    ['type' => 'edit', 'url' => '#/language/edit/{{row.id}}'],
+                    ['type' => 'toggleOne', 'url' => route('admin::language.setDefault'), 'key' => 'default'],
+                    ['type' => 'delete', 'url' => route('admin::language.delete')]
+                ]],
+            ],
+            'rowAttributes' => [
+                'ng-class' => "{'table-success': row.default}"
+            ]
+        ];
+    }
+
+    protected function dataGridHtml($scope = null)
+    {
+        return $this->makeDataGrid($scope)
+            ->setScope($scope)
+            ->response('admin.language.index');
     }
 
     public function all(LanguageRepository $languageRepository)
@@ -106,6 +172,8 @@ class LanguageController extends AdminController
     
     public function edit(LanguageRepository $languageRepository, $iso)
     {
+        //TODO: Refactoring to use AdminForm
+
         $model = $languageRepository->get($iso);
 
         $pages = Page::ordered()->pluck('title', 'id')->toArray();
