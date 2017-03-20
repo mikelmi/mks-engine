@@ -1,4 +1,4 @@
-@extends('admin::page')
+@extends('admin::page-clear')
 
 @section('title')
     @lang('general.Dashboard')

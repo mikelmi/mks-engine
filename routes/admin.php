@@ -5,13 +5,16 @@ $router = app('router');
 
 //Dashboard
 $router->get('home', 'DashboardController@home');
-$router->group(['prefix'=>'dashboard', 'middleware' => ['permission:admin.dashboard*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('notifications.json', ['as' => 'dashboard.notifications', 'uses' => 'DashboardController@notifications']);
-    $router->get('notification-details/{uid}', ['as' => 'dashboard.notification.details', 'uses' => 'DashboardController@notificationDetails']);
-    $router->post('notification-delete/{uid}', ['as' => 'dashboard.notification.delete', 'uses' => 'DashboardController@notificationDelete']);
-    $router->post('notifications-delete/{all?}', ['as' => 'dashboard.notifications.delete', 'uses' => 'DashboardController@notificationsDelete'])->where('all', 'all');
-    $router->get('statistics', ['as' => 'dashboard.statistics', 'uses' => 'DashboardController@statistics']);
-});
+
+$router->group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['permission:admin.dashboard*']],
+    function(\Illuminate\Routing\Router $router) {
+        $router->get('notifications.json', 'DashboardController@notifications')->name('notifications');
+        $router->get('notification-details/{uid}', 'DashboardController@notificationDetails')->name('notification.details');
+        $router->post('notification-delete/{uid}', 'DashboardController@notificationDelete')->name('notification.delete');
+        $router->post('notifications-delete/{all?}', 'DashboardController@notificationsDelete')->name('notifications.delete')->where('all', 'all');
+        $router->get('statistics', 'DashboardController@statistics')->name('statistics');
+    }
+);
 
 //Users
 \Mikelmi\MksAdmin\Services\AdminRoute::group('UserController', 'user', null, [

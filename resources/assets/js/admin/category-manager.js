@@ -1,3 +1,5 @@
+require('angular-ui-tree');
+
 (function(){
     var app = angular.module('mks-category-manager', ['ui.tree']);
 

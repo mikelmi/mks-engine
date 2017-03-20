@@ -16,7 +16,7 @@ return [
 
     'scripts' => [
         'vendor/ckeditor/ckeditor.js',
-        'admin/js/admin.js',
+        'admin/js/admin-app.js',
     ],
 
     'styles' => [

@@ -89,7 +89,9 @@
                 deleteMany(UrlBuilder.get('dashboard/notifications-delete/all'), confirmation);
             };
 
-            this.load();
+            this.$onInit = function () {
+                this.load();
+            };
         }]
     });
 
@@ -100,7 +102,7 @@
         bindings: {
             url: '@'
         },
-        controller: ['$http', 'UrlBuilder', function($http, UrlBuilder) {
+        controller: ['$http', function($http) {
             var ctrl = this;
 
             this.items = [];
@@ -113,7 +115,9 @@
                 });
             };
 
-            this.load();
+            this.$onInit = function () {
+                this.load();
+            };
         }]
     });
 
