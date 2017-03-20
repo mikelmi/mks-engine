@@ -105,10 +105,10 @@ class PageController extends AdminController
             'deleteButton' => route('admin::page.delete'),
             'columns' => [
                 ['key' => 'id', 'sortable' => true, 'searchable' => true],
-                ['key' => 'name', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => '#/page/edit/{{row.id}}'],
+                ['key' => 'title', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => '#/page/edit/{{row.id}}'],
                 ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
-                ['key' => 'path', 'type' => $scope == 'trash' ? '':'link', 'title' => 'URL', 'target' => '_blank', 'url' => url('/') . '{{row.path}}'],
-                ['key' => 'created_at', 'type' => 'date'],
+                ['key' => 'path', 'type' => $scope == 'trash' ? '':'link', 'title' => 'URL', 'target' => '_blank', 'url' => '{{row.url}}'],
+                ['key' => 'created_at', 'type' => 'date', 'title' => __('general.Created at')],
                 ['type' => 'actions', 'actions' => $actions],
             ],
             'baseUrl' => '#/page',
@@ -135,11 +135,31 @@ class PageController extends AdminController
         $form->addGroup('general', [
             'title' => __('general.Page'),
             'fields' => [
-                ['name' => 'name', 'required' => true, 'label' => __('general.Name')],
+                ['name' => 'title', 'required' => true, 'label' => __('general.Name')],
                 ['name' => 'lang', 'type' => 'language'],
                 ['name' => 'path', 'label' => 'URL', 'type' => 'checkedInput'],
                 ['name' => 'page_text', 'label' => __('general.Text'), 'type' => 'editor', 'allowContent'=>true],
             ]
+        ]);
+
+        $form->addGroup('seo', [
+            'title' => 'SEO',
+            'fields' => [
+                ['name' => 'seo', 'type' => 'seo', 'value' => [
+                    'title' => $model->meta_title,
+                    'description' => $model->meta_description,
+                    'keywords' => $model->meta_keywords,
+                ]],
+            ],
+        ]);
+
+        $form->addGroup('params', [
+            'title' => __('general.Params'),
+            'fields' => [
+                ['name' => 'params[template]', 'type' => 'toggle', 'label' => __('general.Empty Template'), 'value' => $model->param('template')],
+                ['name' => 'params[hide_title]', 'type' => 'toggle', 'label' => __('general.Hide Title'), 'value' => $model->param('hide_title')],
+                ['name' => 'params[roles]', 'type' => 'rolesShow', 'value' => $model->param('roles'), 'model' => $model],
+            ],
         ]);
 
         return $form->response();
@@ -170,9 +190,9 @@ class PageController extends AdminController
         }
 
         $model->params = $request->input('params', []);
-        $model->meta_title = $request->input('meta_title');
-        $model->meta_keywords = $request->input('meta_keywords');
-        $model->meta_description = $request->input('meta_description');
+        $model->meta_title = $request->input('seo.title');
+        $model->meta_keywords = $request->input('seo.keywords');
+        $model->meta_description = $request->input('seo.description');
 
         \DB::beginTransaction();
 

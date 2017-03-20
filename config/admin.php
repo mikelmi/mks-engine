@@ -38,6 +38,8 @@ return [
             'language' => \App\Form\Field\LanguageSelect::class,
             'checkedInput' => \App\Form\Field\CheckedInput::class,
             'editor' => \App\Form\Field\Editor::class,
+            'seo' => \App\Form\Field\SeoFieldset::class,
+            'rolesShow' => \App\Form\Field\ShowForRoles::class
         ]
     ],
 

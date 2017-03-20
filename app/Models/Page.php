@@ -24,6 +24,8 @@ class Page extends Model
     use SoftDeletes;
     use Parametrized;
 
+    protected $appends = ['url'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
@@ -35,5 +37,10 @@ class Page extends Model
     public function scopeOrdered($query)
     {
         return $query->orderBy('title');
+    }
+
+    public function getUrlAttribute()
+    {
+        return url($this->path);
     }
 }
