@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Section;
 use App\Services\CategoryManager;
 use Illuminate\Http\Request;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class CategoryController extends AdminController
@@ -105,7 +106,25 @@ class CategoryController extends AdminController
 
         $model->section()->associate($section);
 
-        return view('admin.category.edit', compact('model', 'section'));
+        $form = new AdminModelForm($model);
+
+        $form->setAction(route('admin::category.save', ['scope' => $section->id, 'id' => $model->id]));
+        $form->addBreadCrumb(__('general.Categories'), '#/category');
+        $form->addBreadCrumb($section->title, '#/category/' . $section->id);
+        $form->setBackUrl('#/category/' . $section->id);
+
+        if ($id) {
+            $form->addModelField('id', 'ID');
+        }
+
+        $form->setFields([
+            ['name' => 'title', 'required' => true, 'label' => __('general.Title')],
+            ['name' => 'parent_id', 'label' => __('general.Parent Item'), 'type' => 'select2',
+                'url' => route('admin::category.tree.options', ['scope'=>$section->id, 'id'=>$model->id])
+            ],
+        ]);
+
+        return $form->response();
     }
 
     public function save(Request $request, $scope, $id = null)

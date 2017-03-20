@@ -128,8 +128,6 @@ class MenuController extends AdminController
         ]);
 
         return $form->response();
-
-        return view('admin.menu.item', compact('model', 'menu'));
     }
 
     public function saveItem(Request $request, $scope, $id = null)
