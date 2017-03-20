@@ -119,8 +119,10 @@ class PageController extends AdminController
         ];
     }
 
-    public function edit(Page $model)
+    public function edit($id = null)
     {
+        $model = $id ? Page::withTrashed()->find($id) : new Page();
+
         $form = new AdminModelForm($model);
 
         $form->setAction(route('admin::page.save', $model->id));
@@ -215,7 +217,7 @@ class PageController extends AdminController
         $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect([
-            '/page' . ($model->trashed() ? '/trash' : ''),
+            '/page/scope' . ($model->trashed() ? '/trash' : ''),
             '/page/edit',
             '/page'
         ]);
