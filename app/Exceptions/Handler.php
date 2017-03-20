@@ -79,7 +79,7 @@ class Handler extends ExceptionHandler
             /** @var LanguageRepository $langs */
             $langs = app(LanguageRepository::class);
             if ($language = $langs->get($locale)) {
-                $page_id = $language->get($status);
+                $page_id = $language->get('e'.$status);
             }
         }
 

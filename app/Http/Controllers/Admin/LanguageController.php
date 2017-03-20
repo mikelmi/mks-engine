@@ -7,6 +7,8 @@ use App\Models\Page;
 use App\Repositories\LanguageRepository;
 use App\Services\Settings;
 use Illuminate\Http\Request;
+use Mikelmi\MksAdmin\Form\AdminForm;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\DataGridRequests;
 use Mikelmi\MksAdmin\Traits\DeleteRequests;
@@ -176,9 +178,36 @@ class LanguageController extends AdminController
 
         $model = $languageRepository->get($iso);
 
-        $pages = Page::ordered()->pluck('title', 'id')->toArray();
+        $form = new AdminForm();
 
-        return view('admin.language.edit', compact('model', 'pages'));
+        $form->setAction(route('admin::language.save', $model->getIso()));
+        $form->addBreadCrumb(__('general.Languages'), '#/language');
+        $form->setBackUrl('#/language');
+
+        $form->addGroup('general', [
+            'title' => __('general.Language'),
+            'fields' => [
+                ['name' => 'title', 'value' => $model->getTitle(), 'label' => __('general.Title')],
+                ['name' => 'enabled', 'type' => 'toggle', 'value' => $model->getEnabled(), 'label' => __('general.Active')],
+                ['name' => 'site[title]', 'value' => $model->get('site.title'), 'label' => __('general.Site name')],
+                ['name' => 'site[description]', 'value' => $model->get('site.description'), 'label' => __('general.Description')],
+                ['name' => 'site[keywords]', 'value' => $model->get('site.keywords'), 'label' => __('general.Keywords')],
+            ]
+        ]);
+
+        $form->addGroup('pages', [
+            'title' => __('general.Pages'),
+            'fields' => [
+                ['name' => 'home', 'label' => __('general.Homepage'), 'type' => 'route',
+                    'value' => ['route' => $model->get('home.route'), 'params' => $model->get('home.params')]
+                ],
+                ['name' => 'e404', 'label' => '404', 'value' => $model->get('e404'), 'type' => 'pages'],
+                ['name' => 'e500', 'label' => __('general.Error page'), 'value' => $model->get('e500'), 'type' => 'pages'],
+                ['name' => 'e503', 'label' => __('general.Offline page'), 'value' => $model->get('e503'), 'type' => 'pages'],
+            ],
+        ]);
+
+        return $form->response();
     }
     
     public function save(Request $request, LanguageRepository $languageRepository, $iso)
@@ -191,7 +220,7 @@ class LanguageController extends AdminController
         
         $model->setTitle($request->get('title'));
         $model->setEnabled((bool)$request->get('enabled'));
-        $model->setParams($request->only(['site', 'home', '404', '500', '503']));
+        $model->setParams($request->only(['site', 'home', 'e404', 'e500', 'e503']));
 
         $languageRepository->save($model);
 
