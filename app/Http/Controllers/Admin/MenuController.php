@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class MenuController extends AdminController
@@ -99,6 +100,35 @@ class MenuController extends AdminController
 
         $model->menu()->associate($menu);
 
+        $form = new AdminModelForm($model);
+
+        $form->setAction(route('admin::menu.items.save', ['scope' => $menu->id, 'id' => $model->id]));
+        $form->addBreadCrumb(__('general.Menu'), '#/menuman');
+        $form->addBreadCrumb($menu->name, '#/menuman/' . $menu->id);
+        $form->setBackUrl('#/menuman/' . $menu->id);
+
+        if ($id) {
+            $form->addModelField('id', 'ID');
+        }
+
+        $form->setFields([
+            ['name' => 'title', 'required' => true, 'label' => __('general.Title')],
+            ['name' => 'link', 'label' => __('general.Link'), 'type' => 'route',
+                'value' => ['route' => $model->route, 'params' => $model->params],
+                'attributes' => [
+                    'raw-value' => $model->url,
+                    'field-raw' => 'url',
+                    'raw-enabled' => 'true',
+                    'empty-title' => 'URL'
+                ]
+            ],
+            ['name' => 'parent_id', 'label' => __('general.Parent Item'), 'type' => 'select2',
+                'url' => route('admin::menu.tree.options', ['scope'=>$menu->id, 'id'=>$model->id])
+            ],
+        ]);
+
+        return $form->response();
+
         return view('admin.menu.item', compact('model', 'menu'));
     }
 
@@ -115,8 +145,8 @@ class MenuController extends AdminController
         $model->menu()->associate($menu);
 
         $model->title = $request->input('title');
-        $model->route = $request->input('route');
-        $model->params = $request->input('params');
+        $model->route = $request->input('link.route');
+        $model->params = $request->input('link.params');
         $model->url = $request->input('url');
         $model->target = $request->input('target', '');
 
@@ -161,7 +191,7 @@ class MenuController extends AdminController
                 $result[] = [
                     'id' => $item->id,
                     'text' => $prefix . ' ' . $item->title,
-                    'disabled' => $current && $item->isDescendantOf($current),
+                    'disabled' => $current ? ($current->id == $item->id || $item->isDescendantOf($current)) : false,
                     'selected' => $current && $current->parent_id == $item->id,
                 ];
 
