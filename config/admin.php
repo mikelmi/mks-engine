@@ -34,7 +34,10 @@ return [
     'form' => [
         'layout' => 'row',
         'fields' => [
-            'changePassword' => \App\Form\Field\ChangePassword::class
+            'changePassword' => \App\Form\Field\ChangePassword::class,
+            'language' => \App\Form\Field\LanguageSelect::class,
+            'checkedInput' => \App\Form\Field\CheckedInput::class,
+            'editor' => \App\Form\Field\Editor::class,
         ]
     ],
 

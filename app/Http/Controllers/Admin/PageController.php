@@ -8,6 +8,7 @@ use App\Repositories\LanguageRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CountItemsResponse;
 use Mikelmi\MksAdmin\Traits\DataGridRequests;
@@ -106,28 +107,42 @@ class PageController extends AdminController
                 ['key' => 'id', 'sortable' => true, 'searchable' => true],
                 ['key' => 'name', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => '#/page/edit/{{row.id}}'],
                 ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
-                ['key' => 'path', 'type' => 'link', 'title' => __('general.Path'), 'target' => '_blank'],
+                ['key' => 'path', 'type' => $scope == 'trash' ? '':'link', 'title' => 'URL', 'target' => '_blank', 'url' => url('/') . '{{row.path}}'],
                 ['key' => 'created_at', 'type' => 'date'],
                 ['type' => 'actions', 'actions' => $actions],
             ],
             'baseUrl' => '#/page',
             'scopes' => [
                 ['title' => __('general.Pages'), 'badge'=>'{{page.model.count_all}}'],
-                ['name' => 'trash', 'title' => __('general.Trash'), 'icon' => 'trash', 'badge'=>'{{page.model.count_trash}}']
+                ['name' => 'trash', 'title' => __('admin::messages.Trash'), 'icon' => 'trash', 'badge'=>'{{page.model.count_trash}}']
             ]
         ];
     }
 
-    public function edit($id = null)
+    public function edit(Page $model)
     {
-        $model = $id ? Page::withTrashed()->findOrFail($id) : new Page();
+        $form = new AdminModelForm($model);
 
-        return view(
-            'admin.page.edit',
-            [
-                'model' => $model
+        $form->setAction(route('admin::page.save', $model->id));
+        $form->addBreadCrumb(__('general.Pages'), '#/page');
+        $form->setBackUrl('#/page');
+        $form->setNewUrl('#/page/edit');
+
+        if ($model->id) {
+            $form->setDeleteUrl(route('admin::page.delete', $model->id));
+        }
+
+        $form->addGroup('general', [
+            'title' => __('general.Page'),
+            'fields' => [
+                ['name' => 'name', 'required' => true, 'label' => __('general.Name')],
+                ['name' => 'lang', 'type' => 'language'],
+                ['name' => 'path', 'label' => 'URL', 'type' => 'checkedInput'],
+                ['name' => 'page_text', 'label' => __('general.Text'), 'type' => 'editor', 'allowContent'=>true],
             ]
-        );
+        ]);
+
+        return $form->response();
     }
 
     public function save(Request $request, $id = null)

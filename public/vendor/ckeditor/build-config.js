@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -13,10 +13,10 @@
  * (1) http://ckeditor.com/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/7b6a45af2bad1cd502bd757a39c9d9e5
+ * (2) http://ckeditor.com/builder/4490d6d1c6334f1c1e81d4277bb489a0
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/7b6a45af2bad1cd502bd757a39c9d9e5
+ * (3) http://ckeditor.com/builder/download/4490d6d1c6334f1c1e81d4277bb489a0
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -25,36 +25,31 @@
  */
 
 var CKBUILDER_CONFIG = {
-	skin: 'moono',
+	skin: 'moono-lisa',
 	preset: 'full',
 	ignore: [
-		'.bender',
-		'bender.js',
-		'bender-err.log',
-		'bender-out.log',
-		'dev',
 		'.DS_Store',
+		'.bender',
 		'.editorconfig',
 		'.gitattributes',
 		'.gitignore',
-		'gruntfile.js',
 		'.idea',
 		'.jscsrc',
 		'.jshintignore',
 		'.jshintrc',
-		'less',
 		'.mailmap',
+		'bender-err.log',
+		'bender-out.log',
+		'bender.js',
+		'dev',
+		'gruntfile.js',
+		'less',
 		'node_modules',
 		'package.json',
-		'README.md',
 		'tests'
 	],
 	plugins : {
-		'Audio' : 1,
 		'a11yhelp' : 1,
-		'ajax' : 1,
-		'allmedias' : 1,
-		'base64image' : 1,
 		'basicstyles' : 1,
 		'bidi' : 1,
 		'blockquote' : 1,
@@ -62,6 +57,7 @@ var CKBUILDER_CONFIG = {
 		'colorbutton' : 1,
 		'colordialog' : 1,
 		'contextmenu' : 1,
+		'copyformatting' : 1,
 		'dialogadvtab' : 1,
 		'div' : 1,
 		'elementspath' : 1,
@@ -74,26 +70,22 @@ var CKBUILDER_CONFIG = {
 		'font' : 1,
 		'format' : 1,
 		'forms' : 1,
-		'gg' : 1,
-		'googledocs' : 1,
 		'horizontalrule' : 1,
+		'html5video' : 1,
 		'htmlwriter' : 1,
 		'iframe' : 1,
 		'image' : 1,
 		'indentblock' : 1,
 		'indentlist' : 1,
 		'justify' : 1,
-		'language' : 1,
+		'lightbox' : 1,
 		'link' : 1,
 		'list' : 1,
 		'liststyle' : 1,
 		'magicline' : 1,
-		'markdown' : 1,
 		'maximize' : 1,
 		'newpage' : 1,
 		'pagebreak' : 1,
-		'pastecode' : 1,
-		'pastefromexcel' : 1,
 		'pastefromword' : 1,
 		'pastetext' : 1,
 		'preview' : 1,
@@ -107,13 +99,14 @@ var CKBUILDER_CONFIG = {
 		'smiley' : 1,
 		'sourcearea' : 1,
 		'specialchar' : 1,
+		'stylescombo' : 1,
 		'tab' : 1,
 		'table' : 1,
 		'tabletools' : 1,
 		'templates' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
-		'widget' : 1,
+		'wsc' : 1,
 		'wysiwygarea' : 1,
 		'youtube' : 1
 	},

@@ -90,3 +90,6 @@ mix.js([
 
 mix.copy(path_bower('bootstrap/dist/fonts'), public_path('filemanager/fonts'));
 
+//CKEDITOR plugins
+mix.copy(asset('ckeditor/plugins'), public_path('vendor/ckeditor/plugins'), false);
+

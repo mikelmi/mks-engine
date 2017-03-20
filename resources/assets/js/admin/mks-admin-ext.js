@@ -250,7 +250,7 @@
             link: function (scope, elem, attrs) {
                 if (typeof CKEDITOR !== 'undefined') {
                     var opt = {
-                        removePlugins: 'forms,audio,Audio,allmedias,base64image,markdown,googledocs',
+                        //removePlugins: 'audio,Audio',
                         extraPlugins: 'wpmore',
                         language: AppConfig.getLang('en'),
                         filebrowserBrowseUrl: UrlBuilder.get('file-manager'),
