@@ -172,20 +172,22 @@ class LanguageController extends AdminController
     
     public function edit(LanguageRepository $languageRepository, $iso)
     {
-        //TODO: Refactoring to use AdminForm
-
         $model = $languageRepository->get($iso);
 
         $form = new AdminForm();
 
+        $form->setMode(AdminForm::MODE_EDIT);
+
         $form->setAction(route('admin::language.save', $model->getIso()));
         $form->addBreadCrumb(__('general.Languages'), '#/language');
+        $form->addBreadCrumb($model->getIso());
         $form->setBackUrl('#/language');
 
         $form->addGroup('general', [
             'title' => __('general.Language'),
             'fields' => [
-                ['name' => 'title', 'value' => $model->getTitle(), 'label' => __('general.Title')],
+                ['name' => 'iso', 'label'=> 'ISO', 'value' => $model->getIso(), 'type' => 'staticText'],
+                ['name' => 'title', 'value' => $model->getTitle(), 'label' => __('general.Title'), 'required' => true],
                 ['name' => 'enabled', 'type' => 'toggle', 'value' => $model->getEnabled(), 'label' => __('general.Active')],
                 ['name' => 'site[title]', 'value' => $model->get('site.title'), 'label' => __('general.Site name')],
                 ['name' => 'site[description]', 'value' => $model->get('site.description'), 'label' => __('general.Description')],
