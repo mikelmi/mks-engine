@@ -9,14 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
-use Mikelmi\MksAdmin\Traits\DataGridRequests;
-use Mikelmi\MksAdmin\Traits\DeleteRequests;
+use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class RoleController extends AdminController
 {
-    use DataGridRequests,
-        DeleteRequests;
+    use CrudRequests;
 
     public $modelClass = Role::class;
 
@@ -29,15 +27,15 @@ class RoleController extends AdminController
     {
         return [
             'title' => __('general.Roles'),
-            'createLink' => '#/role/edit',
+            'createLink' => hash_url('role/create'),
             'deleteButton' => route('admin::role.delete'),
             'columns' => [
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
-                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => '#/role/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => hash_url('role/edit/{{row.id}}'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'display_name', 'title' => __('general.Display Title'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'permissionsList', 'title' => __('general.Permissions'), 'searchable' => true],
                 ['type' => 'actions', 'actions' => [
-                    ['type' => 'edit', 'url' => '#/role/edit/{{row.id}}'],
+                    ['type' => 'edit', 'url' => hash_url('role/edit/{{row.id}}')],
                     ['type' => 'delete', 'url' => route('admin::role.delete'),
                         'attributes' => ['ng-if' => '!row.is_system']
                     ]
@@ -51,9 +49,9 @@ class RoleController extends AdminController
         $conn = \DB::getDefaultConnection();
 
         if ($conn == 'sqlite') {
-            $permissionsList = \DB::raw('GROUP_CONCAT('.(\DB::getTablePrefix()).'permissions.name, \', \') as permissionsList');
+            $permissionsList = \DB::raw('GROUP_CONCAT(' . (\DB::getTablePrefix()) . 'permissions.name, \', \') as permissionsList');
         } else {
-            $permissionsList = \DB::raw('GROUP_CONCAT('.(\DB::getTablePrefix()).'permissions.name SEPARATOR \', \') as permissionsList');
+            $permissionsList = \DB::raw('GROUP_CONCAT(' . (\DB::getTablePrefix()) . 'permissions.name SEPARATOR \', \') as permissionsList');
         }
 
         $items = Role::select([
@@ -61,8 +59,8 @@ class RoleController extends AdminController
             'roles.name',
             'roles.display_name',
             $permissionsList,
-        ])->leftJoin('permission_role','roles.id','=','permission_role.role_id')
-            ->leftJoin('permissions','permission_role.permission_id','=','permissions.id')
+        ])->leftJoin('permission_role', 'roles.id', '=', 'permission_role.role_id')
+            ->leftJoin('permissions', 'permission_role.permission_id', '=', 'permissions.id')
             ->groupBy(['roles.id', 'roles.name', 'roles.display_name']);
 
         return $smartTable->make($items)
@@ -72,19 +70,14 @@ class RoleController extends AdminController
             ->response();
     }
 
-    protected function deletableQuery()
-    {
-        return Role::notSystem();
-    }
-
-    public function edit(Role $model)
+    public function form(Role $model)
     {
         $form = new AdminModelForm($model);
 
-        $form->setAction(route('admin::role.save', $model->id));
-        $form->addBreadCrumb(__('general.Roles'), '#/role');
-        $form->setBackUrl('#/role');
-        $form->setNewUrl('#/role/edit');
+        $form->setAction(route('admin::role.' . ($model->id ? 'update':'create'), $model->id));
+        $form->addBreadCrumb(__('general.Roles'), hash_url('role'));
+        $form->setBackUrl(hash_url('role'));
+        $form->setNewUrl(hash_url('role/edit'));
 
         if ($model->id) {
             $form->addModelField('id', 'ID');
@@ -106,7 +99,7 @@ class RoleController extends AdminController
 
         $form->setFields($fields);
 
-        return $form->response();
+        return $form;
     }
 
     public function save(Request $request, Role $model)
@@ -114,14 +107,12 @@ class RoleController extends AdminController
         $id = $model->id;
 
         $this->validate($request, [
-            'name' => 'required|unique:roles,name' . ($id ? ','.$id : ''),
+            'name' => 'required|unique:roles,name' . ($id ? ',' . $id : ''),
         ]);
 
         \DB::beginTransaction();
 
-        $model->name = $request->input('name');
-        $model->display_name = $request->input('display_name');
-        $model->description = $request->input('description');
+        $model->fill($request->only(['name', 'display_name', 'description']));
 
         $model->save();
 
@@ -135,7 +126,7 @@ class RoleController extends AdminController
 
         return $this->redirect([
             '/role',
-            '/role/edit',
+            '/role/create',
         ]);
     }
 
@@ -191,5 +182,10 @@ class RoleController extends AdminController
         }
 
         return $list;
+    }
+
+    protected function deletableQuery()
+    {
+        return Role::notSystem();
     }
 }

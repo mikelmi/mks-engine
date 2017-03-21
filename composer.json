@@ -16,7 +16,7 @@
         "league/glide": "^1.2",
         "league/glide-laravel": "^1.0",
         "mews/captcha": "^2.1",
-        "mikelmi/mks-admin": "^3.0",
+        "mikelmi/mks-admin": "dev-master",
         "mikelmi/mks-smart-table": "^2.1",
         "mikelmi/mks-theme": "^2.1",
         "zizaco/entrust": "dev-master"

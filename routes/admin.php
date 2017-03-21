@@ -6,7 +6,7 @@ $router = app('router');
 //Dashboard
 $router->get('home', 'DashboardController@home');
 
-$router->group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['permission:admin.dashboard*']],
+$router->group(['prefix' => 'dashboard', 'as' => 'dashboard.'],
     function(\Illuminate\Routing\Router $router) {
         $router->get('notifications.json', 'DashboardController@notifications')->name('notifications');
         $router->get('notification-details/{uid}', 'DashboardController@notificationDetails')->name('notification.details');
@@ -117,10 +117,9 @@ $router->get('file-manager', function(\Illuminate\Http\Request $request) {
 
 //Languages
 \Mikelmi\MksAdmin\Services\AdminRoute::group('LanguageController', 'language', null, [
-    'middleware' => ['permission:admin.language*'],
+    'middleware' => ['permission:admin.lang.*'],
     'toggle' => true
 ], function($router) {
-    $router->post('/add', 'LanguageController@add')->name('add');
     $router->get('data.json', 'LanguageController@data')->name('data');
     $router->get('all.json', 'LanguageController@all')->name('all');
     $router->post('set-default/{iso?}', 'LanguageController@setDefault')->name('setDefault');

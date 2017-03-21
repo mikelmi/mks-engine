@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Permission;
+use App\Traits\CrudPermissions;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
-use Mikelmi\MksAdmin\Traits\DataGridRequests;
-use Mikelmi\MksAdmin\Traits\DeleteRequests;
+use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class PermissionController extends AdminController
 {
-    use DataGridRequests,
-        DeleteRequests;
+    use CrudRequests,
+        CrudPermissions;
 
     public $modelClass = Permission::class;
+
+    public $permissionsPrefix = 'permissions';
 
     protected function dataGridUrl(): string
     {
@@ -24,20 +26,29 @@ class PermissionController extends AdminController
 
     protected function dataGridOptions(): array
     {
-        return [
+        $actions = [];
+
+        if ($this->canEdit()) {
+            $actions[] = ['type' => 'edit', 'url' => hash_url('permission/edit/{{row.id}}')];
+        }
+
+        if ($this->canDelete()) {
+            $actions[] = ['type' => 'delete', 'url' => route('admin::permission.delete')];
+        }
+
+        $options = [
             'title' => __('general.Permission'),
-            'createLink' => '#/permission/edit',
+            'createLink' =>  $this->canCreate() ? hash_url('permission/create') : '',
             'deleteButton' => route('admin::permission.delete'),
             'columns' => [
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
-                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => '#/permission/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => hash_url('permission/show/{{row.id}}'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'display_name', 'title' => __('general.Display Title'), 'sortable' => true, 'searchable' => true],
-                ['type' => 'actions', 'actions' => [
-                    ['type' => 'edit', 'url' => '#/permission/edit/{{row.id}}'],
-                    ['type' => 'delete', 'url' => route('admin::permission.delete')]
-                ]],
+                ['type' => 'actions', 'actions' => $actions]
             ]
         ];
+
+        return $options;
     }
 
     public function dataGridJson(SmartTable $smartTable)
@@ -54,18 +65,29 @@ class PermissionController extends AdminController
             ->response();
     }
 
-    public function edit(Permission $model)
+    public function form(Permission $model)
     {
         $form = new AdminModelForm($model);
 
-        $form->setAction(route('admin::permission.save', $model->id));
-        $form->addBreadCrumb(__('general.Permissions'), '#/permission');
-        $form->setBackUrl('#/permission');
-        $form->setNewUrl('#/permission/edit');
+        if ($model->id) {
+            $form->setAction(route('admin::permission.update', $model->id));
+        } else {
+            $form->setAction(route('admin::permission.store'));
+        }
+        $form->addBreadCrumb(__('general.Permissions'), hash_url('permission'));
+        $form->setBackUrl(hash_url('permission'));
+        $form->setNewUrl(hash_url('permission/create'));
 
         if ($model->id) {
             $form->addModelField('id', 'ID');
-            $form->setDeleteUrl(route('admin::permission.delete', $model->id));
+
+            if ($this->canEdit($model)) {
+                $form->setEditUrl(hash_url('permission/edit', $model->id));
+            }
+
+            if ($this->canDelete($model)) {
+                $form->setDeleteUrl(route('admin::permission.delete', $model->id));
+            }
         }
 
         $fields = [
@@ -76,7 +98,7 @@ class PermissionController extends AdminController
 
         $form->setFields($fields);
 
-        return $form->response();
+        return $form;
     }
 
     public function save(Request $request, Permission $model)
@@ -97,7 +119,7 @@ class PermissionController extends AdminController
 
         return $this->redirect([
             '/permission',
-            '/permission/edit',
+            '/permission/create',
         ]);
     }
 }

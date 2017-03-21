@@ -22,10 +22,15 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property string name
  * @property string email
  * @property string password
- * @property boolean active
+ * @property bool active
  * @property \DateTime created_at
  * @property \DateTime updated_at
  * @property string activation_token
+ * @property bool $is_current
+ * @property bool $non_selectable
+ *
+ * @method static Builder notCurrent()
+ * @method static Builder admins()
  */
 class User extends Authenticatable implements AdminableUserInterface
 {

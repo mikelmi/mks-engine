@@ -3,33 +3,34 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Models\Language;
 use App\Repositories\LanguageRepository;
 use App\Services\Settings;
+use App\Traits\CrudPermissions;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
-use Mikelmi\MksAdmin\Traits\DataGridRequests;
-use Mikelmi\MksAdmin\Traits\DeleteRequests;
+use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\MksAdmin\Traits\ToggleRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class LanguageController extends AdminController
 {
-    use DataGridRequests,
+    use CrudRequests,
         ToggleRequests,
-        DeleteRequests;
+        CrudPermissions;
 
     public $toggleField = 'active';
+
+    public $permissionsPrefix = 'lang';
 
     /**
      * @var LanguageRepository
      */
     protected $langRepo;
 
-    public function __construct()
+    protected function init()
     {
-        parent::__construct();
-
         $this->langRepo = app(LanguageRepository::class);
     }
 
@@ -58,42 +59,71 @@ class LanguageController extends AdminController
 
     protected function dataGridOptions(): array
     {
-        return [
-            'title' => __('general.Languages'),
-            'links' => [
-                [
-                    'title' => __('admin::messages.Add'),
-                    'type' => 'link',
-                    'btnType' => 'primary',
-                    'icon' => 'plus',
-                    'url' => '#addLangModal',
-                    'attributes' => [
-                        'data-toggle' => 'modal',
-                    ]
+        $canEdit = $this->canEdit();
+        $canToggle = $this->canToggle();
+        $canDelete = $this->canDelete();
+
+        $actions = [];
+        $links = [];
+
+        if ($canEdit) {
+            $actions[] = ['type' => 'edit', 'url' => hash_url('language/edit/{{row.id}}')];
+        }
+
+        if ($canToggle) {
+            $actions[] = ['type' => 'toggleOne', 'url' => route('admin::language.setDefault'), 'key' => 'default'];
+        }
+
+        if ($canDelete) {
+            $actions[] = ['type' => 'delete', 'url' => route('admin::language.delete')];
+        }
+
+        if ($this->canCreate()) {
+            $links[] = [
+                'title' => __('admin::messages.Add'),
+                'type' => 'link',
+                'btnType' => 'primary',
+                'icon' => 'plus',
+                'url' => '#addLangModal',
+                'attributes' => [
+                    'data-toggle' => 'modal',
                 ]
-            ],
-            'toggleButton' => [route('admin::language.toggle.batch', 1), route('admin::language.toggle.batch', 0)],
-            'deleteButton' => route('admin::language.delete'),
+            ];
+        }
+
+        $options = [
+            'title' => __('general.Languages'),
+            'links' => $links,
             'columns' => [
                 ['key' => 'iso', 'title' => 'ISO', 'sortable' => true, 'searchable' => true,
                     'type' => 'language',
                     'searchType' => 'search',
                 ],
-                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => '#/language/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => hash_url('language/show/{{row.id}}'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'title', 'title' => __('general.Title'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'enabled', 'title' => __('general.Status'), 'type' => 'status', 'url' => route('admin::language.toggle'),
                     'sortable' => true, 'searchable' => true,
+                    'disabled' => !$canToggle
                 ],
-                ['type' => 'actions', 'actions' => [
-                    ['type' => 'edit', 'url' => '#/language/edit/{{row.id}}'],
-                    ['type' => 'toggleOne', 'url' => route('admin::language.setDefault'), 'key' => 'default'],
-                    ['type' => 'delete', 'url' => route('admin::language.delete')]
-                ]],
+                ['type' => 'actions', 'actions' => $actions],
             ],
             'rowAttributes' => [
                 'ng-class' => "{'table-success': row.default}"
             ]
         ];
+
+        if ($canToggle) {
+            $options['toggleButton'] = [
+                route('admin::language.toggle.batch', 1),
+                route('admin::language.toggle.batch', 0)
+            ];
+        }
+
+        if ($canDelete) {
+            $options['deleteButton'] = route('admin::language.delete');
+        }
+
+        return $options;
     }
 
     protected function dataGridHtml($scope = null)
@@ -103,9 +133,9 @@ class LanguageController extends AdminController
             ->response('admin.language.index');
     }
 
-    public function all(LanguageRepository $languageRepository)
+    public function all()
     {
-        $all = $languageRepository->all()->diffKeys($languageRepository->available());
+        $all = $this->langRepo->all()->diffKeys($this->langRepo->available());
 
         return $all->map(function($item) {
             return [
@@ -115,34 +145,34 @@ class LanguageController extends AdminController
         })->values();
     }
 
-    public function add(Request $request, LanguageRepository $languageRepository)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'language' => 'required'
         ]);
 
-        $languageRepository->add($request->get('language'));
+        $this->langRepo->add($request->get('language'));
 
         $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect('/language');
     }
 
-    public function delete(Request $request, LanguageRepository $languageRepository, $iso = null)
+    public function delete(Request $request, $iso = null)
     {
         $keys = $iso ?: $request->get('id');
         
-        $result = $languageRepository->delete($keys);
+        $result = $this->langRepo->delete($keys);
         
         return response()->json($result);
     }
 
-    public function toggle(LanguageRepository $languageRepository, $iso)
+    public function toggle($iso)
     {
-        $language = $languageRepository->get($iso);
+        $language = $this->langRepo->get($iso);
         $status = !$language->isEnabled();
 
-        if (!$languageRepository->setStatus($iso, $status)) {
+        if (!$this->langRepo->setStatus($iso, $status)) {
             abort(500);
         }
 
@@ -153,7 +183,7 @@ class LanguageController extends AdminController
         ];
     }
 
-    public function toggleBatch(Request $request, LanguageRepository $languageRepository, $status)
+    public function toggleBatch(Request $request, $status)
     {
         $this->validate($request, [
             'id' => 'array'
@@ -161,27 +191,40 @@ class LanguageController extends AdminController
 
         $id = $request->get('id');
 
-        if (!$languageRepository->setStatuses($id, (bool) $status)) {
+        if (!$this->langRepo->setStatuses($id, (bool) $status)) {
             abort(500);
         }
 
         return [
-            'models' => $languageRepository->available()->whereIn('iso', $id)->toArray()
+            'models' => $this->langRepo->available()->whereIn('iso', $id)->toArray()
         ];
     }
-    
-    public function edit(LanguageRepository $languageRepository, $iso)
+
+    protected function formModel($model)
     {
-        $model = $languageRepository->get($iso);
+        if ($model instanceof Language) {
+            return $model;
+        }
+
+        return $this->langRepo->get($model);
+    }
+    
+    public function form($iso)
+    {
+        $model = $this->formModel($iso);
 
         $form = new AdminForm();
 
         $form->setMode(AdminForm::MODE_EDIT);
 
-        $form->setAction(route('admin::language.save', $model->getIso()));
-        $form->addBreadCrumb(__('general.Languages'), '#/language');
-        $form->addBreadCrumb($model->getIso());
-        $form->setBackUrl('#/language');
+        $form->setAction(route('admin::language.update', $model->getIso()));
+        $form->addBreadCrumb(__('general.Languages'), hash_url('language'));
+        $form->addBreadCrumb($model->getIso(), hash_url('language/show', $model->getIso()));
+        $form->setBackUrl(hash_url('language'));
+
+        if ($this->canEdit($model)) {
+            $form->setEditUrl(hash_url('language/edit', $model->getIso()));
+        }
 
         $form->addGroup('general', [
             'title' => __('general.Language'),
@@ -207,40 +250,40 @@ class LanguageController extends AdminController
             ],
         ]);
 
-        return $form->response();
+        return $form;
     }
     
-    public function save(Request $request, LanguageRepository $languageRepository, $iso)
+    public function update(Request $request, $iso)
     {
         $this->validate($request, [
             'title' => 'required'
         ]);
         
-        $model = $languageRepository->get($iso);
+        $model = $this->langRepo->get($iso);
         
         $model->setTitle($request->get('title'));
         $model->setEnabled((bool)$request->get('enabled'));
         $model->setParams($request->only(['site', 'home', 'e404', 'e500', 'e503']));
 
-        $languageRepository->save($model);
+        $this->langRepo->save($model);
 
         $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect('/language');
     }
 
-    public function setDefault(LanguageRepository $languageRepository, Settings $settings, $iso)
+    public function setDefault(Settings $settings, $iso)
     {
-        $language = $languageRepository->get($iso);
+        $language = $this->langRepo->get($iso);
         $settings->set('locale', $language->getIso());
         $settings->save();
 
         return $this->redirect('/language');
     }
 
-    public function getSelectList(LanguageRepository $languageRepository, $iso = null)
+    public function getSelectList($iso = null)
     {
-        return $languageRepository->enabled()->map(function($item) use ($iso) {
+        return $this->langRepo->enabled()->map(function($item) use ($iso) {
             return [
                 'id' => $item->iso,
                 'text' => $item->title,

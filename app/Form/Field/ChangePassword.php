@@ -15,4 +15,13 @@ class ChangePassword extends Custom
      * @var string
      */
     protected $view = 'admin.form.field.change-password';
+
+    public function render(): string
+    {
+        if ($this->isStatic()) {
+            return '';
+        }
+
+        return parent::render();
+    }
 }

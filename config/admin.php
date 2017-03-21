@@ -6,13 +6,13 @@ return [
     'materialized' => false,
     'username' => 'email',
     'reset_enable' => true,
+
     'locale' => env('APP_LOCALE', 'en'),
     'locales' => [
         'uk' => 'Українська',
         'ru' => 'Русский',
         'en' => 'English'
     ],
-    'search_form' => false,
 
     'scripts' => [
         'vendor/ckeditor/ckeditor.js',

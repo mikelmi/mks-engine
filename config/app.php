@@ -239,6 +239,7 @@ return [
         'Menu' => Lavary\Menu\Facade::class,
         'Theme' => Mikelmi\MksTheme\Facades\Theme::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Entrust' => \Zizaco\Entrust\EntrustFacade::class,
     ],
 
 ];

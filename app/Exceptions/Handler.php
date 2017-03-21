@@ -48,7 +48,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        $response = parent::render($request, $exception);
+
+        if ($response->getStatusCode() == 403) {
+            if ($request->ajax() || $request->wantsJson()) {
+                $response->headers->set('X-Flash-Message', rawurlencode(__('admin::auth.Access Denied')));
+                $response->headers->set('X-Flash-Message-Type', 'danger');
+            }
+        }
+
+        return $response;
     }
 
     /**

@@ -8,14 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
-use Mikelmi\MksAdmin\Traits\DataGridRequests;
-use Mikelmi\MksAdmin\Traits\DeleteRequests;
+use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class UserController extends AdminController
 {
-    use DataGridRequests,
-        DeleteRequests;
+    use CrudRequests;
 
     public $modelClass = User::class;
     public $toggleField = 'active';
@@ -57,12 +55,12 @@ class UserController extends AdminController
     {
         return [
             'title' => __('general.Users'),
-            'createLink' => '#/user/edit',
+            'createLink' => hash_url('user/create'),
             'toggleButton' => [route('admin::user.toggle.batch', 1), route('admin::user.toggle.batch', 0)],
             'deleteButton' => route('admin::user.delete'),
             'columns' => [
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
-                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => '#/user/edit/{{row.id}}', 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => hash_url('user/edit/{{row.id}}'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'email', 'title' => 'E-mail', 'sortable' => true, 'searchable' => true],
                 ['key' => 'active', 'title' => __('general.Status'), 'type' => 'status', 'url' => route('admin::user.toggle'),
                     'sortable' => true, 'searchable' => true,
@@ -71,7 +69,7 @@ class UserController extends AdminController
                 ['key' => 'rolesList', 'title' => __('general.Roles'), 'searchable' => true],
                 ['key' => 'created_at', 'title' => __('general.Created at'), 'type' => 'date', 'sortable' => true, 'searchable' => true],
                 ['type' => 'actions', 'actions' => [
-                    ['type' => 'edit', 'url' => '#/user/edit/{{row.id}}'],
+                    ['type' => 'edit', 'url' => hash_url('user/edit/{{row.id}}')],
                     ['type' => 'delete', 'url' => route('admin::user.delete'),
                         'attributes' => ['ng-if' => '!row.is_current']
                     ]
@@ -88,20 +86,22 @@ class UserController extends AdminController
         return User::notCurrent();
     }
 
-    public function edit(User $model)
+    public function form(User $model)
     {
         $form = new AdminModelForm($model);
 
         $form->setAction(route('admin::user.save', $model->id));
-        $form->addBreadCrumb(__('general.Users'), '#/user');
-        $form->setBackUrl('#/user');
-        $form->setNewUrl('#/user/edit');
+        $form->addBreadCrumb(__('general.Users'), hash_url('user'));
+        $form->setBackUrl(hash_url('user'));
+        $form->setNewUrl(hash_url('user/create'));
 
         if ($model->id) {
             $form->addModelField('id', 'ID');
             if (!$model->isCurrent()) {
                 $form->setDeleteUrl(route('admin::user.delete', $model->id));
             }
+            $form->setInfoUrl(hash_url('user/show', $model->id));
+            $form->setEditUrl(hash_url('user/edit', $model->id));
         }
 
         $fields = [
@@ -120,7 +120,7 @@ class UserController extends AdminController
 
         $form->setFields($fields);
 
-        return $form->response();
+        return $form;
     }
 
     public function save(Request $request, User $model)
@@ -217,5 +217,13 @@ class UserController extends AdminController
         return response()->json([
             'models' => $data
         ]);
+    }
+
+    public function show(User $model)
+    {
+        return $this->form($model)
+            ->setupViewMode()
+            ->addBreadCrumb($model->name)
+            ->response();
     }
 }
