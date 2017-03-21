@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Traits\CrudPermissions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -14,9 +15,12 @@ use Mikelmi\SmartTable\SmartTable;
 
 class RoleController extends AdminController
 {
-    use CrudRequests;
+    use CrudRequests,
+        CrudPermissions;
 
     public $modelClass = Role::class;
+
+    public $permissionsPrefix = 'roles';
 
     protected function dataGridUrl(): string
     {
@@ -25,21 +29,31 @@ class RoleController extends AdminController
 
     protected function dataGridOptions(): array
     {
+        $canEdit = $this->canEdit();
+        $canDelete = $this->canDelete();
+
+        $actions = [];
+
+        if ($canEdit) {
+            $actions[] = ['type' => 'edit', 'url' => hash_url('role/edit/{{row.id}}')];
+        }
+
+        if ($canDelete) {
+            $actions[] = ['type' => 'delete', 'url' => route('admin::role.delete'),
+                'attributes' => ['ng-if' => '!row.is_system']
+            ];
+        }
+
         return [
             'title' => __('general.Roles'),
-            'createLink' => hash_url('role/create'),
-            'deleteButton' => route('admin::role.delete'),
+            'createLink' =>  $this->canCreate() ? hash_url('role/create') : false,
+            'deleteButton' => $canDelete ? route('admin::role.delete'): false,
             'columns' => [
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
                 ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => hash_url('role/edit/{{row.id}}'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'display_name', 'title' => __('general.Display Title'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'permissionsList', 'title' => __('general.Permissions'), 'searchable' => true],
-                ['type' => 'actions', 'actions' => [
-                    ['type' => 'edit', 'url' => hash_url('role/edit/{{row.id}}')],
-                    ['type' => 'delete', 'url' => route('admin::role.delete'),
-                        'attributes' => ['ng-if' => '!row.is_system']
-                    ]
-                ]],
+                ['type' => 'actions', 'actions' => $actions],
             ]
         ];
     }
@@ -74,14 +88,22 @@ class RoleController extends AdminController
     {
         $form = new AdminModelForm($model);
 
-        $form->setAction(route('admin::role.' . ($model->id ? 'update':'create'), $model->id));
+        $form->setAction(route('admin::role.' . ($model->id ? 'update':'store'), $model->id));
         $form->addBreadCrumb(__('general.Roles'), hash_url('role'));
         $form->setBackUrl(hash_url('role'));
-        $form->setNewUrl(hash_url('role/edit'));
+
+        if ($this->canCreate()) {
+            $form->setNewUrl(hash_url('role/create'));
+        }
 
         if ($model->id) {
             $form->addModelField('id', 'ID');
-            if (!$model->isSystem()) {
+
+            if ($this->canEdit($model)) {
+                $form->setEditUrl(hash_url('role/edit', $model->id));
+            }
+
+            if (!$model->isSystem() && $this->canDelete($model)) {
                 $form->setDeleteUrl(route('admin::role.delete', $model->id));
             }
         }

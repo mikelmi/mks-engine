@@ -26,20 +26,23 @@ class PermissionController extends AdminController
 
     protected function dataGridOptions(): array
     {
+        $canEdit = $this->canEdit();
+        $canDelete = $this->canDelete();
+
         $actions = [];
 
-        if ($this->canEdit()) {
+        if ($canEdit) {
             $actions[] = ['type' => 'edit', 'url' => hash_url('permission/edit/{{row.id}}')];
         }
 
-        if ($this->canDelete()) {
+        if ($canDelete) {
             $actions[] = ['type' => 'delete', 'url' => route('admin::permission.delete')];
         }
 
-        $options = [
+        return [
             'title' => __('general.Permission'),
-            'createLink' =>  $this->canCreate() ? hash_url('permission/create') : '',
-            'deleteButton' => route('admin::permission.delete'),
+            'createLink' =>  $this->canCreate() ? hash_url('permission/create') : false,
+            'deleteButton' => $canDelete ? route('admin::permission.delete'): '',
             'columns' => [
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
                 ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => hash_url('permission/show/{{row.id}}'), 'sortable' => true, 'searchable' => true],
@@ -47,8 +50,6 @@ class PermissionController extends AdminController
                 ['type' => 'actions', 'actions' => $actions]
             ]
         ];
-
-        return $options;
     }
 
     public function dataGridJson(SmartTable $smartTable)
@@ -74,9 +75,13 @@ class PermissionController extends AdminController
         } else {
             $form->setAction(route('admin::permission.store'));
         }
+
         $form->addBreadCrumb(__('general.Permissions'), hash_url('permission'));
         $form->setBackUrl(hash_url('permission'));
-        $form->setNewUrl(hash_url('permission/create'));
+
+        if ($this->canCreate()) {
+            $form->setNewUrl(hash_url('permission/create'));
+        }
 
         if ($model->id) {
             $form->addModelField('id', 'ID');
