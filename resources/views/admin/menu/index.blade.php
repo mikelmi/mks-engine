@@ -9,23 +9,27 @@
 @endsection
 
 @section('tools')
-    <button class="btn btn-primary" ng-hide="menuModel" ng-click="addMenu()">
-        <i class="fa fa-plus"></i>
-        {{trans('general.Add Menu')}}
-    </button>
-    <button class="btn btn-success" ng-show="currentMenu.id" ng-click="editMenu(currentMenu)">
-        <i class="fa fa-pencil"></i>
-        {{trans('admin::messages.Edit')}}
-    </button>
-    <button class="btn btn-primary" ng-if="menuModel" ng-click="saveMenu()" ng-disabled="menuForm.$invalid">
-        {{trans('admin::messages.Save')}}
-    </button>
+    @can('admin.menu.edit')
+        <button class="btn btn-primary" ng-hide="menuModel" ng-click="addMenu()">
+            <i class="fa fa-plus"></i>
+            {{trans('general.Add Menu')}}
+        </button>
+        <button class="btn btn-success" ng-show="currentMenu.id" ng-click="editMenu(currentMenu)">
+            <i class="fa fa-pencil"></i>
+            {{trans('admin::messages.Edit')}}
+        </button>
+        <button class="btn btn-primary" ng-if="menuModel" ng-click="saveMenu()" ng-disabled="menuForm.$invalid">
+            {{trans('admin::messages.Save')}}
+        </button>
+    @endcan
     <button class="btn btn-secondary" ng-if="menuModel" ng-click="cancel()">
         {{trans('admin::messages.Cancel')}}
     </button>
-    <button class="btn btn-danger" ng-show="currentMenu.id" title="{{trans('admin::messages.Delete')}}" ng-click="deleteMenu(currentMenu, '{{trans('admin::messages.Delete')}}?')">
-        <i class="fa fa-remove"></i>
-    </button>
+    @can('admin.menu.delete')
+        <button class="btn btn-danger" ng-show="currentMenu.id" title="{{trans('admin::messages.Delete')}}" ng-click="deleteMenu(currentMenu, '{{trans('admin::messages.Delete')}}?')">
+            <i class="fa fa-remove"></i>
+        </button>
+    @endcan
 @endsection
 
 @section('content')
@@ -74,12 +78,16 @@
             </button>
             @{{node.title}}
             <span class="pull-right btn-group btn-group-sm tree-tools" data-nodrag>
-                <a class="btn btn-outline-primary no-b btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/menuman/items/@{{currentMenu.id}}/edit/@{{node.id}}">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <button class="btn btn-outline-danger no-b btn-sm" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
-                    <i class="fa fa-remove"></i>
-                </button>
+                @can('admin.menu.edit')
+                    <a class="btn btn-outline-primary no-b btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/menuman/items/@{{currentMenu.id}}/edit/@{{node.id}}">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                @endcan
+                @can('admin.menu.delete')
+                    <button class="btn btn-outline-danger no-b btn-sm" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                @endcan
             </span>
         </div>
         <ol ui-tree-nodes="" ng-model="node.children" ng-class="{hidden: collapsed}">

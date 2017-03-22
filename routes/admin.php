@@ -53,32 +53,35 @@ $router->group(['prefix'=>'templates', 'middleware' => ['admin', 'admin.locale']
 });
 
 //Menu
-$router->group(['prefix'=>'menuman', 'middleware' => ['permission:admin.menu*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('list', ['as' => 'menu.list', 'uses' => 'MenuController@all']);
-    $router->post('save', ['as' => 'menu.save', 'uses' => 'MenuController@save']);
-    $router->post('delete', ['as' => 'menu.delete', 'uses' => 'MenuController@delete']);
+$router->group(['prefix'=>'menuman', 'as' => 'menu.', 'middleware' => ['permission:admin.menu*']],
+    function(\Illuminate\Routing\Router $router) {
+        $router->get('list', 'MenuController@all')->name('list');
+        $router->post('save', 'MenuController@save')->name('save')->middleware('permission:admin.menu.edit');
+        $router->post('delete', 'MenuController@delete')->name('delete')->middleware('permission:admin.menu.delete');
 
-    $router->get('items/{scope}', ['as' => 'menu.items', 'uses' => 'MenuController@items'])->where('scope', '\d+');
-    $router->post('items/{scope}/move/{id}', ['as' => 'menu.move', 'uses' => 'MenuController@moveItem'])
-        ->where('scope', '\d+')
-        ->where('id', '\d+');
+        $router->get('items/{scope}', 'MenuController@items')->where('scope', '\d+')->name('items');
+        $router->post('items/{scope}/move/{id}', 'MenuController@moveItem')->name('move')->middleware('permission:admin.menu.edit')
+            ->where('scope', '\d+')
+            ->where('id', '\d+');
 
-    $router->post('items/delete/{id}', ['as' => 'menu.items.delete', 'uses' => 'MenuController@deleteItem'])->where('id', '\d+');
+        $router->post('items/delete/{id}', 'MenuController@deleteItem')->name('items.delete')->middleware('permission:admin.menu.delete')
+            ->where('id', '\d+');
 
-    $router->get('items/{scope}/edit/{id?}', ['as' => 'menu.items.edit', 'uses' => 'MenuController@editItem'])
-        ->where('scope', '\d+')
-        ->where('id', '\d+');
+        $router->get('items/{scope}/edit/{id?}', 'MenuController@editItem')->name('items.edit')->middleware('permission:admin.menu.edit')
+            ->where('scope', '\d+')
+            ->where('id', '\d+');
 
-    $router->post('items/{scope}/save/{id?}', ['as' => 'menu.items.save', 'uses' => 'MenuController@saveItem'])
-        ->where('scope', '\d+')
-        ->where('id', '\d+');
+        $router->post('items/{scope}/save/{id?}', 'MenuController@saveItem')->name('items.save')->middleware('permission:admin.menu.edit')
+            ->where('scope', '\d+')
+            ->where('id', '\d+');
 
-    $router->get('/tree/options/{scope}/{id?}', ['as' => 'menu.tree.options', 'uses' => 'MenuController@treeOptions'])
-        ->where('scope', '\d+')
-        ->where('id', '\d+');
+        $router->get('/tree/options/{scope}/{id?}', 'MenuController@treeOptions')->name('tree.options')
+            ->where('scope', '\d+')
+            ->where('id', '\d+');
 
-    $router->get('/{scope?}', ['as' => 'menu', 'uses' => 'MenuController@index'])->where('scope', '\d+');
-});
+        $router->get('/{scope?}', 'MenuController@index')->name('index')->where('scope', '\d+');
+    }
+);
 
 //Widgets
 $router->group(['prefix'=>'widget', 'middleware' => ['permission:admin.widget*']], function(\Illuminate\Routing\Router $router) {
