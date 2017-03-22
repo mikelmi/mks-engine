@@ -14,19 +14,22 @@ trait CrudPermissions
 {
     protected function setupMiddlewares()
     {
-        $prefix = 'permission:admin.';
+        $p = 'permission:';
+        $prefix = 'admin.';
 
         if (property_exists($this, 'permissionsPrefix')) {
             $prefix .= $this->permissionsPrefix . '.';
         }
 
-        $this->middleware($prefix.'*')->only('index');
-        $this->middleware($prefix.'create')->only(['create', 'store']);
-        $this->middleware($prefix.'edit')->only(['edit', 'update']);
-        $this->middleware($prefix.'delete')->only('delete');
-        $this->middleware($prefix.'toggle|'.$prefix.'|edit')->only(['toggle', 'toggleBatch']);
-        $this->middleware($prefix.'move|'.$prefix.'|edit')->only('move');
-        $this->middleware($prefix.'create|'.$prefix.'|edit')->only('create');
+        $p .= $prefix;
+
+        $this->middleware($p.'*')->only('index');
+        $this->middleware($p.'create')->only(['create', 'store']);
+        $this->middleware($p.'edit')->only(['edit', 'update']);
+        $this->middleware($p.'delete')->only('delete');
+        $this->middleware($p.'toggle|'.$prefix.'edit')->only(['toggle', 'toggleBatch']);
+        $this->middleware($p.'move|'.$prefix.'edit')->only('move');
+        $this->middleware($p.'create')->only('create');
     }
 
     /**

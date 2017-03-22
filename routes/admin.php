@@ -18,7 +18,6 @@ $router->group(['prefix' => 'dashboard', 'as' => 'dashboard.'],
 
 //Users
 \Mikelmi\MksAdmin\Services\AdminRoute::group('UserController', 'user', null, [
-    'middleware' => ['permission:admin.user*'],
     'toggle' => true,
 ], function($router) {
     $router->get('/roles/{userId?}', 'UserController@roles')->name('roles');

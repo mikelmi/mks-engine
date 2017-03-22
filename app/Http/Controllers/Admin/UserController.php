@@ -3,20 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Role;
+use App\Traits\CrudPermissions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
+use Mikelmi\MksAdmin\Traits\ToggleRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class UserController extends AdminController
 {
-    use CrudRequests;
+    use CrudRequests,
+        ToggleRequests,
+        CrudPermissions;
 
     public $modelClass = User::class;
+
     public $toggleField = 'active';
+
+    public $permissionsPrefix = 'users';
 
     protected function dataGridUrl(): string
     {
@@ -53,27 +60,40 @@ class UserController extends AdminController
 
     protected function dataGridOptions(): array
     {
+        $canEdit = $this->canEdit();
+        $canDelete = $this->canDelete();
+        $canCreate = $this->canCreate();
+        $canToggle = $this->canToggle();
+
+        $actions = [];
+
+        if ($canEdit) {
+            $actions[] = ['type' => 'edit', 'url' => hash_url('user/edit/{{row.id}}')];
+        }
+
+        if ($canDelete) {
+            $actions[] = ['type' => 'delete', 'url' => route('admin::user.delete'),
+                'attributes' => ['ng-if' => '!row.is_current']
+            ];
+        }
+
         return [
             'title' => __('general.Users'),
-            'createLink' => hash_url('user/create'),
-            'toggleButton' => [route('admin::user.toggle.batch', 1), route('admin::user.toggle.batch', 0)],
-            'deleteButton' => route('admin::user.delete'),
+            'createLink' => $canCreate ? hash_url('user/create') : false,
+            'toggleButton' => $canToggle ?
+                [route('admin::user.toggle.batch', 1), route('admin::user.toggle.batch', 0)] : false,
+            'deleteButton' => $canDelete ? route('admin::user.delete') : false,
             'columns' => [
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
-                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => hash_url('user/edit/{{row.id}}'), 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Name'), 'type' => 'link', 'url' => hash_url('user/show/{{row.id}}'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'email', 'title' => 'E-mail', 'sortable' => true, 'searchable' => true],
                 ['key' => 'active', 'title' => __('general.Status'), 'type' => 'status', 'url' => route('admin::user.toggle'),
                     'sortable' => true, 'searchable' => true,
-                    'buttonAttributes' => ['ng-disabled' => 'row.is_current']
+                    'buttonAttributes' => $canToggle ? ['ng-disabled' => 'row.is_current'] : ['disabled' => true]
                 ],
                 ['key' => 'rolesList', 'title' => __('general.Roles'), 'searchable' => true],
                 ['key' => 'created_at', 'title' => __('general.Created at'), 'type' => 'date', 'sortable' => true, 'searchable' => true],
-                ['type' => 'actions', 'actions' => [
-                    ['type' => 'edit', 'url' => hash_url('user/edit/{{row.id}}')],
-                    ['type' => 'delete', 'url' => route('admin::user.delete'),
-                        'attributes' => ['ng-if' => '!row.is_current']
-                    ]
-                ]],
+                ['type' => 'actions', 'actions' => $actions],
             ],
             'rowAttributes' => [
                 'ng-class' => "{'table-warning': !row.active}"
@@ -90,18 +110,24 @@ class UserController extends AdminController
     {
         $form = new AdminModelForm($model);
 
-        $form->setAction(route('admin::user.save', $model->id));
+        $form->setAction(route('admin::user.' . ($model->id ? 'update' : 'store'), $model->id));
         $form->addBreadCrumb(__('general.Users'), hash_url('user'));
         $form->setBackUrl(hash_url('user'));
-        $form->setNewUrl(hash_url('user/create'));
+
+        if ($this->canCreate()) {
+            $form->setNewUrl(hash_url('user/create'));
+        }
 
         if ($model->id) {
             $form->addModelField('id', 'ID');
-            if (!$model->isCurrent()) {
+
+            if ($this->canEdit($model)) {
+                $form->setEditUrl(hash_url('user/edit', $model->id));
+            }
+
+            if (!$model->isCurrent() && $this->canDelete($model)) {
                 $form->setDeleteUrl(route('admin::user.delete', $model->id));
             }
-            $form->setInfoUrl(hash_url('user/show', $model->id));
-            $form->setEditUrl(hash_url('user/edit', $model->id));
         }
 
         $fields = [
