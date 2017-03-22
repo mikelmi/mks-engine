@@ -9,23 +9,27 @@
 @endsection
 
 @section('tools')
-    <button class="btn btn-primary" ng-hide="sectionModel" ng-click="addSection()">
-        <i class="fa fa-plus"></i>
-        {{trans('general.Add Section')}}
-    </button>
-    <button class="btn btn-success" ng-show="currentSection.id" ng-click="editSection(currentSection)">
-        <i class="fa fa-pencil"></i>
-        {{trans('admin::messages.Edit')}}
-    </button>
-    <button class="btn btn-primary" ng-if="sectionModel" ng-click="saveSection()" ng-disabled="sectionForm.$invalid">
-        {{trans('admin::messages.Save')}}
-    </button>
+    @can('admin.category.edit')
+        <button class="btn btn-primary" ng-hide="sectionModel" ng-click="addSection()">
+            <i class="fa fa-plus"></i>
+            {{trans('general.Add Section')}}
+        </button>
+        <button class="btn btn-success" ng-show="currentSection.id" ng-click="editSection(currentSection)">
+            <i class="fa fa-pencil"></i>
+            {{trans('admin::messages.Edit')}}
+        </button>
+        <button class="btn btn-primary" ng-if="sectionModel" ng-click="saveSection()" ng-disabled="sectionForm.$invalid">
+            {{trans('admin::messages.Save')}}
+        </button>
+    @endcan
     <button class="btn btn-secondary" ng-if="sectionModel" ng-click="cancel()">
         {{trans('admin::messages.Cancel')}}
     </button>
-    <button class="btn btn-danger" ng-show="currentSection.id" title="{{trans('admin::messages.Delete')}}" ng-click="deleteSection(currentSection, '{{trans('admin::messages.Delete')}}?')">
-        <i class="fa fa-remove"></i>
-    </button>
+    @can('admin.category.delete')
+        <button class="btn btn-danger" ng-show="currentSection.id" title="{{trans('admin::messages.Delete')}}" ng-click="deleteSection(currentSection, '{{trans('admin::messages.Delete')}}?')">
+            <i class="fa fa-remove"></i>
+        </button>
+    @endcan
 @endsection
 
 @section('content')
@@ -46,12 +50,14 @@
         <div class="card-block">
             <div ng-if="currentSection && !sectionModel" ng-controller="CategoryTreeController as tree">
 
-                <div>
-                    <a class="btn btn-link" ng-href="#/category/edit/@{{currentSection.id}}">
-                        <i class="fa fa-plus"></i>
-                        @lang('general.Add Category')
-                    </a>
-                </div>
+                @can('admin.category.edit')
+                    <div>
+                        <a class="btn btn-link" ng-href="#/category/edit/@{{currentSection.id}}">
+                            <i class="fa fa-plus"></i>
+                            @lang('general.Add Category')
+                        </a>
+                    </div>
+                @endcan
 
                 <div ui-tree="tree.treeOptions" data-empty-placeholder-enabled="false">
                     <ol ui-tree-nodes ng-model="categories[currentSection.id]">
@@ -74,12 +80,16 @@
             </button>
             @{{node.title}}
             <span class="pull-right btn-group btn-group-sm tree-tools" data-nodrag>
-                <a class="btn btn-success btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/category/edit/@{{currentSection.id}}/@{{node.id}}">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <button class="btn btn-danger" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
-                    <i class="fa fa-remove"></i>
-                </button>
+                @can('admin.category.edit')
+                    <a class="btn btn-success btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/category/edit/@{{currentSection.id}}/@{{node.id}}">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                @endcan
+                @can('admin.category.delete')
+                    <button class="btn btn-danger" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                @endcan
             </span>
         </div>
         <ol ui-tree-nodes="" ng-model="node.children" ng-class="{hidden: collapsed}">

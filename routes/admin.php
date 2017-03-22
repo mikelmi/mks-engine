@@ -122,33 +122,38 @@ $router->get('file-manager', function(\Illuminate\Http\Request $request) {
 });
 
 //Category
-$router->group(['prefix' => 'category', 'as' => 'category.', 'middleware' => ['permission:admin.category*']], function(\Illuminate\Routing\Router $router) {
-    $router->get('sections', ['as' => 'sections', 'uses' => 'CategoryController@sections']);
-    $router->post('save-section', ['as' => 'save.section', 'uses' => 'CategoryController@saveSection']);
-    $router->post('delete-section', ['as' => 'delete.section', 'uses' => 'CategoryController@deleteSection']);
+$router->group(['prefix' => 'category', 'as' => 'category.'], function(\Illuminate\Routing\Router $router) {
+    $router->get('sections', 'CategoryController@sections')->name('sections');
+    $router->post('save-section', 'CategoryController@saveSection')->name('save.section');
+    $router->post('delete-section', 'CategoryController@deleteSection')->name('delete.section');
 
-    $router->get('categories/{scope}', ['as' => 'categories', 'uses' => 'CategoryController@categories'])->where('scope', '\d+');
-    $router->post('move/{scope}/{id}', ['as' => 'move', 'uses' => 'CategoryController@move'])
+    $router->get('categories/{scope}', 'CategoryController@categories')->name('categories')
+        ->where('scope', '\d+');
+
+    $router->post('move/{scope}/{id}', 'CategoryController@move')->name('move')->middleware('permission:admin.category.edit')
         ->where('scope', '\d+')
         ->where('id', '\d+');
 
-    $router->post('delete/{id}', ['as' => 'delete', 'uses' => 'CategoryController@delete'])->where('id', '\d+');
+    $router->post('delete/{id}', 'CategoryController@delete')->name('delete')->middleware('permission:admin.category.delete')
+        ->where('id', '\d+');
 
-    $router->get('edit/{scope}/{id?}', ['as' => 'edit', 'uses' => 'CategoryController@edit'])
+    $router->get('edit/{scope}/{id?}', 'CategoryController@edit')->name('edit')->middleware('permission:admin.category.edit')
         ->where('scope', '\d+')
         ->where('id', '\d+');
 
-    $router->post('save/{scope}/{id?}', ['as' => 'save', 'uses' => 'CategoryController@save'])
+    $router->post('save/{scope}/{id?}', 'CategoryController@save')->name('save')->middleware('permission:admin.category.save')
         ->where('scope', '\d+')
         ->where('id', '\d+');
 
-    $router->get('/tree/options/{scope}/{id?}', ['as' => 'tree.options', 'uses' => 'CategoryController@treeOptions'])
+    $router->get('/tree/options/{scope}/{id?}', 'CategoryController@treeOptions')->name('tree.options')
         ->where('scope', '\d+')
         ->where('id', '\d+');
 
-    $router->get('select/{type?}', ['as' => 'select', 'uses' => 'CategoryController@select'])->where('type', '.+');
+    $router->get('select/{type?}', 'CategoryController@select')->name('select')
+        ->where('type', '.+');
 
-    $router->get('/{scope?}', ['as' => 'index', 'uses' => 'CategoryController@index'])->where('scope', '\d+');
+    $router->get('/{scope?}', 'CategoryController@index')->name('index')
+        ->where('scope', '\d+');
 });
 
 //Tags list

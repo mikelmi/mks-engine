@@ -50,12 +50,14 @@
         <div class="card-block">
             <div ng-if="currentMenu && !menuModel" ng-controller="MenuTreeController as tree">
 
-                <div>
-                    <a class="btn btn-link" ng-href="#/menuman/items/@{{currentMenu.id}}/edit">
-                        <i class="fa fa-plus"></i>
-                        @lang('general.Add Menu Item')
-                    </a>
-                </div>
+                @can('admin.category.edit')
+                    <div>
+                        <a class="btn btn-link" ng-href="#/menuman/items/@{{currentMenu.id}}/edit">
+                            <i class="fa fa-plus"></i>
+                            @lang('general.Add Menu Item')
+                        </a>
+                    </div>
+                @endcan
 
                 <div ui-tree="tree.treeOptions" data-empty-placeholder-enabled="false">
                     <ol ui-tree-nodes ng-model="menuItems[currentMenu.id]">
