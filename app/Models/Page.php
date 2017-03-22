@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $meta_title
  * @property string $meta_description
  * @property string $meta_keywords
+ * @property string $url
  */
 class Page extends Model
 {

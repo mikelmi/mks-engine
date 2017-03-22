@@ -83,4 +83,12 @@ class Editor extends Textarea
         return $result;
     }
 
+    public function render(): string
+    {
+        if ($this->isStatic()) {
+            return '';
+        }
+
+        return parent::render();
+    }
 }

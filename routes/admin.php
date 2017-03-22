@@ -24,27 +24,20 @@ $router->group(['prefix' => 'dashboard', 'as' => 'dashboard.'],
 });
 
 //Roles
-\Mikelmi\MksAdmin\Services\AdminRoute::group('RoleController', 'role', null, [
-    'middleware' => ['permission:admin.role*'],
-], function($router) {
+\Mikelmi\MksAdmin\Services\AdminRoute::group('RoleController', 'role', null, [], function($router) {
     $router->get('permissions/{id?}', 'RoleController@permissions')->name('permissions');
     $router->get('for-model/{model?}/{id?}', 'RoleController@listForModel')->name('forModel');
 });
 
 //Permissions
-\Mikelmi\MksAdmin\Services\AdminRoute::group('PermissionController', 'permission', null, [
-    'middleware' => ['permission:admin.permission*'],
-]);
+\Mikelmi\MksAdmin\Services\AdminRoute::group('PermissionController', 'permission');
 
 //Settings
 $router->get('settings/{scope?}', ['as' => 'settings', 'uses' => 'SettingsController@index'])->where('scope', '[a-z]+');
 $router->post('settings/{scope?}', ['as' => 'settings.save', 'uses' => 'SettingsController@save'])->where('scope', '[a-z]+');
 
 //Page
-\Mikelmi\MksAdmin\Services\AdminRoute::group('PageController', 'page', null, [
-    'middleware' => ['permission:admin.page*'],
-    'trash' => true
-]);
+\Mikelmi\MksAdmin\Services\AdminRoute::group('PageController', 'page', null, ['trash' => true]);
 
 //Routes
 $router->group(['prefix'=>'route'], function(\Illuminate\Routing\Router $router) {

@@ -114,9 +114,7 @@ class PermissionController extends AdminController
             'name' => 'required|unique:permissions,name' . ($id ? ','.$id : ''),
         ]);
 
-        $model->name = $request->input('name');
-        $model->display_name = $request->input('display_name');
-        $model->description = $request->input('description');
+        $model->fill($request->only(['name', 'display_name', 'description']));
 
         $model->save();
 

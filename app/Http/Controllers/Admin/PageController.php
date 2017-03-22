@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Page;
 use App\Repositories\LanguageRepository;
+use App\Traits\CrudPermissions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Mikelmi\MksAdmin\Form\AdminForm;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CountItemsResponse;
+use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\MksAdmin\Traits\DataGridRequests;
 use Mikelmi\MksAdmin\Traits\DeleteRequests;
 use Mikelmi\MksAdmin\Traits\TrashRequests;
@@ -18,32 +21,16 @@ use Mikelmi\SmartTable\SmartTable;
 
 class PageController extends AdminController
 {
-    use DataGridRequests,
-        DeleteRequests,
+    use CrudRequests,
         TrashRequests,
-        CountItemsResponse;
+        CountItemsResponse,
+        CrudPermissions;
 
     public $modelClass = Page::class;
 
     public $countScopes = ['all', 'trash'];
 
-    /*public function index($scope = null)
-    {
-        $viewPath = $scope == 'trash' ? 'admin.page.trash' : 'admin.page.index';
-
-        $view = view(
-            $viewPath,
-            [
-                'data_url' => route('admin::pages.data', $scope),
-                'scope' => $scope,
-                'count' => $this->getCount(),
-                'lang_icon_url' => route('lang.icon'),
-                'languages' => app(LanguageRepository::class)->enabled()
-            ]
-        );
-
-        return $this->setCountsHeader(response($view));
-    }*/
+    public $permissionsPrefix = 'pages';
 
     protected function dataGridUrl($scope = null): string
     {
@@ -82,36 +69,45 @@ class PageController extends AdminController
 
     protected function dataGridOptions($scope = null): array
     {
-        $actions = [
-            ['type' => 'edit', 'url' => '#/page/edit/{{row.id}}']
-        ];
+        $canCreate = $this->canCreate();
+        $canEdit = $this->canEdit();
+        $canDelete = $this->canDelete();
 
+        $actions = [];
         $tools = [];
 
+        if ($canEdit) {
+            $actions[] = ['type' => 'edit', 'url' => hash_url('page/edit/{{row.id}}')];
+        }
+
         if ($scope == 'trash') {
-            $actions[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
-            $tools[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
-        } else {
+            if ($canEdit) {
+                $actions[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
+                $tools[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
+            }
+        } elseif($canDelete) {
             $actions[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
             $tools[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
         }
 
-        $actions[] = ['type' => 'delete', 'url' => route('admin::page.delete')];
+        if ($canDelete) {
+            $actions[] = ['type' => 'delete', 'url' => route('admin::page.delete')];
+        }
 
         return [
             'title' => __('general.Pages'),
-            'createLink' => '#/page/edit',
+            'createLink' => $canCreate ? hash_url('page/edit') : false,
             'tools' => $tools,
-            'deleteButton' => route('admin::page.delete'),
+            'deleteButton' => $canDelete ? route('admin::page.delete') : false,
             'columns' => [
                 ['key' => 'id', 'sortable' => true, 'searchable' => true],
-                ['key' => 'title', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => '#/page/edit/{{row.id}}'],
+                ['key' => 'title', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => hash_url('page/show/{{row.id}}')],
                 ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
                 ['key' => 'path', 'type' => $scope == 'trash' ? '':'link', 'title' => 'URL', 'target' => '_blank', 'url' => '{{row.url}}'],
                 ['key' => 'created_at', 'type' => 'date', 'title' => __('general.Created at')],
                 ['type' => 'actions', 'actions' => $actions],
             ],
-            'baseUrl' => '#/page',
+            'baseUrl' => hash_url('page'),
             'scopes' => [
                 ['title' => __('general.Pages'), 'badge'=>'{{page.model.count_all}}'],
                 ['name' => 'trash', 'title' => __('admin::messages.Trash'), 'icon' => 'trash', 'badge'=>'{{page.model.count_trash}}']
@@ -119,19 +115,40 @@ class PageController extends AdminController
         ];
     }
 
-    public function edit($id = null)
+    protected function formModel($model = null)
     {
-        $model = $id ? Page::withTrashed()->find($id) : new Page();
+        if ($model instanceof Page) {
+            return $model;
+        }
 
+        return $model ? Page::withTrashed()->find($model) : new Page();
+    }
+
+    public function form(Page $model, $mode = null)
+    {
         $form = new AdminModelForm($model);
 
-        $form->setAction(route('admin::page.save', $model->id));
-        $form->addBreadCrumb(__('general.Pages'), '#/page');
-        $form->setBackUrl('#/page');
-        $form->setNewUrl('#/page/edit');
+        $form->setAction(route('admin::page.' . ($model->id ? 'update':'store'), $model->id));
+        $form->addBreadCrumb(__('general.Pages'), hash_url('page'));
+        $form->setBackUrl(hash_url('page'));
+
+        if ($this->canCreate($model)) {
+            $form->setNewUrl(hash_url('page/create'));
+        }
 
         if ($model->id) {
-            $form->setDeleteUrl(route('admin::page.delete', $model->id));
+            if ($this->canEdit($model)) {
+                $form->setEditUrl(hash_url('page/edit', $model->id));
+            }
+            if ($this->canDelete($model)) {
+                $form->setDeleteUrl(route('admin::page.delete', $model->id));
+            }
+        }
+
+        if ($mode == AdminForm::MODE_VIEW && !$model->trashed()) {
+            $pathField = ['name' => 'path', 'label' => 'URL', 'type' => 'link', 'value' => $model->url, 'target' => '_blank'];
+        } else {
+            $pathField = ['name' => 'path', 'label' => 'URL', 'type' => 'checkedInput'];
         }
 
         $form->addGroup('general', [
@@ -139,7 +156,7 @@ class PageController extends AdminController
             'fields' => [
                 ['name' => 'title', 'required' => true, 'label' => __('general.Name')],
                 ['name' => 'lang', 'type' => 'language'],
-                ['name' => 'path', 'label' => 'URL', 'type' => 'checkedInput'],
+                $pathField,
                 ['name' => 'page_text', 'label' => __('general.Text'), 'type' => 'editor', 'allowContent'=>true],
             ]
         ]);
@@ -164,13 +181,11 @@ class PageController extends AdminController
             ],
         ]);
 
-        return $form->response();
+        return $form;
     }
 
-    public function save(Request $request, $id = null)
+    public function save(Request $request, Page $model)
     {
-        $model = $id ? Page::withTrashed()->findOrFail($id) : new Page();
-
         $this->validate($request, [
             'title' => 'required|min:3|max:255',
             'path' => 'alpha_dash'
@@ -221,5 +236,15 @@ class PageController extends AdminController
             '/page/edit',
             '/page'
         ]);
+    }
+
+    public function show($id)
+    {
+        $model = $this->formModel($id);
+
+        return $this->form($model, AdminForm::MODE_VIEW)
+            ->setupViewMode()
+            ->addBreadCrumb($model->title)
+            ->response();
     }
 }

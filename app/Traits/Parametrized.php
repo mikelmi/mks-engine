@@ -5,6 +5,12 @@ namespace App\Traits;
 
 use Illuminate\Support\Collection;
 
+/**
+ * Class Parametrized
+ * @package App\Traits
+ *
+ * @property string|array $params
+ */
 trait Parametrized
 {
     protected $params_field = 'params';
@@ -64,6 +70,11 @@ trait Parametrized
         return $this->paramsDecoded;
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
     public function setAttribute($key, $value)
     {
         if ($key === $this->params_field) {
