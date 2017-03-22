@@ -184,7 +184,7 @@ class UserController extends AdminController
 
         return $this->redirect([
             '/user',
-            '/user/edit',
+            '/user/create',
         ]);
     }
 

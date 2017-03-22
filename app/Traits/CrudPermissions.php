@@ -26,10 +26,11 @@ trait CrudPermissions
         $this->middleware($p.'*')->only('index');
         $this->middleware($p.'create')->only(['create', 'store']);
         $this->middleware($p.'edit')->only(['edit', 'update']);
-        $this->middleware($p.'delete')->only('delete');
+        $this->middleware($p.'delete')->only(['delete', 'toTrash']);
         $this->middleware($p.'toggle|'.$prefix.'edit')->only(['toggle', 'toggleBatch']);
         $this->middleware($p.'move|'.$prefix.'edit')->only('move');
         $this->middleware($p.'create')->only('create');
+        $this->middleware($p.'delete|'.$prefix.'edit')->only('restore');
     }
 
     /**
@@ -87,5 +88,10 @@ trait CrudPermissions
     protected function canAction($action, $model = null)
     {
         return Gate::allows($this->permissionName($action), $model);
+    }
+
+    public function canRestore($model = null)
+    {
+        return $this->canDelete($model) || $this->canEdit($model);
     }
 }

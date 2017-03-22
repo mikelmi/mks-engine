@@ -72,6 +72,7 @@ class PageController extends AdminController
         $canCreate = $this->canCreate();
         $canEdit = $this->canEdit();
         $canDelete = $this->canDelete();
+        $canRestore = $this->canRestore();
 
         $actions = [];
         $tools = [];
@@ -81,13 +82,15 @@ class PageController extends AdminController
         }
 
         if ($scope == 'trash') {
-            if ($canEdit) {
+            if ($canRestore) {
                 $actions[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
                 $tools[] = ['type' => 'restore', 'url' => route('admin::page.restore')];
             }
-        } elseif($canDelete) {
-            $actions[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
-            $tools[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
+        } else {
+            if ($canDelete) {
+                $actions[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
+                $tools[] = ['type' => 'trash', 'url' => route('admin::page.toTrash')];
+            }
         }
 
         if ($canDelete) {
@@ -96,7 +99,7 @@ class PageController extends AdminController
 
         return [
             'title' => __('general.Pages'),
-            'createLink' => $canCreate ? hash_url('page/edit') : false,
+            'createLink' => $canCreate ? hash_url('page/create') : false,
             'tools' => $tools,
             'deleteButton' => $canDelete ? route('admin::page.delete') : false,
             'columns' => [
@@ -233,7 +236,7 @@ class PageController extends AdminController
 
         return $this->redirect([
             '/page/scope' . ($model->trashed() ? '/trash' : ''),
-            '/page/edit',
+            '/page/create',
             '/page'
         ]);
     }
