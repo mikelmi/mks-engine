@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Notifications\ResetPassword;
+use App\Traits\HasActive;
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Role;
@@ -22,7 +23,6 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property string name
  * @property string email
  * @property string password
- * @property bool active
  * @property \DateTime created_at
  * @property \DateTime updated_at
  * @property string activation_token
@@ -40,6 +40,7 @@ class User extends Authenticatable implements AdminableUserInterface
         cachedRoles as entrustCachedRoles;
     }
     use AdminableUser;
+    use HasActive;
 
     /**
      * The attributes that are mass assignable.
@@ -74,10 +75,6 @@ class User extends Authenticatable implements AdminableUserInterface
     public function getNonSelectableAttribute()
     {
         return isset($this->attributes['id']) && $this->attributes['id'] == auth()->id();
-    }
-
-    public function getActiveAttribute($value) {
-        return (boolean) $value;
     }
 
     public function scopeNotCurrent(Builder $query)
