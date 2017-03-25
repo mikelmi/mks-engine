@@ -220,11 +220,8 @@ class PageController extends AdminController
 
         $rolesShowing = $model->param('roles');
 
-        if (!$rolesShowing || $rolesShowing == '1') {
-            $model->roles()->detach();
-        } else {
-            $model->roles()->sync((array)$request->input('roles'));
-        }
+        $roles = !$rolesShowing || $rolesShowing == '1' ? [] : (array)$request->input('roles');
+        $model->syncRoles($roles);
 
         if ($request->header('X-Submit-Flag') == 2) {
             $model->restore();

@@ -2,32 +2,30 @@
 
 namespace App\Widgets;
 
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 
-use Illuminate\Http\Request;
-
-class HtmlWidget extends WidgetBase implements WidgetInterface
+class HtmlWidget extends TextWidget
 {
-
     /**
      * @return string
      */
-    public static function title()
+    public function title(): string
     {
         return trans('general.HtmlWidget');
     }
 
-    public function form()
+    public function alias(): string
     {
-        return view('admin.widget.form.html', ['model' => $this->model]);
+        return 'html';
     }
 
-    public function beforeSave(Request $request)
+    public function form(AdminModelForm $form, $mode = null)
     {
-        $this->model->content = $request->input('content');
-    }
-    
-    public function render()
-    {
-        return $this->view('widget.html')->render();
+        $form->addGroup('text', [
+            'title' => $this->title(),
+            'fields' => [
+                ['name' => 'content', 'label' => __('general.Text'), 'type' => 'editor', 'rows' => 5]
+            ]
+        ]);
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Services;
 
 
+use App\Contracts\WidgetPresenter;
 use App\Events\WidgetTypesCollect;
+use App\Exceptions\WidgetPresenterNotFound;
 use App\Models\Widget;
 use App\User;
 use App\Widgets\WidgetInterface;
@@ -13,9 +15,9 @@ use Illuminate\Support\Collection;
 class WidgetManager
 {
     /**
-     * @var Collection
+     * @var WidgetPresenter[]
      */
-    private $types;
+    private $presenters;
 
     /**
      * @var Collection
@@ -23,59 +25,75 @@ class WidgetManager
     private $loaded;
 
     /**
-     * @return Collection
+     * WidgetManager constructor.
+     * @param array $presenters
      */
-    public function getTypes()
+    public function __construct(array $presenters)
     {
-        if (!($this->types instanceof Collection)) {
+        $this->setPresenters($presenters);
+    }
 
-            $this->types = new Collection();
-
-            $dir = app_path('Widgets');
-
-            foreach (glob($dir . '/*.php') as $file) {
-                $className = '\App\Widgets\\' . basename($file, '.php');
-                $class = new \ReflectionClass($className);
-
-                if (!$class->isInterface() && !$class->isAbstract()
-                    && $class->implementsInterface(WidgetInterface::class)
-                ) {
-                    $this->types->put($class->getName(), $className::title());
-                }
-            }
-
-            event(new WidgetTypesCollect($this->types));
+    public function setPresenters(array $presenters)
+    {
+        /** @var WidgetPresenter $presenter */
+        foreach ($presenters as $presenter) {
+            $this->presenters[$presenter->alias()] = $presenter;
         }
-
-        return $this->types;
     }
 
     /**
-     * @param string $class
-     * @return WidgetInterface
-     * @throws \Exception
+     * @return WidgetPresenter[]
      */
-    public static function make($class)
+    public function getPresenters(): array
     {
-        $class = str_replace('/', '\\', $class);
-
-        if (!class_exists($class)) {
-            throw new \Exception('Class \'' . $class. '\' not found');
-        }
-
-        /** @var WidgetInterface $widget */
-        $widget = new $class();
-
-        if (!($widget instanceof WidgetInterface)) {
-            throw new \Exception('Class \'' . $class. '\' does not implement widget interface');
-        }
-
-        return $widget;
+        return $this->presenters;
     }
 
-    public function title($type, $default = null)
+    /**
+     * @return array
+     */
+    public function getPresentersList(): array
     {
-        return $this->getTypes()->get($type, $default);
+        $result = [];
+
+        foreach ($this->presenters as $presenter) {
+            $result[$presenter->alias()] = $presenter->title();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $alias
+     * @return WidgetPresenter
+     * @throws WidgetPresenterNotFound
+     */
+    public function presenter(string $alias): WidgetPresenter
+    {
+        if (!$this->exists($alias)) {
+            throw new WidgetPresenterNotFound($alias);
+        }
+
+        return $this->presenters[$alias];
+    }
+
+    /**
+     * @param string $alias
+     * @return bool
+     */
+    public function exists(string $alias): bool
+    {
+        return array_key_exists($alias, $this->presenters);
+    }
+
+    /**
+     * @param string $alias
+     * @param string|null $default
+     * @return null|string
+     */
+    public function title(string $alias, string $default = null)
+    {
+        return $this->exists($alias) ? $this->presenters[$alias]->title() : $default;
     }
 
     protected function load()
@@ -86,7 +104,7 @@ class WidgetManager
 
         $this->loaded = collect();
 
-        $all = Widget::with(['roles', 'routes'])->where('status', true)->orderBy('ordering')->get();
+        $all = Widget::with(['roles', 'routes'])->active()->ordered()->get();
 
         /** @var User|null $user */
         $user = auth()->user();
@@ -202,9 +220,9 @@ class WidgetManager
 
             foreach ($items as $item) {
                 try {
-                    $widget = self::make($item->class);
-                    $widget->setModel($item);
-                    $content .= $widget->render() . "\n";
+                    $presenter = self::presenter($item->class);
+                    $presenter->setModel($item);
+                    $content .= $presenter->render() . "\n";
                 } catch(\Exception $e) {
                     if (config('app.debug')) {
                         throw $e;
@@ -227,9 +245,9 @@ class WidgetManager
         }
 
         try {
-            $widget = self::make($model->class);
-            $widget->setModel($model);
-            return $widget->render();
+            $presenter = self::presenter($model->class);
+            $presenter->setModel($model);
+            return $presenter->render();
         } catch(\Exception $e) {
             if (config('app.debug')) {
                 throw $e;

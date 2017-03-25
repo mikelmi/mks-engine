@@ -24,7 +24,8 @@ return [
     ],
 
     'appModules' => [
-        'mks-admin-ext',
+        'mks-components',
+        'mks-link-select',
         'mks-menu-manager',
         'mks-dashboard',
         'mks-category-manager',
@@ -41,7 +42,9 @@ return [
             'seo' => \App\Form\Field\SeoFieldset::class,
             'rolesShow' => \App\Form\Field\ShowForRoles::class,
             'route' => \App\Form\Field\RouteLink::class,
-            'pages' => \App\Form\Field\SelectPages::class
+            'pages' => \App\Form\Field\SelectPages::class,
+            'routesShow' => \App\Form\Field\ShowForRoutes::class,
+            'assoc' => \App\Form\Field\AssocArray::class
         ]
     ],
 

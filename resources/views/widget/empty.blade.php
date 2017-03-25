@@ -1,8 +1,15 @@
-@if($attr)
-    <div{!! htmlspecialchars(html_attr($attr), ENT_NOQUOTES) !!}>
+@if (isset($attr) && is_array($attr))
+    <div {!! html_attr($attr) !!}>
 @endif
-@yield('widget_title', !$model->param('hide_title') ? $model->title : '')
-@yield('widget_content')
-@if ($attr)
+
+@if (isset($title) && $title)
+    <div class="widget-title">
+        {{ $title }}
+    </div>
+@endif
+
+{{ $slot }}
+
+@if (isset($attr) && is_array($attr))
     </div>
 @endif

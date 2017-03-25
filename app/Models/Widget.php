@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Services\WidgetManager;
+use App\Traits\HasActive;
+use App\Traits\HasPriority;
+use App\Traits\HasRoles;
 use App\Traits\Parametrized;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,24 +20,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $content
  * @property string $position
  * @property string $lang
- * @property integer $ordering
- * @property bool $status
  */
 class Widget extends Model
 {
-    use Parametrized;
+    use Parametrized,
+        HasPriority,
+        HasActive,
+        HasRoles;
 
     protected $appends = ['class_title'];
 
-    protected $casts = [
-        'status' => 'boolean'
-    ];
-
-    private $html_attr;
-
     public function getClassTitleAttribute()
     {
-        return app(WidgetManager::class)->title($this->class, 'Opack');
+        return app(WidgetManager::class)->title($this->class);
     }
 
     /**
@@ -46,30 +44,12 @@ class Widget extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function roles()
-    {
-        return $this->morphToMany(Role::class, 'model', 'model_role');
-    }
-
-    /**
      * @return array
      */
-    public function getHtmlAttributes()
+    public function getHtmlAttributes(): array
     {
-        if (!isset($this->html_attr)) {
-            $this->html_attr = [];
+        $result = $this->param('attr');
 
-            if ($class = $this->param('css_class')) {
-                $this->html_attr['class'] = $class;
-            }
-
-            if ($id = $this->param('html_id')) {
-                $this->html_attr['id'] = $id;
-            }
-        }
-
-        return $this->html_attr;
+        return is_array($result) ? $result : [];
     }
 }

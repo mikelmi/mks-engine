@@ -147,4 +147,7 @@ return [
     'bottom-right' => 'bottom-right',
 
     'Empty Template' => 'Empty Template',
+
+    'Priority' => 'Priority',
+    'In Block' => 'In Block',
 ];

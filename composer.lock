@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9624b47b7ad1238f4dcbf936f9061535",
+    "content-hash": "8ed126e0eccffadeeca8da410b8e2aea",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -713,16 +713,16 @@
         },
         {
             "name": "lavary/laravel-menu",
-            "version": "dev-master",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lavary/laravel-menu.git",
-                "reference": "dda18067801ef922524bea0352995323f656445a"
+                "reference": "1617add78aa8ec8e4657aba3d88d2b86fc534b9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lavary/laravel-menu/zipball/dda18067801ef922524bea0352995323f656445a",
-                "reference": "dda18067801ef922524bea0352995323f656445a",
+                "url": "https://api.github.com/repos/lavary/laravel-menu/zipball/1617add78aa8ec8e4657aba3d88d2b86fc534b9f",
+                "reference": "1617add78aa8ec8e4657aba3d88d2b86fc534b9f",
                 "shasum": ""
             },
             "require": {
@@ -751,7 +751,7 @@
             "keywords": [
                 "laravel"
             ],
-            "time": "2017-02-18T20:42:31+00:00"
+            "time": "2016-09-12T13:17:45+00:00"
         },
         {
             "name": "league/flysystem",
@@ -1041,16 +1041,16 @@
         },
         {
             "name": "mikelmi/mks-admin",
-            "version": "v3.0.5",
+            "version": "v3.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikelmi/mks-admin.git",
-                "reference": "92b49d4c18cf58891e7e8c498a1e0dec09771d87"
+                "reference": "4ad85803980ab727cd80eb4a49dc9e4b471ed89f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/92b49d4c18cf58891e7e8c498a1e0dec09771d87",
-                "reference": "92b49d4c18cf58891e7e8c498a1e0dec09771d87",
+                "url": "https://api.github.com/repos/mikelmi/mks-admin/zipball/4ad85803980ab727cd80eb4a49dc9e4b471ed89f",
+                "reference": "4ad85803980ab727cd80eb4a49dc9e4b471ed89f",
                 "shasum": ""
             },
             "require": {
@@ -1080,7 +1080,7 @@
                 "angular",
                 "laravel"
             ],
-            "time": "2017-03-20T13:17:59+00:00"
+            "time": "2017-03-22T17:37:23+00:00"
         },
         {
             "name": "mikelmi/mks-smart-table",
@@ -4465,7 +4465,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "lavary/laravel-menu": 20,
         "zizaco/entrust": 20
     },
     "prefer-stable": false,

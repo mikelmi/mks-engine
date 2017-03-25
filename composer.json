@@ -12,11 +12,11 @@
         "kalnoy/nestedset": "^4.2",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "lavary/laravel-menu": "dev-master",
+        "lavary/laravel-menu": "^1.6",
         "league/glide": "^1.2",
         "league/glide-laravel": "^1.0",
         "mews/captcha": "^2.1",
-        "mikelmi/mks-admin": "dev-master",
+        "mikelmi/mks-admin": "^3.1",
         "mikelmi/mks-smart-table": "^2.1",
         "mikelmi/mks-theme": "^2.1",
         "zizaco/entrust": "dev-master"

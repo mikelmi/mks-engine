@@ -3,17 +3,46 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\DataGrid\Tools\ButtonWidgetCreate;
 use App\Models\Widget;
 use App\Models\WidgetRoutes;
 use App\Services\WidgetManager;
+use App\Traits\CrudPermissions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Mikelmi\MksAdmin\Form\AdminForm;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
+use Mikelmi\MksAdmin\Traits\CrudRequests;
+use Mikelmi\MksAdmin\Traits\MoveRequests;
+use Mikelmi\MksAdmin\Traits\ToggleRequests;
 use Mikelmi\SmartTable\SmartTable;
 
 class WidgetController extends AdminController
 {
-    public function index(WidgetManager $widgetManager)
+    use CrudRequests,
+        CrudPermissions,
+        ToggleRequests,
+        MoveRequests;
+
+    public $modelClass = Widget::class;
+
+    public $toggleField = 'active';
+
+    public $permissionsPrefix = 'widgets';
+
+    /**
+     * @var WidgetManager
+     */
+    private $widgetManager;
+
+    protected function init()
+    {
+        $this->widgetManager = resolve(WidgetManager::class);
+    }
+
+
+    public function index2(WidgetManager $widgetManager)
     {
         return view('admin.widget.index', [
             'types' => $widgetManager->getTypes(),
@@ -21,88 +50,180 @@ class WidgetController extends AdminController
         ]);
     }
 
-    public function data(SmartTable $smartTable)
+    protected function dataGridUrl(): string
+    {
+        return route('admin::widget.index');
+    }
+
+    public function dataGridJson(SmartTable $smartTable)
     {
         $items = Widget::select([
             'id',
             'class',
             'name',
             'title',
-            'status',
+            'active',
             'position',
-            'ordering',
+            'priority',
             'lang'
         ]);
 
         return $smartTable->make($items)
             ->setSearchColumns(['name', 'title'])
+            ->orderBy('priority', 'desc')
             ->apply()
             ->response();
     }
 
-    public function delete(Request $request, $id = null)
+    protected function dataGridOptions(): array
     {
-        if ($id === null) {
-            $id = $request->get('id', []);
+        $canEdit = $this->canEdit();
+        $canDelete = $this->canDelete();
+        $canCreate = $this->canCreate();
+        $canToggle = $this->canToggle();
+
+        $actions = [];
+        $links = [];
+
+        if ($canEdit) {
+            $actions[] = ['type' => 'edit', 'url' => hash_url('widget/edit/{{row.id}}')];
         }
 
-        $res = Widget::whereIn('id',(array)$id)->delete();
-
-        if (!$res) {
-            app()->abort(422);
+        if ($canDelete) {
+            $actions[] = ['type' => 'delete', 'url' => route('admin::widget.delete')];
         }
 
-        return response()->json($res);
+        if ($canCreate) {
+            $links[] = new ButtonWidgetCreate();
+        }
+
+        return [
+            'title' => __('general.Widgets'),
+            'links' => $links,
+            'toggleButton' => $canToggle ?
+                [route('admin::widget.toggle.batch', 1), route('admin::widget.toggle.batch', 0)] : false,
+            'deleteButton' => $canDelete ? route('admin::widget.delete') : false,
+            'columns' => [
+                ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
+                ['key' => 'title', 'title' => __('general.Title'), 'type' => 'link', 'url' => hash_url('widget/show/{{row.id}}'), 'sortable' => true, 'searchable' => true],
+                ['key' => 'class', 'displayKey' => 'class_title', 'title' => __('general.Type'),
+                    'type' => 'list', 'options' => $this->widgetManager->getPresentersList(),
+                    'sortable' => true, 'searchable' => true],
+                ['key' => 'active', 'title' => __('general.Status'), 'type' => 'status', 'url' => route('admin::widget.toggle'),
+                    'sortable' => true, 'searchable' => true,
+                    'disabled' => !$canToggle
+                ],
+                ['key' => 'position', 'title' => __('general.Position'), 'sortable' => true, 'searchable' => true],
+                ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
+                ['key' => 'priority', 'title' => __('general.Priority'), 'type' => 'priority', 'url' => route('admin::widget.move'), 'sortable' => true, 'searchable' => true],
+                ['type' => 'actions', 'actions' => $actions],
+            ],
+            'rowAttributes' => [
+                'ng-class' => "{'table-warning': !row.active}"
+            ]
+        ];
     }
 
-    public function add(WidgetManager $widgetManager, $class)
+    public function create($class)
     {
-        $widget = $widgetManager->make($class);
-
         $model = new Widget();
-        $model->class = $class;
+        $model->class = $this->widgetManager->presenter($class)->alias();
 
-        $widget->setModel($model);
+        $form = $this->form($model, AdminForm::MODE_CREATE);
 
-        $model->status = true;
+        $form->setupCreateMode();
 
-        return view('admin.widget.edit', compact('model', 'widget'));
+        return $form->response();
     }
 
-    public function edit(WidgetManager$widgetManager, $id)
+    protected function form(Widget $model, $mode = null): AdminForm
     {
-        $model = Widget::findOrFail($id);
+        $form = new AdminModelForm($model);
 
-        $widget = $widgetManager->make($model->class);
-        $widget->setModel($model);
+        $form->setAction(route('admin::widget.' . ($model->id ? 'update' : 'store'), $model->id));
+        $form->addBreadCrumb(__('general.Widgets'), hash_url('widget'));
+        $form->setBackUrl(hash_url('widget'));
 
-        return view('admin.widget.edit', compact('model', 'widget'));
+        $fields = [];
+
+        if ($model->id) {
+            $fields[] = ['name' => 'id', 'label' => 'ID'];
+
+            if ($this->canEdit($model)) {
+                $form->setEditUrl(hash_url('widget/edit', $model->id));
+            }
+
+            if ($this->canDelete($model)) {
+                $form->setDeleteUrl(route('admin::widget.delete', $model->id));
+            }
+        }
+
+        $fields = array_merge($fields, [
+            ['name' => 'class_title', 'label' => __('general.Type'), 'type' => 'staticText'],
+            ['name' => 'class', 'type' => 'hidden'],
+            ['name' => 'lang', 'type' => 'language'],
+            ['name' => 'title', 'label' => __('general.Title'), 'required' => true],
+            ['name' => 'name', 'label' => __('general.Name'), 'type' => 'checkedInput'],
+            ['name' => 'position', 'label' => __('general.Position')],
+            ['name' => 'priority', 'label' => __('general.Priority'), 'type' => 'number'],
+            ['name' => 'active', 'type' => 'toggle', 'label' => __('general.Active')],
+        ]);
+
+        $form->addGroup('general', [
+            'title' => __('general.Widget'),
+            'fields' => $fields
+        ]);
+
+        $presenter = $this->widgetManager->exists($model->class) ? $this->widgetManager->presenter($model->class) : null;
+
+        if ($presenter) {
+            $presenter->setModel($model);
+            $presenter->form($form, $mode);
+        }
+
+        $form->addGroup('params', [
+            'title' => __('general.Params'),
+            'fields' => [
+                ['name' => 'params[show_title]', 'label' => __('general.Show Title'),
+                    'type' => 'toggle', 'value' => $model->param('show_title')],
+                ['name' => 'params[in_block]', 'label' => __('general.In Block'),
+                    'type' => 'toggle', 'value' => $model->param('in_block')],
+                ['name' => 'params[attr]', 'type' => 'assoc', $model->id, 'value' => $model->param('attr')],
+                ['name' => 'params[roles]', 'type' => 'rolesShow', 'value' => $model->param('roles'), 'model' => $model],
+                ['name' => 'params[showing]', 'type' => 'routesShow', 'url' => route('admin::widget.routes', $model->id),
+                    'value' => $model->param('showing')
+                ]
+            ]
+        ]);
+
+        return $form;
     }
 
-    public function save(WidgetManager $widgetManager, Request $request, $id = null)
+    public function save(Request $request, Widget $model)
     {
         $this->validate($request, [
-           'class' => 'required' 
-        ]);
-        
-        $widget = $widgetManager->make($request->get('class'));
-        
-        $this->validate($request, array_merge([
+            'class' => 'required',
             'title' => 'required',
             'name' => 'alpha_dash',
             'position' => 'alpha_dash',
-            'ordering' => 'integer'
-        ], $widget->rules()));
+            'priority' => 'integer'
+        ]);
 
-        $model = $id ? Widget::findOrFail($id) : new Widget();
+        $class = $request->get('class');
 
-        $model->class = get_class($widget);
+        $presenter = $this->widgetManager->exists($class) ? $this->widgetManager->presenter($class) : null;
+        
+        if ($presenter) {
+            $this->validate($request, $presenter->rules());
+        }
 
+        $model->class = $presenter ? $presenter->alias() : $class;
         $model->title = $request->input('title');
         $model->position = $request->input('position');
         $model->lang = $request->input('lang');
-        $model->ordering = (int) $request->input('ordering', 0);
-        $model->status = $request->input('status', true);
+        $model->priority = $request->input('priority');
+        $model->active = $request->input('active', true);
+        $model->content = $request->input('content', '');
         $model->params = $request->input('params');
 
         if ($request->exists('name')) {
@@ -112,16 +233,12 @@ class WidgetController extends AdminController
         if (!$model->name) {
             $model->name = str_slug($model->title);
         }
-
-        if ($request->exists('lang')) {
-            $model->lang = $request->input('lang');
-        }
         
-        $widget->setModel($model);
+        $presenter->setModel($model);
 
         \DB::beginTransaction();
 
-        $widget->beforeSave($request);
+        $presenter->beforeSave($request);
 
         $model->save();
 
@@ -173,75 +290,14 @@ class WidgetController extends AdminController
 
         $rolesShowing = $model->param('roles');
 
-        if (!$rolesShowing || $rolesShowing == '1') {
-            $model->roles()->detach();
-        } else {
-            $model->roles()->sync((array)$request->input('roles'));
-        }
+        $roles = !$rolesShowing || $rolesShowing == '1' ? [] : (array)$request->input('roles');
+        $model->syncRoles($roles);
 
         \DB::commit();
 
         $this->flashSuccess(trans('general.Saved'));
 
         return $this->redirect('/widget');
-    }
-
-    function toggle($id)
-    {
-        $model = Widget::findOrFail($id);
-        $model->status = !$model->status;
-        $model->save();
-
-        return response()->json([
-            'model' => [
-                'status' => $model->status
-            ]
-        ]);
-    }
-
-    function toggleBatch(Request $request, $status)
-    {
-        $id = $request->get('id', []);
-
-        $res = Widget::whereIn('id', $id)->update([
-            'status' => $status
-        ]);
-
-        if (!$res) {
-            app()->abort(402);
-        }
-
-        $data = [];
-        $models = Widget::whereIn('id', $id)->get();
-
-        foreach($models as $model) {
-            $data[$model->id] = [
-                'status' => $model->status
-            ];
-        }
-
-        return response()->json([
-            'models' => $data
-        ]);
-    }
-
-    function move($id, $down = false)
-    {
-        $model = Widget::findOrFail($id);
-
-        if ($down) {
-            $model->ordering++;
-        } else {
-            $model->ordering--;
-        }
-
-        $model->save();
-
-        return response()->json([
-            'model' => [
-                'ordering' => $model->ordering
-            ]
-        ]);
     }
 
     function routes($id = null)

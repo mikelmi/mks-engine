@@ -1,5 +1,5 @@
-@extends('widget.' . $template)
+@component($template, ['title' => $title, 'attr' => $attr])
 
-@section('widget_content')
-    {!! $model->content !!}
-@overwrite
+{!! $model->content !!}
+
+@endcomponent

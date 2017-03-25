@@ -1,7 +1,15 @@
-<div {!! htmlspecialchars(html_attr($attr), ENT_NOQUOTES) !!}>
-    @yield('widget_title', !$model->param('hide_title') ? '<div class="card-header widget-title">' . $model->title . '</div>' : '')
+<div
+@if (isset($attr) && is_array($attr))
+    {!! html_attr($attr) !!}
+@endif
+>
+    @if (isset($title) && $title)
+        <div class="card-header widget-title">
+            {{ $title }}
+        </div>
+    @endif
 
     <div class="card-block widget-body">
-        @yield('widget_content')
+        {{ $slot }}
     </div>
 </div>

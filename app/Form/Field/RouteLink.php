@@ -39,7 +39,7 @@ class RouteLink extends Field
     {
         $attr = $this->getAttributes();
 
-        return '<mks-link-select '.html_attr($attr).'></mks-select-link>';
+        return '<mks-link-select '.html_attr($attr).'></mks-link-select>';
     }
 
     protected function getDefaultAttributes(): array

@@ -70,12 +70,12 @@ mix.combine([
 ], public_path('admin/css/admin.css'));
 
 mix.js(asset([
-    'js/admin/mks-admin-ext.js',
+    'js/admin/mks-components.js',
+    'js/admin/mks-link-select.js',
     'js/admin/artisan.js',
     'js/admin/dashboard.js',
     'js/admin/category-manager.js',
-    'js/admin/menu-manager.js',
-    'js/admin/widget-manager.js'
+    'js/admin/menu-manager.js'
 ]), public_path('admin/js/admin-app.js'));
 
 /** FileManager **/

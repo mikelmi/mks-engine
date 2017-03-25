@@ -147,4 +147,7 @@ return [
     'bottom-right' => 'знизу справа',
 
     'Empty Template' => 'Порожній шаблон',
+
+    'Priority' => 'Пріоритет',
+    'In Block' => 'В блоці',
 ];
