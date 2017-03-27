@@ -1,13 +1,14 @@
 @extends('layouts.base')
 
 @section('body-wrap')
-    <nav class="navbar navbar-fixed-top navbar-light bg-faded">
-        {!! site_logo() !!}
-        @widget(mainmenu)
-        <div class="pull-right" style="margin-left: 20px">
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">{!! site_logo() !!}</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            @widget(mainmenu)
             @include('_partials.user_top_nav')
-        </div>
-        <div class="pull-right">
             @widgets(top-right)
         </div>
     </nav>

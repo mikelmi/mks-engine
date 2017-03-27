@@ -1,4 +1,4 @@
-@if (isset($attr) && is_array($attr))
+@if (isset($attr) && $attr)
     <div {!! html_attr($attr) !!}>
 @endif
 
@@ -10,6 +10,6 @@
 
 {{ $slot }}
 
-@if (isset($attr) && is_array($attr))
+@if (isset($attr) && $attr)
     </div>
 @endif
