@@ -5,61 +5,55 @@ namespace App\Widgets;
 
 use App\Models\Category;
 use App\Models\Section;
-use App\Presenters\SelectMenuPresenter;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 
-class CategoryWidget extends MenuWidget implements WidgetInterface
+
+class CategoryWidget extends NavPresenter
 {
 
     /**
      * @return string
      */
-    public static function title()
+    public function title(): string
     {
-        return trans('general.Categories');
+        return __('general.Categories');
     }
 
-    public function form()
+    /**
+     * @return string
+     */
+    public function alias(): string
     {
-        return view('admin.widget.form.category', [
-            'model' => $this->model,
-            'sections' => Section::pluck('title', 'id'),
-            'presenters' => $this->getPresentersList()
+        return 'category';
+    }
+
+    public function form(AdminModelForm $form, $mode = null)
+    {
+        $fields = [
+            ['name' => 'content', 'label' => __('general.Section'), 'type' => 'select2',
+                'options' => Section::pluck('title', 'id')->toArray()
+            ]
+        ];
+
+        $form->addGroup('menu', [
+            'title' => __('general.Categories'),
+            'fields' => array_merge($fields, $this->formFields())
         ]);
     }
 
-    public function beforeSave(Request $request)
-    {
-        $this->model->content = $request->input('content');
-    }
-
-    public function render()
-    {
-        if (!$this->model->content) {
-            return;
-        }
-
-        $type = array_get($this->presenters, $this->model->param('type', ''));
-
-        $presenter = $this->makePresenter($type);
-
-        if ($presenter instanceof SelectMenuPresenter) {
-            $items = Category::getFlatTree($this->model->content);
-        } else {
-            $items = Category::getTree($this->model->content);
-        }
-        
-        $items = $presenter->render($items, $this->getGeneralAttributes(true));
-
-        return $this->view('widget.menu', [
-            'items' => $items
-        ])->render();
-    }
-
-    public function rules()
+    public function rules():array
     {
         return [
             'content' => 'required'
         ];
+    }
+
+    /**
+     * @return Collection
+     */
+    protected function getItems(): Collection
+    {
+        return Category::getTree($this->model->content);
     }
 }
