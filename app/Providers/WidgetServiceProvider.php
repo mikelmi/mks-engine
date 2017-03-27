@@ -10,6 +10,7 @@ namespace App\Providers;
 
 use App\Services\WidgetManager;
 use App\Widgets\CategoryWidget;
+use App\Widgets\ContactsWidget;
 use App\Widgets\HtmlWidget;
 use App\Widgets\LanguagesWidget;
 use App\Widgets\MenuWidget;
@@ -28,6 +29,7 @@ class WidgetServiceProvider extends ServiceProvider
         'widget.languages' => LanguagesWidget::class,
         'widget.category' => CategoryWidget::class,
         'widget.search' => SearchWidget::class,
+        'widget.contacts' => ContactsWidget::class
     ];
 
     public function register()

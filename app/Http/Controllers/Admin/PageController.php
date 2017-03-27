@@ -178,9 +178,9 @@ class PageController extends AdminController
         $form->addGroup('params', [
             'title' => __('general.Params'),
             'fields' => [
-                ['name' => 'params[template]', 'type' => 'toggle', 'label' => __('general.Empty Template'), 'value' => $model->param('template')],
-                ['name' => 'params[hide_title]', 'type' => 'toggle', 'label' => __('general.Hide Title'), 'value' => $model->param('hide_title')],
-                ['name' => 'params[roles]', 'type' => 'rolesShow', 'value' => $model->param('roles'), 'model' => $model],
+                ['name' => 'params[template]', 'nameSce' => 'params.template', 'type' => 'toggle', 'label' => __('general.Empty Template'), 'value' => $model->param('template')],
+                ['name' => 'params[hide_title]', 'nameSce' => 'params.hide_title', 'type' => 'toggle', 'label' => __('general.Hide Title'), 'value' => $model->param('hide_title')],
+                ['name' => 'params[roles]', 'nameSce' => 'params.roles', 'type' => 'rolesShow', 'value' => $model->param('roles'), 'model' => $model],
             ],
         ]);
 

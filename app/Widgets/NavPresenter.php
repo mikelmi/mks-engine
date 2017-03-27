@@ -155,7 +155,7 @@ abstract class NavPresenter extends WidgetPresenter
     public function formFields($mode = null): array
     {
         return [
-            ['name' => 'params[nav_type]', 'label' => __('general.Type'),
+            ['name' => 'params[nav_type]', 'nameSce' => 'params.nav_type', 'label' => __('general.Type'),
                 'type' => 'radio',
                 'value' => $this->model->param('nav_type', 'h'),
                 'options' => [
@@ -163,7 +163,7 @@ abstract class NavPresenter extends WidgetPresenter
                     'v' => __('general.Vertical'),
                 ]
             ],
-            ['name' => 'params[nav_align]', 'label' => __('general.Align'),
+            ['name' => 'params[nav_align]', 'nameSce' => 'params.nav_align', 'label' => __('general.Align'),
                 'type' => 'radio',
                 'value' => $this->model->param('nav_align', 'left'),
                 'options' => [
@@ -173,7 +173,7 @@ abstract class NavPresenter extends WidgetPresenter
                     'justify' => __('general.align_justify'),
                 ]
             ],
-            ['name' => 'params[nav_attr]', 'label' => __('general.html_attr'),
+            ['name' => 'params[nav_attr]', 'nameSce' => 'params.nav_attr', 'label' => __('general.html_attr'),
                 'type' => 'assoc', 'value' => $this->model->param('nav_attr')],
         ];
     }

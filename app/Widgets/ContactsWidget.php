@@ -2,23 +2,41 @@
 
 namespace App\Widgets;
 
-class ContactsWidget extends HtmlWidget
+use Mikelmi\MksAdmin\Form\AdminModelForm;
+
+
+class ContactsWidget extends WidgetPresenter
 {
+    /**
+     * @return string
+     */
+    public function title(): string
+    {
+        return __('general.ContactsWidget');
+    }
 
     /**
      * @return string
      */
-    public static function title()
+    public function alias(): string
     {
-        return trans('general.ContactsWidget');
+        return 'contacts';
     }
 
-    public function form()
+    public function form(AdminModelForm $form, $mode = null)
     {
-        return view('admin.widget.form.contacts', ['model' => $this->model]);
+        $form->addGroup('text', [
+            'title' => $this->title(),
+            'fields' => [
+                ['name' => 'params[email]', 'nameSce' => 'params.email', 'label' => 'E-mail', 'type' => 'email',
+                    'value' => $this->model->param('email')
+                ],
+                ['name' => 'content', 'label' => __('general.Text'), 'type' => 'editor', 'rows' => 5]
+            ]
+        ]);
     }
-    
-    public function render()
+
+    public function render(): string
     {
         $user = \Auth::user();
 
@@ -29,7 +47,7 @@ class ContactsWidget extends HtmlWidget
         ])->render();
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'params.email' => 'email',

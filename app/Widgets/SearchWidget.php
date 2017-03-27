@@ -11,7 +11,7 @@ class SearchWidget extends WidgetPresenter
      */
     public function title(): string
     {
-        return trans('general.SearchWidget');
+        return __('general.SearchWidget');
     }
 
     /**

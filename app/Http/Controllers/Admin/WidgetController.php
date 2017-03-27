@@ -184,14 +184,14 @@ class WidgetController extends AdminController
         $form->addGroup('params', [
             'title' => __('general.Params'),
             'fields' => [
-                ['name' => 'params[show_title]', 'label' => __('general.Show Title'),
+                ['name' => 'params[show_title]', 'nameSce' => 'params.show_title', 'label' => __('general.Show Title'),
                     'type' => 'toggle', 'value' => $model->param('show_title')],
-                ['name' => 'params[in_block]', 'label' => __('general.In Block'),
+                ['name' => 'params[in_block]', 'nameSce' => 'params.in_block', 'label' => __('general.In Block'),
                     'type' => 'toggle', 'value' => $model->param('in_block')],
-                ['name' => 'params[attr]', 'label' => __('general.html_attr'),
+                ['name' => 'params[attr]', 'nameSce' => 'params.attr', 'label' => __('general.html_attr'),
                     'type' => 'assoc', 'value' => $model->param('attr')],
-                ['name' => 'params[roles]', 'type' => 'rolesShow', 'value' => $model->param('roles'), 'model' => $model],
-                ['name' => 'params[showing]', 'type' => 'routesShow', 'url' => route('admin::widget.routes', $model->id),
+                ['name' => 'params[roles]', 'nameSce' => 'params.roles', 'type' => 'rolesShow', 'value' => $model->param('roles'), 'model' => $model],
+                ['name' => 'params[showing]', 'nameSce' => 'params.showing', 'type' => 'routesShow', 'url' => route('admin::widget.routes', $model->id),
                     'value' => $model->param('showing')
                 ]
             ]

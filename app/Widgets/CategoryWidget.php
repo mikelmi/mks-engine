@@ -32,7 +32,8 @@ class CategoryWidget extends NavPresenter
     {
         $fields = [
             ['name' => 'content', 'label' => __('general.Section'), 'type' => 'select2',
-                'options' => Section::pluck('title', 'id')->toArray()
+                'options' => Section::pluck('title', 'id')->toArray(),
+                'required' => true
             ]
         ];
 
