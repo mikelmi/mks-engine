@@ -150,4 +150,12 @@ return [
 
     'Priority' => 'Priority',
     'In Block' => 'In Block',
+
+    'Align' => 'Align',
+    'align_left' => 'Left',
+    'align_center' => 'Center',
+    'align_right' => 'Right',
+    'align_justify' => 'Justify',
+
+    'html_attr' => 'HTML attributes',
 ];

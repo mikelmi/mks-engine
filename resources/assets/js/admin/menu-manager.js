@@ -3,8 +3,8 @@ require('angular-ui-tree');
 (function(){
     var app = angular.module('mks-menu-manager', ['ui.tree']);
 
-    app.controller('MenuController', ['$scope', '$http', 'UrlBuilder', '$location',
-        function($scope, $http, UrlBuilder, $location) {
+    app.controller('MenuController', ['$scope', '$http', 'UrlBuilder', '$location', 'Page',
+        function($scope, $http, UrlBuilder, $location, Page) {
 
         $scope.menu = [];
         $scope.currentMenu = null;
@@ -111,6 +111,9 @@ require('angular-ui-tree');
                         $location.path('/menuman');
                     } else if ($scope.menu.length) {
                         $scope.selectMenu($scope.menu[0]);
+                    } else {
+                        $location.path('/menuman');
+                        Page.reload();
                     }
                 });
             }

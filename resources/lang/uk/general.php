@@ -150,4 +150,12 @@ return [
 
     'Priority' => 'Пріоритет',
     'In Block' => 'В блоці',
+
+    'Align' => 'Вирівнювання',
+    'align_left' => 'Зліва',
+    'align_center' => 'По центру',
+    'align_right' => 'Справа',
+    'align_justify' => 'По всій ширині',
+
+    'html_attr' => 'HTML атрибути',
 ];

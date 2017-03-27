@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use App\Traits\HasActive;
+use App\Traits\OrderByName;
 use App\Traits\Parametrized;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,11 +16,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $lang
  * @property string $position
- * @property boolean $active
  */
 class Menu extends Model
 {
-    use Parametrized;
+    use Parametrized,
+        HasActive,
+        OrderByName;
 
     protected $table = 'menu';
 
@@ -34,15 +37,5 @@ class Menu extends Model
     public function menuItems()
     {
         return $this->hasMany(MenuItem::class);
-    }
-
-    public function scopeActive($query, $active = true)
-    {
-        return $query->where('active', $active);
-    }
-
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('name');
     }
 }

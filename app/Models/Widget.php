@@ -52,4 +52,14 @@ class Widget extends Model
 
         return is_array($result) ? $result : [];
     }
+
+    /**
+     * @param $key
+     * @param null $default
+     * @return mixed
+     */
+    public function getHtmlAttribute($key, $default = null)
+    {
+        return array_get($this->getAttributes(), $key);
+    }
 }

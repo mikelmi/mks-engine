@@ -1,120 +1,64 @@
 <?php
+/**
+ * Author: mike
+ * Date: 25.03.17
+ * Time: 16:23
+ */
 
 namespace App\Widgets;
 
 
 use App\Models\Menu;
 use App\Models\MenuItem;
-use App\Presenters\LinksMenuPresenter;
-use App\Presenters\LinksSepMenuPresenter;
-use App\Presenters\ListMenuPresenter;
-use App\Presenters\MenuPresenterInterface;
-use App\Presenters\NavbarMenuPresenter;
-use App\Presenters\NavInlineMenuPresenter;
-use App\Presenters\NavMenuPresenter;
-use App\Presenters\PillsMenuPresenter;
-use App\Presenters\PillsStackedMenuPresenter;
-use App\Presenters\SelectMenuPresenter;
-use App\Presenters\TabsMenuPresenter;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 
-class MenuWidget extends WidgetBase implements WidgetInterface
+class MenuWidget extends NavPresenter
 {
-    protected $presenters = [
-        'nav' => NavMenuPresenter::class,
-        'navbar' => NavbarMenuPresenter::class,
-        'nav-inline' => NavInlineMenuPresenter::class,
-        'nav-tabs' => TabsMenuPresenter::class,
-        'pills' => PillsMenuPresenter::class,
-        'pills-stacked' => PillsStackedMenuPresenter::class,
-        'list' => ListMenuPresenter::class,
-        'select' => SelectMenuPresenter::class,
-        'links' => LinksMenuPresenter::class,
-        'links-sep' => LinksSepMenuPresenter::class
-    ];
-
-    public function getPresentersList()
+    protected function getItems(): Collection
     {
-        /**
-         * @var MenuPresenterInterface $class
-         */
-        foreach ($this->presenters as $key => $class) {
-           yield $key => $class::title();
-        }
+        return MenuItem::getTree($this->model->content);
     }
 
     /**
      * @return string
      */
-    public static function title()
+    public function title(): string
     {
-        return trans('general.Menu');
+        return __('general.Menu');
     }
 
-    public function form()
+    /**
+     * @return string
+     */
+    public function alias(): string
     {
-        $menu = Menu::ordered()->get();
+        return 'menu';
+    }
 
-        return view('admin.widget.form.menu', [
-            'model' => $this->model,
-            'menu' => $menu,
-            'presenters' => $this->getPresentersList()
+    public function form(AdminModelForm $form, $mode = null)
+    {
+        $fields = [
+            ['name' => 'content', 'label' => __('general.Menu'), 'type' => 'select2',
+                'options' => Menu::ordered()->pluck('name', 'id')->toArray(),
+                'allowEmpty' => false,
+                'required' => true
+            ]
+        ];
+
+
+        $form->addGroup('menu', [
+            'title' => __('general.Menu'),
+            'fields' => array_merge($fields, $this->formFields())
         ]);
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'content' => 'required'
         ];
     }
 
-    public function beforeSave(Request $request)
-    {
-        $this->model->content = $request->input('content');
-    }
-    
-    public function render()
-    {
-        if (!$this->model->content) {
-            return;
-        }
 
-        $type = array_get($this->presenters, $this->model->param('type', ''));
-
-        $presenter = $this->makePresenter($type);
-        
-        if ($presenter instanceof SelectMenuPresenter) {
-            $items = MenuItem::getFlatTree($this->model->content);
-        } else {
-            $items = MenuItem::getTree($this->model->content);
-        }
-
-        $items = $presenter->render($items, $this->getGeneralAttributes(true));
-
-        return $this->view('widget.menu', [
-            'items' => $items
-        ])->render();
-    }
-
-    /**
-     * @param string $className
-     * @return MenuPresenterInterface
-     * @throws \InvalidArgumentException
-     */
-    protected function makePresenter($className)
-    {
-        if (!$className) {
-            $className = NavMenuPresenter::class;
-        }
-
-        if (class_exists($className)) {
-            $presenter = new $className();
-            if ($presenter instanceof MenuPresenterInterface) {
-                return $presenter;
-            }
-        }
-
-        throw new \InvalidArgumentException('Invalid Menu Presenter "' . $className . '"');
-    }
 }
