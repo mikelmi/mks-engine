@@ -62,7 +62,13 @@ $router->get('lang/{iso?}', function(\Illuminate\Http\Request $request, \App\Rep
         return redirect($iso);
     }
 
-    return redirect()->away($root . '/' . $iso . '/' . $path);
+    $url = $root . '/' . $iso;
+
+    if ($path && !$languageRepository->has($path)) {
+        $url .= '/' . $path;
+    }
+
+    return redirect()->away($url);
 
 })->where('iso', '[A-Za-z-_]+')->name('language.change');
 

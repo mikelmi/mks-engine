@@ -8,8 +8,8 @@
         <a class="navbar-brand" href="#">{!! site_logo() !!}</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             @widget(mainmenu)
-            @include('_partials.user_top_nav')
             @widgets(top-right)
+            @include('_partials.user_top_nav')
         </div>
     </nav>
 

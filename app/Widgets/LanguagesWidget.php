@@ -2,97 +2,50 @@
 
 namespace App\Widgets;
 
-use App\Presenters\DropdownLanguagesPresenter;
-use App\Presenters\DropdownNavbarLanguagesPresenter;
-use App\Presenters\MenuPresenterInterface;
-use App\Presenters\NavLanguagesPresenter;
-use App\Presenters\SelectLanguagesPresenter;
+use App\Models\Language;
 use App\Repositories\LanguageRepository;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
-class LanguagesWidget extends MenuWidget implements WidgetInterface
+
+class LanguagesWidget extends WidgetPresenter
 {
-    public function __construct()
+    public function render(): string
     {
-        $this->presenters['dropdown'] = DropdownLanguagesPresenter::class;
-        $this->presenters['dropdown_navbar'] = DropdownNavbarLanguagesPresenter::class;
-        $this->presenters['select'] = SelectLanguagesPresenter::class;
+        /** @var Collection $languages */
+        $languages = resolve(LanguageRepository::class)->enabled();
+
+        if ($languages->isEmpty()) {
+            return '';
+        }
+
+        if (!($current = $this->getCurrentLanguage())) {
+            $current = $languages->first();
+        }
+
+        return $this->view('widget.languages', compact('languages', 'current'))->render();
     }
 
     /**
      * @return string
      */
-    public static function title()
+    public function title(): string
     {
-        return trans('general.Languages');
-    }
-
-    public function form()
-    {
-        return view('admin.widget.form.languages', [
-            'model' => $this->model,
-            'presenters' => $this->getPresentersList()
-        ]);
-    }
-
-    public function rules()
-    {
-        return [];
-    }
-
-    public function beforeSave(Request $request)
-    {
-        
-    }
-
-    public function render()
-    {
-        $type = $this->model->param('type');
-
-        $presenter = $this->makePresenter($type);
-
-        $languages = app(LanguageRepository::class)->enabled();
-
-        $items = $presenter->render($languages, $this->getGeneralAttributes(true));
-
-        return $this->view('widget.languages', [
-            'items' => $items
-        ])->render();
+        return __('general.Languages');
     }
 
     /**
-     * @param string $type
-     * @return MenuPresenterInterface
-     * @throws \InvalidArgumentException
+     * @return string
      */
-    protected function makePresenter($type)
+    public function alias(): string
     {
-        $className = $type ? array_get($this->presenters, $type) : null;
-        $defaultClassName = NavLanguagesPresenter::class;
+        return 'languages';
+    }
 
-        if (!$className) {
-            $className = $defaultClassName;
-        }
-
-        if (class_exists($className)) {
-            if ($className != $defaultClassName) {
-                $reflect = new \ReflectionClass($className);
-                if ($reflect->isSubclassOf(NavLanguagesPresenter::class)) {
-                    $defaultClassName = $className;
-                }
-            }
-
-            $options = [
-                'locale' => app()->getLocale(),
-            ];
-
-            if ($type && $className != $defaultClassName) {
-                $options = array_merge($options, call_user_func([$className, 'options']));
-            }
-
-            return new $defaultClassName($options);
-        }
-
-        throw new \InvalidArgumentException('Invalid Menu Presenter "' . $className . '"');
+    /**
+     * @return Language|null
+     */
+    protected function getCurrentLanguage()
+    {
+        return resolve(LanguageRepository::class)->get(app()->getLocale());
     }
 }

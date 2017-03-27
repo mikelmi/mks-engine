@@ -1,5 +1,19 @@
-@extends('widget.' . $template)
+@component($template, ['title' => $title, 'attr' => $attr])
 
-@section('widget_content')
-    {!! $items !!}
-@overwrite
+<ul class="nav navbar-nav">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            {!! $current->iconImage() !!} {{$current->getIso()}}
+        </a>
+        <div class="dropdown-menu">
+            @foreach($languages as $lang)
+                <a class="dropdown-item" href="{{route('language.change', $lang->getIso())}}">
+                    {!! $lang->iconImage() !!}
+                    {{$lang->getTitle()}}
+                </a>
+            @endforeach
+        </div>
+    </li>
+</ul>
+
+@endcomponent

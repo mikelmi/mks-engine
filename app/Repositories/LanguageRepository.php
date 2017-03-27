@@ -79,6 +79,15 @@ class LanguageRepository
     }
 
     /**
+     * @param $key
+     * @return bool
+     */
+    public function has($key): bool
+    {
+        return $this->available()->has($key);
+    }
+
+    /**
      * @param $code
      * @return int
      */

@@ -10,6 +10,7 @@ namespace App\Providers;
 
 use App\Services\WidgetManager;
 use App\Widgets\HtmlWidget;
+use App\Widgets\LanguagesWidget;
 use App\Widgets\MenuWidget;
 use App\Widgets\TextWidget;
 use Illuminate\Support\ServiceProvider;
@@ -21,7 +22,8 @@ class WidgetServiceProvider extends ServiceProvider
     private $aliases = [
         'widget.text' => TextWidget::class,
         'widget.html' => HtmlWidget::class,
-        'widget.menu' => MenuWidget::class
+        'widget.menu' => MenuWidget::class,
+        'widget.languages' => LanguagesWidget::class,
     ];
 
     public function register()
