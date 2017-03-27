@@ -3,31 +3,22 @@
 namespace App\Widgets;
 
 
-use Illuminate\Http\Request;
-
-class SearchWidget extends WidgetBase implements WidgetInterface
+class SearchWidget extends WidgetPresenter
 {
 
     /**
      * @return string
      */
-    public static function title()
+    public function title(): string
     {
         return trans('general.SearchWidget');
     }
 
-    public function form()
+    /**
+     * @return string
+     */
+    public function alias(): string
     {
-        return view('admin.widget.form.search', ['model' => $this->model]);
-    }
-
-    public function beforeSave(Request $request)
-    {
-        $this->model->content = $request->input('content', '');
-    }
-    
-    public function render()
-    {
-        return $this->view('widget.search')->render();
+        return 'search';
     }
 }

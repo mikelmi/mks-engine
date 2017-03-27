@@ -13,6 +13,7 @@ use App\Widgets\CategoryWidget;
 use App\Widgets\HtmlWidget;
 use App\Widgets\LanguagesWidget;
 use App\Widgets\MenuWidget;
+use App\Widgets\SearchWidget;
 use App\Widgets\TextWidget;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +27,7 @@ class WidgetServiceProvider extends ServiceProvider
         'widget.menu' => MenuWidget::class,
         'widget.languages' => LanguagesWidget::class,
         'widget.category' => CategoryWidget::class,
+        'widget.search' => SearchWidget::class,
     ];
 
     public function register()
