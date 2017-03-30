@@ -46,6 +46,7 @@ return [
             'routesShow' => \App\Form\Field\ShowForRoutes::class,
             'assoc' => \App\Form\Field\AssocArray::class,
             'image' => \App\Form\Field\ImagePicker::class,
+            'size' => \App\Form\Field\Size::class,
         ]
     ],
 

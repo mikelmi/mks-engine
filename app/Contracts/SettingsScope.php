@@ -33,7 +33,12 @@ interface SettingsScope
     /**
      * @param array $old
      * @param array $new
-     * @return mixed
      */
     public function afterSave(array $old, array $new);
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function input(array $data): array;
 }

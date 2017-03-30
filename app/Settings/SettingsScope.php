@@ -26,4 +26,10 @@ abstract class SettingsScope implements \App\Contracts\SettingsScope
     {
 
     }
+
+    public function input(array $data): array
+    {
+        return $data;
+    }
+
 }

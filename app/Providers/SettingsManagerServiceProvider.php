@@ -11,6 +11,7 @@ namespace App\Providers;
 use App\Services\Settings;
 use App\Services\SettingsManager;
 use App\Settings\CaptchaSettings;
+use App\Settings\FilesSettings;
 use App\Settings\PageSettings;
 use App\Settings\SiteSettings;
 use App\Settings\UserSettings;
@@ -24,7 +25,8 @@ class SettingsManagerServiceProvider extends ServiceProvider
         SiteSettings::class,
         UserSettings::class,
         PageSettings::class,
-        CaptchaSettings::class
+        CaptchaSettings::class,
+        FilesSettings::class
     ];
 
     public function register()

@@ -79,8 +79,14 @@ class SettingsManager
 
             $fields = $settingsScope->fields();
 
-            foreach ($fields as &$field) {
+            foreach ($fields as $k => &$field) {
                 $name = $field['name'];
+
+                if (!$name) {
+                    unset($fields[$k]);
+                    continue;
+                }
+
                 $field['name'] = $this->scopedFieldName($scopeName, $name);
                 $field['nameSce'] = $this->scopedFieldNameSce($scopeName, array_get($field, 'nameSce', $name));
                 if (!array_key_exists('value', $field)) {
@@ -102,7 +108,11 @@ class SettingsManager
      */
     public function scopedFieldName($scope, $name): string
     {
-        if (preg_match('/(.+)\[(.+)\]/', $name, $m)) {
+        if (!$name) {
+            return $name;
+        }
+
+        if (preg_match('/(.+)\[(.*)\]/', $name, $m)) {
             return sprintf('%s[%s][%s]', $scope, $m[1], $m[2]);
         }
         return $scope . '[' . $name . ']';
@@ -115,7 +125,7 @@ class SettingsManager
      */
     public function scopedFieldNameSce($scope, $name): string
     {
-        return $scope . '.' . $name;
+        return $name ? $scope . '.' . $name : '';
     }
 
     /**
@@ -134,7 +144,9 @@ class SettingsManager
 
             foreach ($scopeRules as $field => $rule) {
                 $fieldName = $this->scopedFieldNameSce($scopeName, $field);
-                $rules[$fieldName] = $rule;
+                if ($fieldName) {
+                    $rules[$fieldName] = $rule;
+                }
             }
         }
 
@@ -151,16 +163,18 @@ class SettingsManager
 
             $fields = array_map(function($item) {
                 $name = $item['name'];
-                if ($i = strpos($name, '[')) {
-                    $name = substr($name, 0, $i);
+                if ($name) {
+                    if ($i = strpos($name, '[')) {
+                        $name = substr($name, 0, $i);
+                    }
+                    return $name;
                 }
-                return $name;
             }, $settingsScope->fields());
 
-            $fields = array_unique($fields);
+            $fields = array_unique(array_filter($fields));
 
             $old[$scopeName] = $this->settings->get($scopeName, []);
-            $new[$scopeName] = array_only((array) $request->get($scopeName, []), $fields);
+            $new[$scopeName] = $settingsScope->input(array_only((array) $request->get($scopeName, []), $fields));
 
             $this->settings->set($scopeName, $new[$scopeName]);
         }
