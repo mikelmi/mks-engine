@@ -22,14 +22,14 @@ class WidgetServiceProvider extends ServiceProvider
 {
     protected $defer = true;
 
-    private $aliases = [
-        'widget.text' => TextWidget::class,
-        'widget.html' => HtmlWidget::class,
-        'widget.menu' => MenuWidget::class,
-        'widget.languages' => LanguagesWidget::class,
-        'widget.category' => CategoryWidget::class,
-        'widget.search' => SearchWidget::class,
-        'widget.contacts' => ContactsWidget::class
+    private $presenters = [
+        TextWidget::class,
+        HtmlWidget::class,
+        MenuWidget::class,
+        LanguagesWidget::class,
+        CategoryWidget::class,
+        SearchWidget::class,
+        ContactsWidget::class
     ];
 
     public function register()
@@ -38,17 +38,13 @@ class WidgetServiceProvider extends ServiceProvider
             return new WidgetManager($app->tagged('widgets'));
         });
 
-        foreach ($this->aliases as $alias => $abstract) {
-            $this->app->alias($abstract, $alias);
-        }
-
-        $this->app->tag(array_keys($this->aliases), 'widgets');
+        $this->app->tag($this->presenters, 'widgets');
     }
 
     public function provides()
     {
         return array_merge(
-            array_keys($this->aliases),
+            $this->presenters,
             [WidgetManager::class]
         );
     }

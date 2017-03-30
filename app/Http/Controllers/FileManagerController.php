@@ -297,7 +297,7 @@ class FileManagerController extends Controller
         $extensions = $type ? $fileManager->getTypeExtensions($type, []) : [];
         $maxSize = null;
 
-        if (!$request->user()->isAdmin()) {
+        if (!$request->user()->isSuperAdmin()) {
             if ($allowedExtensions = settings('files.extensions')) {
                 if (!is_array($allowedExtensions)) {
                     $allowedExtensions = explode(',', $extensions);
@@ -496,7 +496,7 @@ class FileManagerController extends Controller
 
     private function isDenyExtension(Request $request, $path, array $extensions = null)
     {
-        if ($request->user()->isAdmin()) {
+        if ($request->user()->isSuperAdmin()) {
             return false;
         }
 

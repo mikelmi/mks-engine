@@ -44,7 +44,8 @@ return [
             'route' => \App\Form\Field\RouteLink::class,
             'pages' => \App\Form\Field\SelectPages::class,
             'routesShow' => \App\Form\Field\ShowForRoutes::class,
-            'assoc' => \App\Form\Field\AssocArray::class
+            'assoc' => \App\Form\Field\AssocArray::class,
+            'image' => \App\Form\Field\ImagePicker::class,
         ]
     ],
 

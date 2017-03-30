@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0",
+        "anhskohbo/no-captcha": "^2.3",
         "artesaos/seotools": "^0.10.0",
         "cviebrock/eloquent-taggable": "^2.1",
         "intervention/image": "^2.3",

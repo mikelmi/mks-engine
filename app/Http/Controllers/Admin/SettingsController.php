@@ -4,79 +4,46 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Events\SettingsScopesCollect;
+use App\Services\SettingsManager;
 use App\Settings\SettingsScope;
 use App\Services\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Mikelmi\MksAdmin\Form\AdminForm;
+use Mikelmi\MksAdmin\Form\FormGroup;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class SettingsController extends AdminController
 {
     /**
-     * @return Collection
+     * @var SettingsManager
      */
-    private function getScopes()
-    {
-        $collection = new Collection();
+    private $settingsManager;
 
-        event(new SettingsScopesCollect($collection));
-        
-        return $collection;
-    }
-
-    /**
-     * @param string $name
-     * @return SettingsScope|nulls
-     */
-    private function getScope($name)
+    protected function init()
     {
-        return $this->getScopes()->get($name);
+        $this->settingsManager = resolve(SettingsManager::class);
     }
     
-    public function index(Settings $settings, $scope = 'site')
+    public function index($scope = 'site')
     {
-        $scopes = $this->getScopes();
-        /** @var SettingsScope $scopeObject */
-        $scopeObject = $scopes->get($scope);
+        $form = $this->settingsManager->getForm($scope);
 
-        if (!$scopeObject) {
-            abort('404', 'Scope not found');
-        }
+        $form->setTitle(__('general.Settings'));
 
-        $model = $settings->getRepository($scope);
-        $scopeObject->getModel($model);
-        
-        $view = $scopeObject->getView('admin.settings.'.$scope);
+        $form->setAction(route('admin::settings.save'));
 
-        return view($view, compact('model', 'scopes', 'scope', 'scopeObject'));
+        return $form->response();
     }
 
-    public function save(Request $request, Settings $settings, $scope = 'site')
+    public function save(Request $request)
     {
-        $scopeObject = $this->getScope($scope);
+        if ($this->settingsManager->save($request)) {
+            $this->flashSuccess(trans('general.Saved'));
 
-        if (!$scopeObject) {
-            abort('404', 'Scope not found');
+            return 'Ok';
         }
 
-        $rules = $scopeObject->getRules();
-
-        if ($rules) {
-            $this->validate($request, $rules);
-        }
-
-        $old = $settings->getRepository($scope);
-        $data = $request->only($scopeObject->getFields());
-
-        $scopeObject->beforeSave($data);
-
-        $settings->set($scope, $data);
-        $settings->save();
-
-        $scopeObject->afterSave($old, $settings->getRepository($scope));
-
-        $this->flashSuccess(trans('general.Saved'));
-
-        return $this->redirect('/settings/' . $scope);
+        abort(422, 'Settings not saved');
     }
 }

@@ -79,10 +79,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(Settings::class, 'settings');
-
-        $this->app->singleton(WidgetManager::class, function() {
-            return new WidgetManager();
-        });
         
         $this->app->singleton(LanguageRepository::class, function($app) {
             return new LanguageRepository($app['settings'], resource_path('data/languages.json'));

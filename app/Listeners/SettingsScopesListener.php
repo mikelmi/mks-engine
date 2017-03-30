@@ -23,7 +23,7 @@ class SettingsScopesListener
     public function subscribe(Dispatcher $events)
     {
         $events->listen(SettingsScopesCollect::class, self::class . '@onScopesCollect');
-        $events->listen(AdminMenuBuild::class, self::class . '@onAdminMenu');
+        //$events->listen(AdminMenuBuild::class, self::class . '@onAdminMenu');
         $events->listen(PagePathChanged::class, self::class . '@onPagePathChanged');
     }
     

@@ -5,30 +5,45 @@ namespace App\Settings;
 
 use Illuminate\Config\Repository;
 
+
 class SiteSettings extends SettingsScope
 {
-    public function __construct()
-    {
-        parent::__construct('site', trans('general.Site'));
-
-        $this->setFields(['title', 'description', 'keywords', 'off', 'theme', 'logo', 'background', 'background_fixed']);
-    }
-
-    public function afterSave(Repository $old, Repository $new)
+    public function afterSave(array $old, array $new)
     {
         $isDown = app()->isDownForMaintenance();
-        if ($isDown && !$new->get('off')) {
+        if ($isDown && !array_get($new, 'off')) {
             \Artisan::call('up');
-        } elseif (!$isDown && $new->get('off')) {
+        } elseif (!$isDown && array_get($new, 'off')) {
             \Artisan::call('down');
         }
     }
 
-    public function getModel(Repository $repository)
+    public function name(): string
     {
-        $repository->set('off', (int) app()->isDownForMaintenance());
-        $repository->set('themes', \Theme::all());
+        return 'site';
+    }
 
-        return parent::getModel($repository);
+    public function title(): string
+    {
+        return __('general.Site');
+    }
+
+    public function fields(): array
+    {
+        return [
+            ['name' => 'title', 'label' => __('general.Title')],
+            ['name' => 'description', 'label' => __('general.Description'), 'type' => 'textarea'],
+            ['name' => 'keywords', 'label' => __('general.Keywords')],
+            ['name' => 'theme', 'label' => __('general.Theme'), 'type' => 'select',
+                'options' => \Theme::all()->toArray(),
+                'allowEmpty' => true,
+            ],
+            ['name' => 'logo', 'label' => __('general.Logo'), 'type' => 'image'],
+            ['name' => 'background', 'label' => __('general.Background'), 'type' => 'image'],
+            ['name' => 'background_fixed', 'label' => __('general.Fixed Background'), 'type' => 'toggle'],
+            ['name' => 'off', 'label' => __('general.Site off'), 'type' => 'toggle',
+                'value' => (int) app()->isDownForMaintenance()
+            ],
+        ];
     }
 }

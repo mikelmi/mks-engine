@@ -170,7 +170,7 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         Lavary\Menu\ServiceProvider::class,
         Mikelmi\MksAdmin\Providers\AdminServiceProvider::class,
-        \Mikelmi\SmartTable\Providers\SmartTableServiceProvider::class,
+        Mikelmi\SmartTable\Providers\SmartTableServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Mikelmi\MksTheme\Providers\MksThemeServiceProvider::class,
         Intervention\Image\ImageServiceProviderLaravel5::class,
@@ -181,6 +181,7 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\WidgetServiceProvider::class,
+        App\Providers\SettingsManagerServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,

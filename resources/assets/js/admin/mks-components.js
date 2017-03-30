@@ -178,7 +178,7 @@
             return UrlBuilder.get('templates/image-select.html');
         }],
         bindings: {
-            image: '=?',
+            image: '@',
             inputName: '@name',
             pickMain: '@',
             id: '@'
