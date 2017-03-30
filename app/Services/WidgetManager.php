@@ -4,11 +4,9 @@ namespace App\Services;
 
 
 use App\Contracts\WidgetPresenter;
-use App\Events\WidgetTypesCollect;
 use App\Exceptions\WidgetPresenterNotFound;
 use App\Models\Widget;
 use App\User;
-use App\Widgets\WidgetInterface;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 
