@@ -7,6 +7,8 @@ mix.autoload({
     'tether': ['window.Tether', 'Tether'],
 });
 
+mix.options({ processCssUrls: false });
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
