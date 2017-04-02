@@ -1,8 +1,7 @@
 <div class="row">
     <div class="col-sm-6">
-        <select class="form-control" ng-model="routeOption"
-                ng-options="item as item.text for item in items">
-            <option value="">@{{ emptyTitle }}</option>
+        <select class="form-control mks-link-select" ng-model="routeOption"
+                ng-options="item as item.text group by item.group for item in items">
         </select>
     </div>
     <div class="col-sm-6">

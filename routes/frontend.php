@@ -77,3 +77,9 @@ $router->post('contacts', 'ContactsController@send')->name('contacts.send');
 
 //search
 $router->get('search', 'SearchController@index')->name('search');
+
+$router->get('test', function() {
+    $s = \App\Models\Section::with('categories')->find(1);
+
+    return $s->categories->first()->title;
+});

@@ -104,3 +104,7 @@
 .form-block .select2-container--bootstrap {
     width: auto !important;
 }
+
+.select2-container--bootstrap .select2-results__option .select2-results__option {
+    padding-left: 2rem;
+}

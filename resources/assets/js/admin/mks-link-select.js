@@ -97,10 +97,21 @@
                 };
 
                 mksLinkService.getRoutes().then(function(items) {
-                    scope.items = items;
+                    scope.items = [{'id':'', 'text': scope.emptyTitle||' - '}].concat(items);
                     if (scope.route.id) {
                         selectRouteOption(scope.route.id);
                     }
+
+                    elem.find('select.mks-link-select').select2({
+                        'theme': 'bootstrap',
+                        formatState: function (state) {
+                            if (!state.icon) {
+                                return state.text;
+                            }
+
+                            return '<span><i class="fa fa-icon-' + state.icon + '"></i> ' + state.text + '</span>';
+                        }
+                    });
                 });
 
                 scope.modal = {
