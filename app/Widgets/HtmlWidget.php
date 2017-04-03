@@ -11,7 +11,7 @@ class HtmlWidget extends TextWidget
      */
     public function title(): string
     {
-        return trans('general.HtmlWidget');
+        return __('general.HtmlWidget');
     }
 
     public function alias(): string

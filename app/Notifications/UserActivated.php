@@ -53,7 +53,7 @@ class UserActivated extends Notification implements ReadableNotification
 
     public static function title($data)
     {
-        return trans('events.user_activated', ['name' => array_get($data, 'user_name')]);
+        return __('events.user_activated', ['name' => array_get($data, 'user_name')]);
     }
 
     public static function details($data)

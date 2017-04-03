@@ -39,7 +39,7 @@ class SettingsController extends AdminController
     public function save(Request $request)
     {
         if ($this->settingsManager->save($request)) {
-            $this->flashSuccess(trans('general.Saved'));
+            $this->flashSuccess(__('general.Saved'));
 
             return 'Ok';
         }

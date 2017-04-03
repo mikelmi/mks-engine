@@ -37,7 +37,7 @@ class Feedback extends Mailable
     public function build()
     {
         return $this
-            ->subject(trans('messages.feedback_subject'))
+            ->subject(__('messages.feedback_subject'))
             //->from($this->userEmail, $this->userName)
             ->view('emails.feedback', [
                 'email' => $this->userEmail,

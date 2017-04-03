@@ -42,7 +42,7 @@ class ContactsController extends SiteController
             ->send(new Feedback($message, $from, $name));
 
         return [
-            'message' => trans('messages.sent_success'),
+            'message' => __('messages.sent_success'),
         ];
     }
 }

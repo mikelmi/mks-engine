@@ -41,7 +41,7 @@ class NewFeedback extends Notification implements ReadableNotification
 
     public static function title($data)
     {
-        return trans('events.new_feedback', ['from' => array_get($data, 'from'), 'name' => array_get($data, 'name')]);
+        return __('events.new_feedback', ['from' => array_get($data, 'from'), 'name' => array_get($data, 'name')]);
     }
 
     public static function details($data)

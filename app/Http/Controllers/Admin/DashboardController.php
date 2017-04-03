@@ -79,17 +79,17 @@ class DashboardController extends AdminController
     {
         return [
             [
-                'title' => trans('general.Users'),
+                'title' => __('general.Users'),
                 'count' => User::count(),
                 'url' => '#/user',
             ],
             [
-                'title' => trans('general.Pages'),
+                'title' => __('general.Pages'),
                 'count' => Page::withTrashed()->count(),
                 'url' => '#/page',
             ],
             [
-                'title' => trans('general.Widgets'),
+                'title' => __('general.Widgets'),
                 'count' => Widget::count(),
                 'url' => '#/widget',
             ],

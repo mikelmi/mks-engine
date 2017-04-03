@@ -12,7 +12,7 @@ class TextWidget extends WidgetPresenter
      */
     public function title(): string
     {
-        return trans('general.TextWidget');
+        return __('general.TextWidget');
     }
 
     public function alias(): string

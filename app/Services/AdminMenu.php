@@ -93,7 +93,7 @@ class AdminMenu implements MenuManagerContract
             $title = $item['title'];
             unset($item['title']);
 
-            $menuItem = $menu->add(trans($title), $item);
+            $menuItem = $menu->add(__($title), $item);
 
             if (isset($item['children']) && $item['children']) {
                 $this->buildFromArray($menuItem, $item['children']);

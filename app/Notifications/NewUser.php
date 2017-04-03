@@ -52,7 +52,7 @@ class NewUser extends Notification implements ReadableNotification
 
     public static function title($data)
     {
-        return trans('events.new_user', ['name' => array_get($data, 'user_name')]);
+        return __('events.new_user', ['name' => array_get($data, 'user_name')]);
     }
 
     public static function details($data)

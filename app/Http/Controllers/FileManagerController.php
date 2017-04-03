@@ -507,7 +507,7 @@ class FileManagerController extends Controller
         $extension = pathinfo($path, PATHINFO_EXTENSION);
 
         if ($extensions && !in_array($extension, $extensions)) {
-            return $this->errorResponse(trans('validation.mimes', ['attribute' => $path, 'values' => implode(', ', $extensions)]));
+            return $this->errorResponse(__('validation.mimes', ['attribute' => $path, 'values' => implode(', ', $extensions)]));
         }
     }
 
@@ -518,6 +518,6 @@ class FileManagerController extends Controller
      */
     private function t($name, array $params = [])
     {
-        return trans('filemanager.'.$name, $params);
+        return __('filemanager.'.$name, $params);
     }
 }

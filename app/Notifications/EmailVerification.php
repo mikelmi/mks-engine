@@ -33,10 +33,10 @@ class EmailVerification extends Notification
         $siteName = settings('site.title', config('app.name'));
         
         return (new MailMessage())
-            ->subject(trans('auth.subject_verification'))
-            ->greeting(trans('user.Hello', ['name' => $this->user->name]))
-            ->line(trans('auth.register_thanks', ['site' => $siteName]))
-            ->line(trans('auth.mail_verification'))
-            ->action(trans('auth.Verify'), url('auth/activation', $this->user->activation_token));
+            ->subject(__('auth.subject_verification'))
+            ->greeting(__('user.Hello', ['name' => $this->user->name]))
+            ->line(__('auth.register_thanks', ['site' => $siteName]))
+            ->line(__('auth.mail_verification'))
+            ->action(__('auth.Verify'), url('auth/activation', $this->user->activation_token));
     }
 }

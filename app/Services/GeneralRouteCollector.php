@@ -183,6 +183,6 @@ class GeneralRouteCollector implements RouteCollector
         $items = $langRepo->getSelectList();
 
         $data->put('items', $items);
-        $data->put('title', trans('general.Language'));
+        $data->put('title', __('general.Language'));
     }
 }

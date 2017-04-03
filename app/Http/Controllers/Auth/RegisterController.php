@@ -107,7 +107,7 @@ class RegisterController extends SiteController
         if (!settings('users.verification')) {
             $this->guard()->login($user);
         } else {
-            $this->flashNotice(trans('auth.verification_info'));
+            $this->flashNotice(__('auth.verification_info'));
         }
 
         event(new UserRegistered($user));
@@ -129,7 +129,7 @@ class RegisterController extends SiteController
 
         event(new UserActivated($user));
 
-        $this->flashSuccess(trans('auth.verification_success'));
+        $this->flashSuccess(__('auth.verification_success'));
 
         return redirect('/login');
     }

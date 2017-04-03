@@ -39,7 +39,7 @@ class ResetPasswordController extends SiteController
 
     public function showResetForm(Request $request, $token = null)
     {
-        $this->seo()->setTitle(trans('auth.Reset Password'));
+        $this->seo()->setTitle(__('auth.Reset Password'));
 
         return view('auth.passwords.reset')->with(
             ['token' => $token, 'email' => $request->email]

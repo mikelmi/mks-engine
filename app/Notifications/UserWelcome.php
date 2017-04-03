@@ -34,10 +34,10 @@ class UserWelcome extends Notification
         
         return (new MailMessage())
             ->subject($siteName)
-            ->greeting(trans('user.Hello', ['name' => $this->user->name]))
-            ->line(trans('auth.register_thanks', ['site' => $siteName]))
-            ->line(trans('user.mail_welcome'))
-            ->line(trans('auth.Username') . ': ' . $this->user->email)
-            ->action(trans('auth.Sign In'), url('auth/login'));
+            ->greeting(__('user.Hello', ['name' => $this->user->name]))
+            ->line(__('auth.register_thanks', ['site' => $siteName]))
+            ->line(__('user.mail_welcome'))
+            ->line(__('auth.Username') . ': ' . $this->user->email)
+            ->action(__('auth.Sign In'), url('auth/login'));
     }
 }

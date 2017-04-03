@@ -37,7 +37,7 @@ class ForgotPasswordController extends SiteController
 
     public function showLinkRequestForm()
     {
-        $this->seo()->setTitle(trans('auth.Reset Password'));
+        $this->seo()->setTitle(__('auth.Reset Password'));
 
         return view('auth.passwords.email');
     }

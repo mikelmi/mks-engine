@@ -180,7 +180,7 @@ class UserController extends AdminController
 
         \DB::commit();
 
-        $this->flashSuccess(trans('general.Saved'));
+        $this->flashSuccess(__('general.Saved'));
 
         return $this->redirect([
             '/user',

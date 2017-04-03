@@ -13,7 +13,7 @@ class CheckActiveUser
             if (!$user->active) {
                 \Auth::logout();
 
-                $message = trans('user.blocked');
+                $message = __('user.blocked');
                 $request->session()->flash('message', $message);
                 $request->session()->flash('alert-class', 'alert-danger');
 

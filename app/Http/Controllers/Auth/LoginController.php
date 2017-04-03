@@ -44,7 +44,7 @@ class LoginController extends SiteController
 
     public function showLoginForm()
     {
-        $this->seo()->setTitle(trans('auth.Sign In'));
+        $this->seo()->setTitle(__('auth.Sign In'));
 
         return view('auth.login');
     }
