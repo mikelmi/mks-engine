@@ -283,12 +283,6 @@ class LanguageController extends AdminController
 
     public function getSelectList($iso = null)
     {
-        return $this->langRepo->enabled()->map(function($item) use ($iso) {
-            return [
-                'id' => $item->iso,
-                'text' => $item->title,
-                'selected' => $item->iso === $iso
-            ];
-        })->values();
+        return $this->langRepo->getSelectList($iso);
     }
 }

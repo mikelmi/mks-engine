@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Http\UrlGenerator;
-use App\Services\RouteConfigService;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -80,10 +79,6 @@ class RouteServiceProvider extends ServiceProvider
     public function register()
     {
         parent::register();
-
-        $this->app->singleton(RouteConfigService::class, function($app) {
-            return new RouteConfigService($app['router'], true);
-        });
 
         //Override UrlGenerator
         $this->app->singleton('url', function($app) {

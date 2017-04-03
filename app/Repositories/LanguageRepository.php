@@ -193,4 +193,20 @@ class LanguageRepository
     {
         return $this->enabled()->keys()->toArray();
     }
+
+    /**
+     * @param null $iso
+     * @return Collection
+     */
+    public function getSelectList($iso = null)
+    {
+        return $this->enabled()->map(function($item) use ($iso) {
+            return [
+                'id' => $item->iso,
+                'iso' => $item->iso,
+                'text' => $item->title,
+                'selected' => $item->iso === $iso
+            ];
+        })->values();
+    }
 }

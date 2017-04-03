@@ -3,33 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Services\RouteConfigService;
+use App\Services\RouteManager;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class RouteController extends AdminController
 {
-    public function all(RouteConfigService $configService)
+    /**
+     * @var RouteManager
+     */
+    private $routeManager;
+
+    protected function init()
     {
-        $result = $configService->collect();
-
-        $result = $result->map(function($item) {
-            if ($item['id']) {
-                $item['text'] = $item['id'] . ' (' . $item['text'] .')';
-            }
-
-            return $item;
-        })->sortBy('text')->values();
-
-        return $result;
+        $this->routeManager = resolve(RouteManager::class);
     }
 
-    public function params(Request $request, RouteConfigService $configService, $name = null)
+    public function all()
+    {
+        return $this->routeManager->links()->values();
+    }
+
+    public function params(Request $request, $name = null)
     {
         if (!$name) {
             $name = $request->get('name');
         }
 
-        return $configService->collectParams($name);
+        return $this->routeManager->collectParams($name);
     }
 }

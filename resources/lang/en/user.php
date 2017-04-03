@@ -8,4 +8,7 @@ return [
     'Hello' => 'Hello, :name!',
     'mail_welcome' => 'You may now log in to the site using your username and password',
     'Profile' => 'Profile',
+    'My Profile' => 'My Profile',
+    'Auth' => 'Authorization',
+    'Registration' => 'Registration',
 ];
