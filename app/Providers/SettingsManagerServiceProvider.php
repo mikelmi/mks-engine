@@ -10,6 +10,7 @@ namespace App\Providers;
 
 use App\Services\Settings;
 use App\Services\SettingsManager;
+use App\ServiceTag;
 use App\Settings\CaptchaSettings;
 use App\Settings\FilesSettings;
 use App\Settings\PageSettings;
@@ -32,17 +33,14 @@ class SettingsManagerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(SettingsManager::class, function($app) {
-            return new SettingsManager($app->tagged('settings-scopes'), $app[Settings::class]);
+            return new SettingsManager($app->tagged(ServiceTag::SETTINGS), $app[Settings::class]);
         });
 
-        $this->app->tag($this->scopes, 'settings-scopes');
+        $this->app->tag($this->scopes, ServiceTag::SETTINGS);
     }
 
     public function provides()
     {
-        return array_merge(
-            $this->scopes,
-            [SettingsManager::class]
-        );
+        return [SettingsManager::class];
     }
 }

@@ -9,6 +9,7 @@ namespace App\Providers;
 
 
 use App\Services\WidgetManager;
+use App\ServiceTag;
 use App\Widgets\CategoryWidget;
 use App\Widgets\ContactsWidget;
 use App\Widgets\HtmlWidget;
@@ -35,17 +36,15 @@ class WidgetServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(WidgetManager::class, function($app) {
-            return new WidgetManager($app->tagged('widgets'));
+            return new WidgetManager($app->tagged(ServiceTag::WIDGETS));
         });
 
-        $this->app->tag($this->presenters, 'widgets');
+        $this->app->tag($this->presenters, ServiceTag::WIDGETS);
     }
 
     public function provides()
     {
-        return array_merge(
-            $this->presenters,
-            [WidgetManager::class]
-        );
+        //TODO: check if $this->presenters needed here
+        return [WidgetManager::class];
     }
 }
