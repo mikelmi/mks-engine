@@ -77,10 +77,3 @@ $router->post('contacts', 'ContactsController@send')->name('contacts.send');
 
 //search
 $router->get('search', 'SearchController@index')->name('search');
-
-$router->get('test', function() {
-    /** @var \App\Services\RouteManager $rm */
-    $rm = resolve(\App\Services\RouteManager::class);
-
-    return $rm->links();
-});
