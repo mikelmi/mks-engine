@@ -183,6 +183,8 @@ return [
         App\Providers\WidgetServiceProvider::class,
         App\Providers\SettingsManagerServiceProvider::class,
         App\Providers\RouteManagerServiceProvider::class,
+        App\Providers\CategoryManagerServiceProvider::class,
+        App\Providers\AdminMenuServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,

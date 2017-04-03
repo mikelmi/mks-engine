@@ -3,28 +3,41 @@
 namespace App\Services;
 
 
-use App\Events\CategoryTypesCollect;
+use App\Contracts\CategoryType;
 use App\Models\Category;
 use App\Models\Section;
-use Illuminate\Support\Collection;
 
 class CategoryManager
 {
     /**
-     * @var Collection|null
+     * @var array
      */
-    private $types;
+    private $types = [];
 
     /**
-     * @return Collection
+     * CategoryManager constructor.
+     * @param array $types
+     */
+    public function __construct(array $types)
+    {
+        foreach ($types as $type) {
+            $this->addType($type);
+        }
+    }
+
+    /**
+     * @param CategoryType $type
+     */
+    public function addType(CategoryType $type)
+    {
+        $this->types[$type->type()] = $type->title();
+    }
+
+    /**
+     * @return CategoryType[]
      */
     public function getTypes()
     {
-        if (!isset($this->types)) {
-            $this->types = new Collection();
-            event(new CategoryTypesCollect($this->types));
-        }
-
         return $this->types;
     }
 

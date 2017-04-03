@@ -15,4 +15,8 @@ class ServiceTag
     const SETTINGS = 'settings';
 
     const WIDGETS = 'widgets';
+
+    const CATEGORIES = 'categories';
+
+    const ADMIN_MENU = 'admin-menu';
 }

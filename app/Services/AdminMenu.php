@@ -2,18 +2,43 @@
 
 namespace App\Services;
 
-use App\Events\AdminMenuBuild;
+use App\Contracts\AdminMenuBuilder;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
 use Mikelmi\MksAdmin\Contracts\MenuManagerContract;
 
 class AdminMenu implements MenuManagerContract
 {
+    /**
+     * @var array
+     */
     private $configItems = [];
 
-    public function __construct(array $items = [])
+    /**
+     * @var AdminMenuBuilder[];
+     */
+    private $builders = [];
+
+    /**
+     * AdminMenu constructor.
+     * @param array $items
+     * @param array $builders
+     */
+    public function __construct(array $items = [], array $builders = [])
     {
         $this->configItems = $items;
+
+        foreach ($builders as $builder) {
+            $this->addBuilder($builder);
+        }
+    }
+
+    /**
+     * @param AdminMenuBuilder $builder
+     */
+    public function addBuilder(AdminMenuBuilder $builder)
+    {
+        $this->builders[] = $builder;
     }
 
     /**
@@ -29,7 +54,9 @@ class AdminMenu implements MenuManagerContract
             $this->buildFromArray($menu, $items);
         });
 
-        event(new AdminMenuBuild($menu));
+        foreach ($this->builders as $builder) {
+            $builder->build($menu);
+        }
 
         return $this->menuToArray($menu);
     }

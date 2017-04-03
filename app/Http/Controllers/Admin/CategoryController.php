@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Events\CategoryTypesCollect;
 use App\Models\Category;
 use App\Models\Section;
 use App\Services\CategoryManager;

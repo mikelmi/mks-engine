@@ -7,10 +7,8 @@ use App\Http\ViewComposers\BreadcrumbComposer;
 use App\Models\Page;
 use App\Repositories\Breadcrumbs;
 use App\Repositories\LanguageRepository;
-use App\Services\CategoryManager;
 use App\Services\Settings;
 use App\Services\TagService;
-use App\Services\WidgetManager;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -82,10 +80,6 @@ class AppServiceProvider extends ServiceProvider
         
         $this->app->singleton(LanguageRepository::class, function($app) {
             return new LanguageRepository($app['settings'], resource_path('data/languages.json'));
-        });
-
-        $this->app->singleton(CategoryManager::class, function($app) {
-            return new CategoryManager();
         });
 
         $this->app->singleton(Breadcrumbs::class, function($app) {
