@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Listeners\RoutesCollectListener;
+use App\Events\PagePathChanged;
+use App\Listeners\ChangeRoutePagePath;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class AdminEventServiceProvider extends ServiceProvider
@@ -13,6 +14,7 @@ class AdminEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        PagePathChanged::class => [ChangeRoutePagePath::class]
     ];
 
     /**
@@ -28,6 +30,6 @@ class AdminEventServiceProvider extends ServiceProvider
     }
 
     protected $subscribe = [
-        RoutesCollectListener::class
+
     ];
 }

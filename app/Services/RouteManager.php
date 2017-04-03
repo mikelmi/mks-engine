@@ -92,18 +92,17 @@ class RouteManager
             return $collector->map();
         }, $this->collectors);
 
-        //TODO: return mapped routes
         $mappers = call_user_func_array('array_merge', $mappers);
 
-        $res =  $this->all();
+        $all =  $this->all();
 
         foreach($mappers as $name => $opt) {
             $options = is_array($opt) ? $opt : ['text' => $opt];
             $options['linked'] = true;
-            $res[$name] = array_merge($res[$name], $options);
+            $all[$name] = array_merge($all[$name], $options);
         }
 
-        return $res->filter(function($item) {
+        return $all->filter(function($item) {
             return isset($item['linked']);
         })->sortByDesc(function($item) {
             return array_get($item, 'priority', 0);
@@ -130,7 +129,12 @@ class RouteManager
             'items' => [],
         ]);
 
-        event('route-params.'.$routeName, [$data]);
+        foreach($this->collectors as $collector) {
+            $callback = array_get($collector->params(), $routeName);
+            if ($callback && is_callable([$collector, $callback])) {
+                call_user_func([$collector, $callback], $data);
+            }
+        }
 
         return $data;
     }

@@ -8,10 +8,17 @@
 namespace App\Contracts;
 
 
+use Illuminate\Support\Collection;
+
 interface RouteCollector
 {
     /**
      * @return array
      */
     public function map(): array;
+
+    /**
+     * @return array
+     */
+    public function params(): array;
 }
