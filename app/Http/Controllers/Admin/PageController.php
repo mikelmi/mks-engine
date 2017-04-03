@@ -4,18 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\Page;
-use App\Repositories\LanguageRepository;
 use App\Traits\CrudPermissions;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Mikelmi\MksAdmin\Form\AdminForm;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
 use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CountItemsResponse;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
-use Mikelmi\MksAdmin\Traits\DataGridRequests;
-use Mikelmi\MksAdmin\Traits\DeleteRequests;
 use Mikelmi\MksAdmin\Traits\TrashRequests;
 use Mikelmi\SmartTable\SmartTable;
 
@@ -148,7 +142,7 @@ class PageController extends AdminController
             }
         }
 
-        if ($mode == AdminForm::MODE_VIEW && !$model->trashed()) {
+        if ($mode == AdminModelForm::MODE_VIEW && !$model->trashed()) {
             $pathField = ['name' => 'path', 'label' => 'URL', 'type' => 'link', 'value' => $model->url, 'target' => '_blank'];
         } else {
             $pathField = ['name' => 'path', 'label' => 'URL', 'type' => 'checkedInput'];
@@ -242,7 +236,7 @@ class PageController extends AdminController
     {
         $model = $this->formModel($id);
 
-        return $this->form($model, AdminForm::MODE_VIEW)
+        return $this->form($model, AdminModelForm::MODE_VIEW)
             ->setupViewMode()
             ->addBreadCrumb($model->title)
             ->response();
