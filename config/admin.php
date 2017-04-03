@@ -72,6 +72,7 @@ return [
                 ['title' => 'general.Settings', 'href' => '#/settings', 'hash' => 'settings', 'icon'=>'cog', 'nickname'=>'settings'],
                 ['title' => 'general.Languages', 'href' => '#/language', 'hash' => 'language', 'icon'=>'language', 'nickname'=>'language'],
                 ['title' => 'filemanager.page_title', 'href' => '#/file-manager', 'icon'=>'folder', 'hash' => 'file-manager'],
+                ['title' => 'general.Tags', 'href' => '#/tags', 'hash' => 'tags', 'icon'=>'tags', 'nickname'=>'tags'],
             ]
         ],
         [

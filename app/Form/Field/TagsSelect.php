@@ -40,7 +40,7 @@ class TagsSelect extends Select2
             $params['id'] = $this->model->getKey();
         }
 
-        $this->setUrl(route('admin::tags', $params));
+        $this->setUrl(route('admin::tags.all', $params));
 
         $result = parent::getDefaultAttributes();
 

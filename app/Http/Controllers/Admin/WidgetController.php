@@ -41,15 +41,6 @@ class WidgetController extends AdminController
         $this->widgetManager = resolve(WidgetManager::class);
     }
 
-
-    public function index2(WidgetManager $widgetManager)
-    {
-        return view('admin.widget.index', [
-            'types' => $widgetManager->getTypes(),
-            'lang_icon_url' => route('lang.icon')
-        ]);
-    }
-
     protected function dataGridUrl(): string
     {
         return route('admin::widget.index');
