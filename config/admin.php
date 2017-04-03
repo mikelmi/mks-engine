@@ -47,6 +47,7 @@ return [
             'assoc' => \App\Form\Field\AssocArray::class,
             'image' => \App\Form\Field\ImagePicker::class,
             'size' => \App\Form\Field\Size::class,
+            'category' => \App\Form\Field\CategorySelect::class,
         ]
     ],
 
