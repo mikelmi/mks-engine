@@ -107,7 +107,7 @@ class TagController extends AdminController
             'tools' => $tools,
             'deleteButton' => $canDelete ? route('admin::tags.delete') : false,
             'columns' => [
-                ['key' => 'id', 'sortable' => true, 'searchable' => true],
+                ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
                 ['key' => 'name', 'title'=> __('general.Name'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'count', 'title' => __('general.Amount'), 'sortable' => true, 'searchable' => true],
                 ['type' => 'actions', 'actions' => $actions],

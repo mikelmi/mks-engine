@@ -97,7 +97,7 @@ class PageController extends AdminController
             'tools' => $tools,
             'deleteButton' => $canDelete ? route('admin::page.delete') : false,
             'columns' => [
-                ['key' => 'id', 'sortable' => true, 'searchable' => true],
+                ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
                 ['key' => 'title', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => hash_url('page/show/{{row.id}}')],
                 ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
                 ['key' => 'path', 'type' => $scope == 'trash' ? '':'link', 'title' => 'URL', 'target' => '_blank', 'url' => '{{row.url}}'],
