@@ -7,7 +7,7 @@
         </a>
         <div class="dropdown-menu">
             @foreach($languages as $lang)
-                <a class="dropdown-item" href="{{route('language.change', $lang->getIso())}}">
+                <a class="dropdown-item" href="{{route('lang.change', $lang->getIso())}}">
                     {!! $lang->iconImage() !!}
                     {{$lang->getTitle()}}
                 </a>

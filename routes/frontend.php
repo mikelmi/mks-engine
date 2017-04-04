@@ -35,42 +35,13 @@ $router->get('image/{path?}', 'FileManagerController@imageProxy')
     ->where('path', '.+')
     ->name('image.proxy');
 
-//language icon
-$router->get('lang-icon/{iso?}', function(\Illuminate\Http\Request $request, \App\Services\ImageService $imageService, $iso = null) {
-    $file = 'vendor/mikelmi/mks-admin/img/lang/' . ($iso ?: $request->get('iso')) . '.gif';
-
-    return $imageService->assetProxy($request, $file, null, 12, 8);
-})->name('lang.icon');
-
-//change language
-$router->get('lang/{iso?}', function(\Illuminate\Http\Request $request, \App\Repositories\LanguageRepository $languageRepository, $iso) {
-    if (!$languageRepository->get($iso)) {
-        abort(404);
-    }
-
-    /** @var \Illuminate\Routing\UrlGenerator $url */
-    $url = app('url');
-
-    $prev = $url->previous('/'.$iso);
-
-    $root = $request->root();
-
-    $path = ltrim(str_replace_first($root, '', $prev), '/');
-    $path = ltrim(str_replace_first(app()->getLocale(), '', $path), '/');
-
-    if (!$path) {
-        return redirect($iso);
-    }
-
-    $url = $root . '/' . $iso;
-
-    if ($path && !$languageRepository->has($path)) {
-        $url .= '/' . $path;
-    }
-
-    return redirect()->away($url);
-
-})->where('iso', '[A-Za-z-_]+')->name('language.change');
+//Language
+$router->group(['prefix' => 'lang', 'as' => 'lang.'], function(\Illuminate\Routing\Router $router) {
+    $router->get('icon/{iso?}', 'LanguageController@icon')->name('icon')
+        ->where('iso', '[A-Za-z-_]+');
+    $router->get('lang/{iso?}', 'LanguageController@change')->name('change')
+        ->where('iso', '[A-Za-z-_]+');
+});
 
 //send feedback form
 $router->post('contacts', 'ContactsController@send')->name('contacts.send');

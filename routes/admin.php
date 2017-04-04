@@ -4,7 +4,7 @@
 $router = app('router');
 
 //Dashboard
-$router->get('home', 'DashboardController@home');
+//$router->get('home', 'DashboardController@home');
 
 $router->group(['prefix' => 'dashboard', 'as' => 'dashboard.'],
     function(\Illuminate\Routing\Router $router) {
@@ -22,6 +22,7 @@ $router->group(['prefix' => 'dashboard', 'as' => 'dashboard.'],
 ], function($router) {
     $router->get('/roles/{userId?}', 'UserController@roles')->name('roles');
 });
+
 
 //Roles
 \Mikelmi\MksAdmin\Services\AdminRoute::group('RoleController', 'role', null, [], function($router) {
@@ -46,11 +47,7 @@ $router->group(['prefix'=>'route'], function(\Illuminate\Routing\Router $router)
 });
 
 //Angular Templates
-$router->group(['prefix'=>'templates', 'middleware' => ['admin', 'admin.locale']], function(\Illuminate\Routing\Router $router) {
-    $router->get('/{path}.html', function($path) {
-        return view('admin._partial.'.$path);
-    });
-});
+$router->get('templates/{path}.html', 'HelperController@template');
 
 //Menu
 $router->group(['prefix'=>'menuman', 'as' => 'menu.', 'middleware' => ['permission:admin.menu*']],
@@ -95,17 +92,7 @@ $router->group(['prefix'=>'menuman', 'as' => 'menu.', 'middleware' => ['permissi
 });
 
 //File Manager
-$router->get('file-manager', function(\Illuminate\Http\Request $request) {
-    $params = array_merge([
-        'langCode' => app()->getLocale(),
-    ], $request->query());
-
-    if ($request->ajax()) {
-        return '<div class="page-iframe-wrap" mks-page-iframe><iframe src="' . route('filemanager', $params) . '" class="page-iframe" frameborder="0"></iframe></div>';
-    }
-
-    return redirect()->route('filemanager', $params);
-})->middleware('admin.locale');
+$router->get('file-manager', 'HelperController@fileManager');
 
 //Languages
 \Mikelmi\MksAdmin\Services\AdminRoute::group('LanguageController', 'language', null, [

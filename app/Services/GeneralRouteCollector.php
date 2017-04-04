@@ -68,7 +68,7 @@ class GeneralRouteCollector implements RouteCollector
                 'priority' => -98
             ],
 
-            'language.change' => [
+            'lang.change' => [
                 'text' => __('general.Language'),
                 'priority' => -99,
                 'extended' => 'select',
@@ -87,7 +87,7 @@ class GeneralRouteCollector implements RouteCollector
             'page' => 'collectPagePath',
             'page.id' => 'collectPageId',
             'user' => 'collectUsers',
-            'language.change' => 'collectLanguages'
+            'lang.change' => 'collectLanguages'
         ];
     }
 
