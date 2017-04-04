@@ -10,7 +10,7 @@ $router->get('auth/activation/{token}', 'Auth\RegisterController@activate');
 
 $router->get('captcha.png', 'PageController@captchaImage')->name('captcha.image');
 
-$router->get('page/{id}', ['as' => 'page.id', 'uses' => 'PageController@getById'])->where('path', '\d+');
+$router->get('page/{id}', ['as' => 'page.id', 'uses' => 'PageController@getById'])->where('id', '\d+');
 
 $router->get('user/profile', 'UserController@profile')->name('user.profile');
 $router->get('user/profile/{id}', 'UserController@info')->name('user')->middleware(['permission:user.profile']);

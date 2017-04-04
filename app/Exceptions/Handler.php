@@ -93,7 +93,7 @@ class Handler extends ExceptionHandler
         }
 
         if (!$page_id) {
-            $page_id = settings('page.' . $status);
+            $page_id = settings('pages.' . $status);
         }
 
         if ($page_id && ($page = Page::find($page_id))) {

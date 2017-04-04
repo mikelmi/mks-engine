@@ -158,4 +158,6 @@ return [
     'align_justify' => 'По всій ширині',
 
     'html_attr' => 'HTML атрибути',
+    'meta_tags' => 'Мета-теги',
+    'meta_raw' => 'Додатково',
 ];

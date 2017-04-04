@@ -158,23 +158,19 @@ class PageController extends AdminController
             ]
         ]);
 
-        $form->addGroup('seo', [
-            'title' => 'SEO',
-            'fields' => [
-                ['name' => 'seo', 'type' => 'seo', 'value' => [
-                    'title' => $model->meta_title,
-                    'description' => $model->meta_description,
-                    'keywords' => $model->meta_keywords,
-                ]],
-            ],
-        ]);
-
         $form->addGroup('params', [
             'title' => __('general.Params'),
             'fields' => [
                 ['name' => 'params[template]', 'nameSce' => 'params.template', 'type' => 'toggle', 'label' => __('general.Empty Template'), 'value' => $model->param('template')],
                 ['name' => 'params[hide_title]', 'nameSce' => 'params.hide_title', 'type' => 'toggle', 'label' => __('general.Hide Title'), 'value' => $model->param('hide_title')],
                 ['name' => 'params[roles]', 'nameSce' => 'params.roles', 'type' => 'rolesShow', 'value' => $model->param('roles'), 'model' => $model],
+            ],
+        ]);
+
+        $form->addGroup('meta', [
+            'title' => __('general.meta_tags'),
+            'fields' => [
+                ['name' => 'meta', 'type' => 'meta', 'value' => $model->getMetaArray()],
             ],
         ]);
 
@@ -204,9 +200,7 @@ class PageController extends AdminController
         }
 
         $model->params = $request->input('params', []);
-        $model->meta_title = $request->input('seo.title');
-        $model->meta_keywords = $request->input('seo.keywords');
-        $model->meta_description = $request->input('seo.description');
+        $model->setMeta($request->input('meta'));
 
         \DB::beginTransaction();
 

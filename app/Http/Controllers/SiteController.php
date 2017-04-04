@@ -8,7 +8,9 @@ use App\Models\Category;
 use App\Repositories\Breadcrumbs;
 use App\Repositories\LanguageRepository;
 use App\Services\Settings;
+use App\Traits\HasMeta;
 use Artesaos\SEOTools\Traits\SEOTools;
+use Illuminate\Database\Eloquent\Model;
 
 class SiteController extends Controller
 {
@@ -90,5 +92,27 @@ class SiteController extends Controller
         $request = app('request');
 
         $request->attributes->set('category_id', $category->id);
+    }
+
+    /**
+     * @param Model $model
+     */
+    protected function setModelMeta(Model $model)
+    {
+        $seo = $this->seo();
+
+        /** @var HasMeta $model */
+
+        if ($title = $model->meta('title')) {
+            $seo->setTitle($title);
+        }
+
+        if ($description = $model->meta('description')) {
+            $seo->setDescription($description);
+        }
+
+        if ($keywords = $model->meta('keywords')) {
+            $seo->metatags()->setKeywords($keywords);
+        }
     }
 }

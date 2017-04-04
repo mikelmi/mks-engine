@@ -158,4 +158,6 @@ return [
     'align_justify' => 'Justify',
 
     'html_attr' => 'HTML attributes',
+    'meta_tags' => 'Meta Tags',
+    'meta_raw' => 'Raw',
 ];

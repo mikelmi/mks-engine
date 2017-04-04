@@ -52,19 +52,7 @@ class PageController extends SiteController
             $this->authorize('view', $page);
         }
 
-        $title = $page->meta_title ?: $page->title;
-
-        if ($title) {
-            $this->seo()->setTitle($title);
-        }
-
-        if ($description = $page->meta_description) {
-            $this->seo()->setDescription($description);
-        }
-
-        if ($keywords = $page->meta_keywords) {
-            $this->seo()->metatags()->setKeywords($keywords);
-        }
+        $this->setModelMeta($page);
 
         if ($page->param('template') == '-1') {
             $template = 'page.empty';
@@ -88,8 +76,8 @@ class PageController extends SiteController
         }
 
         if (!$routeName) {
-            $routeName = $settings->get('page.home.route');
-            $routeParams = $settings->get('page.home.params');
+            $routeName = $settings->get('pages.home.route');
+            $routeParams = $settings->get('pages.home.params');
         }
 
         if ($routeName) {

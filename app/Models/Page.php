@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasMeta;
 use App\Traits\HasRoles;
 use App\Traits\Parametrized;
 use Illuminate\Database\Eloquent\Model;
@@ -16,16 +17,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $path
  * @property string $page_text
  * @property string $lang
- * @property string $meta_title
- * @property string $meta_description
- * @property string $meta_keywords
  * @property string $url
  */
 class Page extends Model
 {
     use SoftDeletes,
         Parametrized,
-        HasRoles;
+        HasRoles,
+        HasMeta;
 
     protected $appends = ['url'];
 
@@ -37,5 +36,12 @@ class Page extends Model
     public function getUrlAttribute()
     {
         return url($this->path);
+    }
+
+    public function getDefaultMeta(): array
+    {
+        return [
+            'title' => $this->attributes['title']
+        ];
     }
 }

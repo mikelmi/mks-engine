@@ -12,7 +12,7 @@ use Mikelmi\MksAdmin\Form\Field;
 use Mikelmi\MksAdmin\Form\FieldInterface;
 
 
-class SeoFieldset extends Field
+class MetaTags extends Field
 {
     protected $values = [];
 
@@ -50,9 +50,11 @@ class SeoFieldset extends Field
     public function renderInput(): string
     {
         $fields = [
-            new Field\Text($this->nameField('title'), $this->valueField('title'), __('general.Title')),
+            new Field\Text($this->nameField('title'), $this->valueField('title'), __('general.Caption')),
             new Field\Textarea($this->nameField('description'), $this->valueField('description'), __('general.Description')),
             new Field\Text($this->nameField('keywords'), $this->valueField('keywords'), __('general.Keywords')),
+            new Field\Text($this->nameField('author'), $this->valueField('author'), __('general.Author')),
+            new Field\Textarea($this->nameField('raw'), $this->valueField('raw'), __('general.meta_raw')),
         ];
 
         $result = '';
