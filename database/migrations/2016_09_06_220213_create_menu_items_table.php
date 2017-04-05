@@ -21,7 +21,7 @@ class CreateMenuItemsTable extends Migration
             $table->unsignedInteger('menu_id')->nullable();
             $table->string('title');
             $table->string('route')->nullable()->default(null);
-            $table->json('params')->nullable();
+            $table->text('params')->nullable();
             $table->string('url')->nullable()->default(null);
             $table->string('target', 20)->default('');
 

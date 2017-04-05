@@ -24,7 +24,7 @@ class CreateWidgetsTable extends Migration
             $table->string('lang', 10)->nullable()->default(null);
             $table->integer('ordering')->default(0);
             $table->boolean('status')->default(true);
-            $table->json('params')->nullable()->default(null);
+            $table->text('params')->nullable()->default(null);
 
             $table->index('name');
             $table->index('position');

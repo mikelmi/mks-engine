@@ -17,7 +17,7 @@ class CreateWidgetRoutesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('widget_id');
             $table->string('route');
-            $table->json('params')->nullable()->default(null);
+            $table->text('params')->nullable()->default(null);
 
             $table->index('route');
 

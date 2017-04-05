@@ -23,7 +23,7 @@ class CreatePagesTable extends Migration
             $table->string('meta_keywords')->nullable()->default(null);
             $table->text('meta_description')->nullable()->default(null);
 
-            $table->json('params');
+            $table->text('params')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
