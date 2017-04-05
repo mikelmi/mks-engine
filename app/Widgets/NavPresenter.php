@@ -89,16 +89,20 @@ abstract class NavPresenter extends WidgetPresenter
 
         /** @var NestedMenuInterface $item */
         foreach ($items as $item) {
-            if ($this->maxDepth > -1 && $item->getDepth() > $this->maxDepth) {
+            $depth = $item->getDepth();
+            if ($this->maxDepth > -1 && $depth > $this->maxDepth) {
                 continue;
             }
 
             $hasChildren = $item->hasChildren();
 
-            $liAttr = $liAttr = ['class' => $this->navItemClass];
+            $liAttr = $liAttr = ['class' => $depth > 0 ? 'subnav-item' : $this->navItemClass];
 
             if ($hasChildren) {
                 $liAttr['class'] .= ' dropdown';
+                if ($depth > 0 || $item->getUrl() != '#') {
+                    $liAttr['class'] .= ' dropdown-hover';
+                }
             }
 
             $result .= sprintf('<li %s>%s', html_attr($liAttr), $this->renderLink($item)) . PHP_EOL;
@@ -124,7 +128,9 @@ abstract class NavPresenter extends WidgetPresenter
 
         $aAttr = $item->htmlAttributes();
 
-        $aAttr['class'] = trim($this->navLinkClass .' '. ($aAttr['class'] ?? ''));
+        $class = $item->getDepth() > 0 ? 'dropdown-item' : $this->navLinkClass;
+
+        $aAttr['class'] = trim($class .' '. ($aAttr['class'] ?? ''));
         $aAttr['href'] = $url;
 
         if ($item->isCurrent()) {
@@ -133,14 +139,12 @@ abstract class NavPresenter extends WidgetPresenter
 
         if ($item->hasChildren()) {
             $aAttr['class'] .= ' dropdown-toggle';
+            $aAttr['aria-haspopup'] = 'true';
+            $aAttr['aria-expanded'] = 'false';
 
             if ($url == '#') {
                 $aAttr['data-toggle'] = 'dropdown';
                 $aAttr['role'] = 'button';
-                $aAttr['aria-haspopup'] = 'true';
-                $aAttr['aria-expanded'] = 'false';
-            } else {
-                $aAttr['class'] .= ' dropdown-hover';
             }
         }
 

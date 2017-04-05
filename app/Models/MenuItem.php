@@ -35,6 +35,8 @@ class MenuItem extends Model implements NestedMenuInterface
 
     public $timestamps = false;
 
+    private $finalizedUrl;
+
     protected $casts = [
         'attr' => 'array',
     ];
@@ -77,23 +79,27 @@ class MenuItem extends Model implements NestedMenuInterface
      */
     public function getUrl()
     {
-        $url = $this->url;
+        if (!isset($this->finalizedUrl)) {
+            $url = $this->url;
 
-        if ($this->route) {
-            $params = $this->params->all();
-            try {
-                $url = route($this->route, $params);
-            } catch (\InvalidArgumentException $e) {
-                if (config('app.debug')) {
-                    throw $e;
+            if ($this->route) {
+                $params = $this->params->all();
+                try {
+                    $url = route($this->route, $params);
+                } catch (\InvalidArgumentException $e) {
+                    if (config('app.debug')) {
+                        throw $e;
+                    }
+                    $url = false;
                 }
-                return false;
+            } elseif ($url && !starts_with($url, ['#', 'http:', 'https:', 'mailto:', 'javascript:'])) {
+                $url = url($url);
             }
-        } elseif($url && !starts_with($url, ['#', 'http:', 'https:', 'mailto:', 'javascript:'])) {
-            return url($url);
+
+            $this->finalizedUrl = $url;
         }
 
-        return $url;
+        return $this->finalizedUrl;
     }
 
     /**
