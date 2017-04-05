@@ -39,6 +39,10 @@ class MenuItem extends Model implements NestedMenuInterface
         'attr' => 'array',
     ];
 
+    protected $appends = [
+        'finalUrl'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -208,5 +212,10 @@ class MenuItem extends Model implements NestedMenuInterface
     public function getIcon()
     {
         return $this->icon;
+    }
+
+    public function getFinalUrlAttribute()
+    {
+        return $this->getUrl();
     }
 }

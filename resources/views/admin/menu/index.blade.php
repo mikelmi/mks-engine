@@ -84,8 +84,10 @@
             <button class="btn btn-link btn-sm text-muted tree-toggle" ng-if="node.children && node.children.length > 0" data-nodrag ng-click="tree.toggle(this)">
                 <i class="fa" ng-class="{'fa-chevron-right': collapsed, 'fa-chevron-down': !collapsed}"></i>
             </button>
+            <i ng-if="node.icon" class="fa fa-@{{ node.icon }}"></i>
             @{{node.title}}
             <span class="pull-right btn-group btn-group-sm tree-tools" data-nodrag>
+                <small class="text-muted hidden-sm-down">@{{ node.finalUrl }}</small>
                 @can('admin.menu.edit')
                     <a class="btn btn-outline-primary no-b btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/menuman/items/@{{currentMenu.id}}/edit/@{{node.id}}">
                         <i class="fa fa-pencil"></i>
