@@ -19,7 +19,8 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $title
  * @property string $route
  * @property string $url
- * @property string $target
+ * @property string $icon
+ * @property array $attr
  * @property Menu $menu
  * @property int depth
  * @property MenuItem[] $children
@@ -33,6 +34,10 @@ class MenuItem extends Model implements NestedMenuInterface
     use NodeTrait, Parametrized;
 
     public $timestamps = false;
+
+    protected $casts = [
+        'attr' => 'array',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -167,5 +172,33 @@ class MenuItem extends Model implements NestedMenuInterface
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @param string|null $key
+     * @param string|null $default
+     * @return array|mixed
+     */
+    public function htmlAttr(string $key = null, string $default = null)
+    {
+        $attr = $this->attr;
+
+        if (is_null($attr)) {
+            $attr = [];
+        }
+
+        if ($key) {
+            return array_get($attr, $key, $default);
+        }
+
+        return $attr;
+    }
+
+    /**
+     * @return array
+     */
+    public function htmlAttributes(): array
+    {
+        return $this->htmlAttr();
     }
 }

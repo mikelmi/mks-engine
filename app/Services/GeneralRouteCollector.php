@@ -26,10 +26,10 @@ class GeneralRouteCollector implements RouteCollector
         $users = __('general.Users');
 
         return [
-            /*'home' => [
-                'text' => __('general.Home'),
+            'home' => [
+                'text' => '/',
                 'priority' => 100
-            ],*/
+            ],
             'page' => [
                 'text' => __('general.Page'),
                 'extended' => true,

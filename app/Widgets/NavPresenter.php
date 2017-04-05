@@ -10,7 +10,6 @@ namespace App\Widgets;
 
 use App\Contracts\NestedMenuInterface;
 use Illuminate\Support\Collection;
-use Mikelmi\MksAdmin\Form\AdminModelForm;
 
 abstract class NavPresenter extends WidgetPresenter
 {
@@ -123,10 +122,10 @@ abstract class NavPresenter extends WidgetPresenter
     {
         $url = $item->getUrl() ?: '#';
 
-        $aAttr = [
-            'class' => $this->navLinkClass,
-            'href' => $url,
-        ];
+        $aAttr = $item->htmlAttributes();
+
+        $aAttr['class'] = trim($this->navLinkClass .' '. ($aAttr['class'] ?? ''));
+        $aAttr['href'] = $url;
 
         if ($item->isCurrent()) {
             $aAttr['class'] .= ' active';
@@ -138,7 +137,7 @@ abstract class NavPresenter extends WidgetPresenter
             if ($url == '#') {
                 $aAttr['data-toggle'] = 'dropdown';
                 $aAttr['role'] = 'button';
-                $aAtrr['aria-haspopup'] = 'true';
+                $aAttr['aria-haspopup'] = 'true';
                 $aAttr['aria-expanded'] = 'false';
             } else {
                 $aAttr['class'] .= ' dropdown-hover';
@@ -149,10 +148,9 @@ abstract class NavPresenter extends WidgetPresenter
     }
 
     /**
-     * @param null $mode
      * @return array
      */
-    public function formFields($mode = null): array
+    public function formFields(): array
     {
         return [
             ['name' => 'params[nav_type]', 'nameSce' => 'params.nav_type', 'label' => __('general.Type'),

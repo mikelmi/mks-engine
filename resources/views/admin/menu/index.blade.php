@@ -14,6 +14,12 @@
             <i class="fa fa-plus"></i>
             {{trans('general.Add Menu')}}
         </button>
+        @can('admin.menu.edit')
+            <a ng-if="currentMenu.id" class="btn btn-secondary" ng-href="#/menuman/items/@{{currentMenu.id}}/edit">
+                <i class="fa fa-plus"></i>
+                @lang('general.Add Menu Item')
+            </a>
+        @endcan
         <button class="btn btn-success" ng-show="currentMenu.id" ng-click="editMenu(currentMenu)">
             <i class="fa fa-pencil"></i>
             {{trans('admin::messages.Edit')}}
@@ -50,7 +56,7 @@
         <div class="card-block">
             <div ng-if="currentMenu && !menuModel" ng-controller="MenuTreeController as tree">
 
-                @can('admin.category.edit')
+                @can('admin.menu.edit')
                     <div>
                         <a class="btn btn-link" ng-href="#/menuman/items/@{{currentMenu.id}}/edit">
                             <i class="fa fa-plus"></i>

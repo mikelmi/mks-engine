@@ -36,4 +36,9 @@ interface NestedMenuInterface
      * @return string
      */
     public function getTitle();
+
+    /**
+     * @return array
+     */
+    public function htmlAttributes(): array;
 }

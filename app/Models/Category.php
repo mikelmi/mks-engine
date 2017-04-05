@@ -119,4 +119,12 @@ class Category extends Model implements NestedMenuInterface
 
         return $catId;
     }
+
+    /**
+     * @return array
+     */
+    public function htmlAttributes(): array
+    {
+        return [];
+    }
 }
