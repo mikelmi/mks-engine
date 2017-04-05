@@ -37,12 +37,18 @@ abstract class NavPresenter extends WidgetPresenter
      */
     public function render(): string
     {
-        $attr = array_merge(
-            (array) $this->model->param('nav_attr'),
-            ['class' => $this->getNavClass()]
-        );
+        $items = $this->getItems();
 
-        $nav = '<ul ' . html_attr($attr) . '>' . $this->renderItems($this->getItems()) . '</ul>';
+        $attr = (array) $this->model->param('nav_attr');
+
+        if ($this->model->param('nav_type') == 's') {
+            $items = $this->renderSimpleItems($items);
+        } else {
+            $items = $this->renderItems($items);
+            $attr['class'] = $this->getNavClass();
+        }
+
+        $nav = '<ul ' . html_attr($attr) . '>' . $items . '</ul>';
 
         return $this->view('widget.nav', compact('nav'))->render();
     }
@@ -83,6 +89,55 @@ abstract class NavPresenter extends WidgetPresenter
      * @param Collection $items
      * @return string
      */
+    protected function renderSimpleItems(Collection $items): string
+    {
+        $result = '';
+
+        /** @var NestedMenuInterface $item */
+        foreach ($items as $item) {
+            if ($this->maxDepth > -1 && $item->getDepth() > $this->maxDepth) {
+                continue;
+            }
+
+            $result .= '<li>'. $this->renderSimpleLink($item) . PHP_EOL;
+
+            if ($item->hasChildren()) {
+                $result .= '<ul>' . $this->renderSimpleItems($item->getChildren()) . '</ul>';
+            }
+
+            $result .= '</li>';
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param NestedMenuInterface $item
+     * @return string
+     */
+    protected function renderSimpleLink(NestedMenuInterface $item): string
+    {
+        $url = $item->getUrl() ?: '#';
+
+        $attr = $item->htmlAttributes();
+
+        $attr['href'] = $url;
+
+        if ($item->isCurrent()) {
+            $attr['class'] = trim(($attr['class'] ?? '') . ' active');
+        }
+
+        if ($icon = $item->getIcon()) {
+            $icon = '<i class="fa fa-' . $icon . '"></i> ';
+        }
+
+        return sprintf('<a %s>%s%s</a>', html_attr($attr), $icon, $item->getTitle());
+    }
+
+    /**
+     * @param Collection $items
+     * @return string
+     */
     protected function renderItems(Collection $items): string
     {
         $result = '';
@@ -96,7 +151,7 @@ abstract class NavPresenter extends WidgetPresenter
 
             $hasChildren = $item->hasChildren();
 
-            $liAttr = $liAttr = ['class' => $depth > 0 ? 'subnav-item' : $this->navItemClass];
+            $liAttr = ['class' => $depth > 0 ? 'subnav-item' : $this->navItemClass];
 
             if ($hasChildren) {
                 $liAttr['class'] .= ' dropdown';
@@ -126,25 +181,25 @@ abstract class NavPresenter extends WidgetPresenter
     {
         $url = $item->getUrl() ?: '#';
 
-        $aAttr = $item->htmlAttributes();
+        $attr = $item->htmlAttributes();
 
         $class = $item->getDepth() > 0 ? 'dropdown-item' : $this->navLinkClass;
 
-        $aAttr['class'] = trim($class .' '. ($aAttr['class'] ?? ''));
-        $aAttr['href'] = $url;
+        $attr['class'] = trim($class .' '. ($attr['class'] ?? ''));
+        $attr['href'] = $url;
 
         if ($item->isCurrent()) {
-            $aAttr['class'] .= ' active';
+            $attr['class'] .= ' active';
         }
 
         if ($item->hasChildren()) {
-            $aAttr['class'] .= ' dropdown-toggle';
-            $aAttr['aria-haspopup'] = 'true';
-            $aAttr['aria-expanded'] = 'false';
+            $attr['class'] .= ' dropdown-toggle';
+            $attr['aria-haspopup'] = 'true';
+            $attr['aria-expanded'] = 'false';
 
             if ($url == '#') {
-                $aAttr['data-toggle'] = 'dropdown';
-                $aAttr['role'] = 'button';
+                $attr['data-toggle'] = 'dropdown';
+                $attr['role'] = 'button';
             }
         }
 
@@ -152,7 +207,7 @@ abstract class NavPresenter extends WidgetPresenter
             $icon = '<i class="fa fa-' . $icon . '"></i> ';
         }
 
-        return sprintf('<a %s>%s%s</a>', html_attr($aAttr), $icon, $item->getTitle());
+        return sprintf('<a %s>%s%s</a>', html_attr($attr), $icon, $item->getTitle());
     }
 
     /**
@@ -167,6 +222,7 @@ abstract class NavPresenter extends WidgetPresenter
                 'options' => [
                     'h' => __('general.Horizontal'),
                     'v' => __('general.Vertical'),
+                    's' => __('general.Simple'),
                 ]
             ],
             ['name' => 'params[nav_align]', 'nameSce' => 'params.nav_align', 'label' => __('general.Align'),

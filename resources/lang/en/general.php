@@ -163,4 +163,6 @@ return [
 
     'Icon' => 'Icon',
     'Icons' => 'Icons',
+
+    'Simple' => 'Simple',
 ];
