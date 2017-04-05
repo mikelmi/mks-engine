@@ -144,7 +144,11 @@ abstract class NavPresenter extends WidgetPresenter
             }
         }
 
-        return sprintf('<a %s>%s</a>', html_attr($aAttr), $item->getTitle());
+        if ($icon = $item->getIcon()) {
+            $icon = '<i class="fa fa-' . $icon . '"></i> ';
+        }
+
+        return sprintf('<a %s>%s%s</a>', html_attr($aAttr), $icon, $item->getTitle());
     }
 
     /**

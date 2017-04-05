@@ -9,6 +9,7 @@
         "anhskohbo/no-captcha": "^2.3",
         "artesaos/seotools": "^0.10.0",
         "cviebrock/eloquent-taggable": "^2.1",
+        "fabpot/goutte": "^3.2",
         "intervention/image": "^2.3",
         "kalnoy/nestedset": "^4.2",
         "laravel/framework": "5.4.*",

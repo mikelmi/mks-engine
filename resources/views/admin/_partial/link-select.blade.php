@@ -18,12 +18,12 @@
 <input type="hidden" name="@{{field.params}}" ng-value="paramsEncoded(routes[routeOption.id].params)" />
 
 <!-- Modal -->
-<div class="modal fade" ng-attr-id="@{{modal.id}}" tabindex="-1" role="dialog" aria-labelledby="routeModalLabel" aria-hidden="true">
+<div class="modal fade" ng-attr-id="@{{modal.id}}" tabindex="-1" role="dialog" aria-labelledby="@{{modal.id}}Label" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <span id="routeModalLabel">@{{ modal.data.title||routeOption.text }}</span>
+                    <span id="@{{modal.id}}Label">@{{ modal.data.title||routeOption.text }}</span>
                 </h5>
                 <div class="input-group" style="width: 250px; display: inline-flex" ng-if="routeOption.extended==true">
                     <input placeholder="@lang('general.Search')..." type="search" ng-model="modal.searchQuery" class="form-control" />

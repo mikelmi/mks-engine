@@ -49,6 +49,7 @@ return [
             'size' => \App\Form\Field\Size::class,
             'category' => \App\Form\Field\CategorySelect::class,
             'tags' => \App\Form\Field\TagsSelect::class,
+            'icon' => \App\Form\Field\IconPicker::class,
         ]
     ],
 

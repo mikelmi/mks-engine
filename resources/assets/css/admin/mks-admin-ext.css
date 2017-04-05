@@ -108,3 +108,15 @@
 .select2-container--bootstrap .select2-results__option .select2-results__option {
     padding-left: 2rem;
 }
+
+/* Icons Picker */
+.icons-grid > .icon-item {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.icons-grid > .icon-item:hover {
+    background-color: #6287ae;
+    color: #fff;
+}

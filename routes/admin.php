@@ -147,6 +147,9 @@ $router->group(['prefix' => 'category', 'as' => 'category.'], function(\Illumina
     $router->get('all/{type}', 'TagController@all')->name('all')->where('type', '.+');
 });
 
+//Icons
+$router->get('icons.json', 'HelperController@icons')->name('icons');
+
 $router->get('artisan', 'ArtisanController@index')->name('artisan');
 $router->get('artisan/commands', 'ArtisanController@commands')->name('artisan.commands');
 $router->post('artisan', 'ArtisanController@run')->name('artisan.run');

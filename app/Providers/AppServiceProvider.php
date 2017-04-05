@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
         $request = $this->app['request'];
 
         if ($request && starts_with($request->path(), config('admin.url', 'admin'))) {
-            $this->app->register(AdminEventServiceProvider::class);
+            $this->app->register(AdminOnlyServicesProvider::class);
         }
 
         $this->app->singleton(Settings::class, function($app) {

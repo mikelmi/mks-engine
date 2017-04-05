@@ -125,6 +125,7 @@ class MenuController extends AdminController
             ['name' => 'parent_id', 'label' => __('general.Parent Item'), 'type' => 'select2',
                 'url' => route('admin::menu.tree.options', ['scope'=>$menu->id, 'id'=>$model->id])
             ],
+            ['name' => 'icon', 'label' => __('general.Icon'), 'type' => 'icon'],
             ['name' => 'attr', 'label' => __('general.html_attr'), 'type' => 'assoc'],
         ]);
 
@@ -148,6 +149,7 @@ class MenuController extends AdminController
         $model->params = $request->input('link.params');
         $model->url = $request->input('url');
         $model->attr = $request->input('attr');
+        $model->icon = $request->input('icon');
 
         if ($request->exists('parent_id')) {
             $parent_id = $request->input('parent_id');

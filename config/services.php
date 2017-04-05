@@ -35,4 +35,7 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'icons' => [
+        'remoteUrl' => 'http://fontawesome.io/cheatsheet/',
+    ]
 ];

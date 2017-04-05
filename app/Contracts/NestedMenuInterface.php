@@ -41,4 +41,9 @@ interface NestedMenuInterface
      * @return array
      */
     public function htmlAttributes(): array;
+
+    /**
+     * @return string
+     */
+    public function getIcon();
 }

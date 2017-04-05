@@ -201,4 +201,12 @@ class MenuItem extends Model implements NestedMenuInterface
     {
         return $this->htmlAttr();
     }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
 }

@@ -160,4 +160,7 @@ return [
     'html_attr' => 'HTML attributes',
     'meta_tags' => 'Meta Tags',
     'meta_raw' => 'Raw',
+
+    'Icon' => 'Icon',
+    'Icons' => 'Icons',
 ];

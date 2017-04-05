@@ -339,4 +339,56 @@
         }]
     });
 
+    app.factory('mksIconService', ['$q', '$http', 'UrlBuilder', function($q, $http, UrlBuilder) {
+        var _iconsPromise = $http.get(UrlBuilder.get('icons.json')).then(function(r) {
+            return r.data;
+        });
+
+        this.getIcons = function () {
+            return _iconsPromise;
+        };
+
+        return this;
+    }]);
+
+    app.component('mksIconPicker', {
+        templateUrl: ['UrlBuilder', function (UrlBuilder) {
+            return UrlBuilder.get('templates/icon-picker.html');
+        }],
+        bindings: {
+            icon: '@value',
+            name: '@'
+        },
+        controller: ['mksIconService', function (mksIconService) {
+            var ctrl = this;
+
+            this.$onInit = function () {
+                if (!this.name) {
+                    this.name = 'icon';
+                }
+
+                this.modalId = 'modal-' + (new Date()).getTime();
+            };
+
+            this.browse = function() {
+                if (!this.icons) {
+                    mksIconService.getIcons().then(function (icons) {
+                        ctrl.icons = icons;
+                    });
+                }
+
+                angular.element('#' + this.modalId).modal('show');
+            };
+
+            this.close = function() {
+                angular.element('#' + this.modalId).modal('hide');
+            };
+
+            this.select = function(icon) {
+                this.icon = icon;
+                this.close();
+            };
+        }]
+    });
+
 })(window.angular);

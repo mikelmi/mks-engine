@@ -127,4 +127,13 @@ class Category extends Model implements NestedMenuInterface
     {
         return [];
     }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        // TODO: Implement getIcon() method.
+        return '';
+    }
 }
