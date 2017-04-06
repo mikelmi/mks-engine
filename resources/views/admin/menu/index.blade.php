@@ -10,17 +10,17 @@
 
 @section('tools')
     @can('admin.menu.edit')
-        <button class="btn btn-primary" ng-hide="menuModel" ng-click="addMenu()">
-            <i class="fa fa-plus"></i>
-            {{trans('general.Add Menu')}}
-        </button>
         @can('admin.menu.edit')
             <a ng-if="currentMenu.id" class="btn btn-secondary" ng-href="#/menuman/items/@{{currentMenu.id}}/edit">
                 <i class="fa fa-plus"></i>
                 @lang('general.Add Menu Item')
             </a>
         @endcan
-        <button class="btn btn-success" ng-show="currentMenu.id" ng-click="editMenu(currentMenu)">
+        <button class="btn btn-secondary" ng-hide="menuModel" ng-click="addMenu()">
+            <i class="fa fa-plus"></i>
+            {{trans('general.Add Menu')}}
+        </button>
+        <button class="btn btn-primary" ng-show="currentMenu.id" ng-click="editMenu(currentMenu)">
             <i class="fa fa-pencil"></i>
             {{trans('admin::messages.Edit')}}
         </button>

@@ -121,6 +121,8 @@ class CategoryController extends AdminController
             ['name' => 'parent_id', 'label' => __('general.Parent Item'), 'type' => 'select2',
                 'url' => route('admin::category.tree.options', ['scope'=>$section->id, 'id'=>$model->id])
             ],
+            ['name' => 'icon', 'type' => 'icon'],
+            ['name' => 'attr', 'label' => __('general.html_attr'), 'type' => 'assoc'],
         ]);
 
         return $form->response();
@@ -139,6 +141,8 @@ class CategoryController extends AdminController
         $model->section()->associate($section);
 
         $model->title = $request->input('title');
+        $model->attr = $request->input('attr');
+        $model->icon = $request->input('icon');
 
         if ($request->exists('parent_id')) {
             $parent_id = $request->input('parent_id');

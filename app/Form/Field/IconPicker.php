@@ -12,6 +12,10 @@ use Mikelmi\MksAdmin\Form\Field;
 
 class IconPicker extends Field
 {
+    public function __construct($name = null, $value = null, $label = null)
+    {
+        parent::__construct($name, $value, $label ?: __('general.Icon'));
+    }
 
     /**
      * @return string

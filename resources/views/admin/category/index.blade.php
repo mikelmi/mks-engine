@@ -10,11 +10,17 @@
 
 @section('tools')
     @can('admin.category.edit')
-        <button class="btn btn-primary" ng-hide="sectionModel" ng-click="addSection()">
-            <i class="fa fa-plus"></i>
+        @can('admin.category.edit')
+            <a class="btn btn-secondary" ng-href="#/category/edit/@{{currentSection.id}}">
+                <i class="fa fa-plus"></i>
+                @lang('general.Add Category')
+            </a>
+        @endcan
+        <button class="btn btn-secondary" ng-hide="sectionModel" ng-click="addSection()">
+            <i class="fa fa-plus-circle"></i>
             {{trans('general.Add Section')}}
         </button>
-        <button class="btn btn-success" ng-show="currentSection.id" ng-click="editSection(currentSection)">
+        <button class="btn btn-primary" ng-show="currentSection.id" ng-click="editSection(currentSection)">
             <i class="fa fa-pencil"></i>
             {{trans('admin::messages.Edit')}}
         </button>
@@ -78,15 +84,16 @@
             <button class="btn btn-link btn-sm text-muted tree-toggle" ng-if="node.children && node.children.length > 0" data-nodrag ng-click="tree.toggle(this)">
                 <i class="fa" ng-class="{'fa-chevron-right': collapsed, 'fa-chevron-down': !collapsed}"></i>
             </button>
+            <i ng-if="node.icon" class="fa fa-@{{ node.icon }}"></i>
             @{{node.title}}
             <span class="pull-right btn-group btn-group-sm tree-tools" data-nodrag>
                 @can('admin.category.edit')
-                    <a class="btn btn-success btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/category/edit/@{{currentSection.id}}/@{{node.id}}">
+                    <a class="btn btn-outline-primary no-b btn-sm" data-nodrag title="@lang('admin::messages.Edit')" ng-href="#/category/edit/@{{currentSection.id}}/@{{node.id}}">
                         <i class="fa fa-pencil"></i>
                     </a>
                 @endcan
                 @can('admin.category.delete')
-                    <button class="btn btn-danger" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
+                    <button class="btn btn-outline-danger no-b btn-sm" data-nodrag ng-click="tree.remove(this, '{{trans('admin::messages.Delete')}}?')" title="@lang('admin::messages.Delete')">
                         <i class="fa fa-remove"></i>
                     </button>
                 @endcan

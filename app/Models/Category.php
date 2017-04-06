@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App\Contracts\NestedMenuInterface;
+use App\Traits\HasHtmlAttributes;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -21,15 +22,21 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property Category[] $children
  * @property int $depth
  * @property string $slug
+ * @property string $icon
  */
 class Category extends Model implements NestedMenuInterface
 {
-    use NodeTrait;
-    use Sluggable;
+    use NodeTrait,
+        Sluggable,
+        HasHtmlAttributes;
 
     public $timestamps = false;
 
     protected $table = 'categories';
+
+    protected $casts = [
+        'attr' => 'array',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -133,7 +140,6 @@ class Category extends Model implements NestedMenuInterface
      */
     public function getIcon()
     {
-        // TODO: Implement getIcon() method.
-        return '';
+        return $this->icon;
     }
 }

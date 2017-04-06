@@ -125,7 +125,7 @@ class MenuController extends AdminController
             ['name' => 'parent_id', 'label' => __('general.Parent Item'), 'type' => 'select2',
                 'url' => route('admin::menu.tree.options', ['scope'=>$menu->id, 'id'=>$model->id])
             ],
-            ['name' => 'icon', 'label' => __('general.Icon'), 'type' => 'icon'],
+            ['name' => 'icon', 'type' => 'icon'],
             ['name' => 'attr', 'label' => __('general.html_attr'), 'type' => 'assoc'],
         ]);
 

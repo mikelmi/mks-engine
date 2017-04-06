@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App\Contracts\NestedMenuInterface;
+use App\Traits\HasHtmlAttributes;
 use App\Traits\Parametrized;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -20,7 +21,6 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $route
  * @property string $url
  * @property string $icon
- * @property array $attr
  * @property Menu $menu
  * @property int depth
  * @property MenuItem[] $children
@@ -31,7 +31,9 @@ use Kalnoy\Nestedset\NodeTrait;
  */
 class MenuItem extends Model implements NestedMenuInterface
 {
-    use NodeTrait, Parametrized;
+    use NodeTrait,
+        Parametrized,
+        HasHtmlAttributes;
 
     public $timestamps = false;
 
@@ -182,34 +184,6 @@ class MenuItem extends Model implements NestedMenuInterface
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * @param string|null $key
-     * @param string|null $default
-     * @return array|mixed
-     */
-    public function htmlAttr(string $key = null, string $default = null)
-    {
-        $attr = $this->attr;
-
-        if (is_null($attr)) {
-            $attr = [];
-        }
-
-        if ($key) {
-            return array_get($attr, $key, $default);
-        }
-
-        return $attr;
-    }
-
-    /**
-     * @return array
-     */
-    public function htmlAttributes(): array
-    {
-        return $this->htmlAttr();
     }
 
     /**

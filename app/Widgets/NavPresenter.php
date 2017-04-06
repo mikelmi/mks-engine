@@ -79,7 +79,7 @@ abstract class NavPresenter extends WidgetPresenter
         }
 
         if ($this->model->param('nav_type') == 'v') {
-            $result .= ' flex-column';
+            $result .= ' nav-vertical flex-column';
         }
 
         return $result;
