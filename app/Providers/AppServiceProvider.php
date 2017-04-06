@@ -68,7 +68,9 @@ class AppServiceProvider extends ServiceProvider
         /** @var Request $request */
         $request = $this->app['request'];
 
-        if ($request && starts_with($request->path(), config('admin.url', 'admin'))) {
+        if ($this->app->runningInConsole()
+            || ($request && starts_with($request->path(), config('admin.url', 'admin')))
+        ) {
             $this->app->register(AdminOnlyServicesProvider::class);
         }
 

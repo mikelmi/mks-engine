@@ -45,11 +45,13 @@
                 <li class="nav-item" ng-repeat="item in sections">
                     <a class="nav-link" ng-class="{'active': item.id==currentSection.id || item.id==sectionModel.id}" href="#" ng-click="selectSection(item)">@{{ item.title }}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" ng-class="{'active': sectionModel && !sectionModel.id}" href="#" title="@lang('admin::messages.Add')" ng-click="addSection()">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                </li>
+                @can('admin.category.edit')
+                    <li class="nav-item">
+                        <a class="nav-link" ng-class="{'active': sectionModel && !sectionModel.id}" href="#" title="@lang('admin::messages.Add')" ng-click="addSection()">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </div>
 
@@ -65,7 +67,7 @@
                     </div>
                 @endcan
 
-                <div ui-tree="tree.treeOptions" data-empty-placeholder-enabled="false">
+                <div ui-tree="tree.treeOptions" data-empty-placeholder-enabled="false"@cannot('admin.category.edit') data-drag-enabled="false"@endcannot>
                     <ol ui-tree-nodes ng-model="categories[currentSection.id]">
                         <li ng-repeat="node in categories[currentSection.id]" ui-tree-node ng-include="'category_nodes_renderer.html'"></li>
                     </ol>

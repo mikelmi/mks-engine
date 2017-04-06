@@ -131,7 +131,7 @@ $router->group(['prefix' => 'category', 'as' => 'category.'], function(\Illumina
         ->where('scope', '\d+')
         ->where('id', '\d+');
 
-    $router->post('save/{scope}/{id?}', 'CategoryController@save')->name('save')->middleware('permission:admin.category.save')
+    $router->post('save/{scope}/{id?}', 'CategoryController@save')->name('save')->middleware('permission:admin.category.edit')
         ->where('scope', '\d+')
         ->where('id', '\d+');
 
@@ -143,7 +143,8 @@ $router->group(['prefix' => 'category', 'as' => 'category.'], function(\Illumina
         ->where('type', '.+');
 
     $router->get('/{scope?}', 'CategoryController@index')->name('index')
-        ->where('scope', '\d+');
+        ->where('scope', '\d+')
+        ->middleware('permission:admin.category.*');
 });
 
 //Tags
