@@ -45,11 +45,13 @@
                 <li class="nav-item" ng-repeat="item in menu">
                     <a class="nav-link" ng-class="{'active': item.id==currentMenu.id || item.id==menuModel.id}" href="#" ng-click="selectMenu(item)">@{{ item.name }}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" ng-class="{'active': menuModel && !menuModel.id}" href="#" title="@lang('admin::messages.Add')" ng-click="addMenu()">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                </li>
+                @can('admin.menu.edit')
+                    <li class="nav-item">
+                        <a class="nav-link" ng-class="{'active': menuModel && !menuModel.id}" href="#" title="@lang('admin::messages.Add')" ng-click="addMenu()">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </div>
 
@@ -65,7 +67,7 @@
                     </div>
                 @endcan
 
-                <div ui-tree="tree.treeOptions" data-empty-placeholder-enabled="false">
+                <div ui-tree="tree.treeOptions" data-empty-placeholder-enabled="false"@cannot('admin.menu.edit') data-drag-enabled="false"@endcannot>
                     <ol ui-tree-nodes ng-model="menuItems[currentMenu.id]">
                         <li ng-repeat="node in menuItems[currentMenu.id]" ui-tree-node ng-include="'nodes_renderer.html'"></li>
                     </ol>
