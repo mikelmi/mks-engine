@@ -148,9 +148,7 @@ $router->group(['prefix' => 'category', 'as' => 'category.'], function(\Illumina
 });
 
 //Tags
-\Mikelmi\MksAdmin\Services\AdminRoute::group('TagController', 'tags', null, [
-    'middleware' => ['permission:admin.tags.*'],
-], function($router) {
+\Mikelmi\MksAdmin\Services\AdminRoute::group('TagController', 'tags', null, [], function($router) {
     $router->get('all/{type}', 'TagController@all')->name('all')->where('type', '.+');
 });
 
