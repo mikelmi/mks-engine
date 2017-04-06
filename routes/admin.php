@@ -103,7 +103,6 @@ $router->get('file-manager', 'HelperController@fileManager');
 
 //Languages
 \Mikelmi\MksAdmin\Services\AdminRoute::group('LanguageController', 'language', null, [
-    'middleware' => ['permission:admin.lang.*'],
     'toggle' => true
 ], function($router) {
     $router->get('data.json', 'LanguageController@data')->name('data');
