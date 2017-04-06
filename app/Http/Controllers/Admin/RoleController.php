@@ -139,7 +139,8 @@ class RoleController extends AdminController
         $model->save();
 
         if (!$model->isSystem()) {
-            $model->perms()->sync((array)$request->input('permissions'));
+            $permissions = array_filter((array)$request->input('permissions'));
+            $model->perms()->sync($permissions);
         }
 
         \DB::commit();

@@ -175,7 +175,7 @@ class UserController extends AdminController
         $model->save();
 
         if (!$model->isCurrent()) {
-            $model->roles()->sync((array)$request->input('roles'));
+            $model->roles()->sync(array_filter((array)$request->input('roles')));
         }
 
         \DB::commit();
