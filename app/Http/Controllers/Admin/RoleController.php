@@ -50,7 +50,7 @@ class RoleController extends AdminController
             'deleteButton' => $canDelete ? route('admin::role.delete'): false,
             'columns' => [
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
-                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => hash_url('role/edit/{{row.id}}'), 'sortable' => true, 'searchable' => true],
+                ['key' => 'name', 'title' => __('general.Title'), 'type' => 'link', 'url' => hash_url('role/show/{{row.id}}'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'display_name', 'title' => __('general.Display Title'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'permissionsList', 'title' => __('general.Permissions'), 'searchable' => true],
                 ['type' => 'actions', 'actions' => $actions],
@@ -210,5 +210,13 @@ class RoleController extends AdminController
     protected function deletableQuery()
     {
         return Role::notSystem();
+    }
+
+    public function show(Role $model)
+    {
+        return $this->form($model)
+            ->setupViewMode()
+            ->addBreadCrumb($model->display_name ?: $model->name)
+            ->response();
     }
 }
