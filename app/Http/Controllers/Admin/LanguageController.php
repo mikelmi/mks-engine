@@ -233,7 +233,7 @@ class LanguageController extends AdminController
                 ['name' => 'title', 'value' => $model->getTitle(), 'label' => __('general.Title'), 'required' => true],
                 ['name' => 'enabled', 'type' => 'toggle', 'value' => $model->getEnabled(), 'label' => __('general.Active')],
                 ['name' => 'site[title]', 'value' => $model->get('site.title'), 'label' => __('general.Site name')],
-                ['name' => 'site[description]', 'value' => $model->get('site.description'), 'label' => __('general.Description')],
+                ['name' => 'site[description]', 'type' => 'textarea', 'value' => $model->get('site.description'), 'label' => __('general.Description')],
                 ['name' => 'site[keywords]', 'value' => $model->get('site.keywords'), 'label' => __('general.Keywords')],
             ]
         ]);
