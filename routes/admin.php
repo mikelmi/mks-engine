@@ -34,8 +34,15 @@ $router->group(['prefix' => 'dashboard', 'as' => 'dashboard.'],
 \Mikelmi\MksAdmin\Services\AdminRoute::group('PermissionController', 'permission');
 
 //Settings
-$router->get('settings/{scope?}', ['as' => 'settings', 'uses' => 'SettingsController@index'])->where('scope', '[a-z]+');
-$router->post('settings/{scope?}', ['as' => 'settings.save', 'uses' => 'SettingsController@save'])->where('scope', '[a-z]+');
+$router->group(['prefix' => 'settings', 'middleware' => 'permission:admin.settings.*'], function($router) {
+    $router->get('/{scope?}', 'SettingsController@index')
+        ->name('settings')
+        ->where('scope', '[a-z]+');
+    $router->post('/{scope?}', 'SettingsController@save')
+        ->name('settings.save')
+        ->where('scope', '[a-z]+')
+        ->middleware('permission:admin.settings.edit');
+});
 
 //Page
 \Mikelmi\MksAdmin\Services\AdminRoute::group('PageController', 'page', null, ['trash' => true]);

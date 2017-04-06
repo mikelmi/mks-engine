@@ -19,8 +19,18 @@ class ImagePicker extends Custom
         unset($attr['class']);
 
         $attr['id'] = 'image-select-' . uniqid();
-        $attr['data-image'] = $this->value;
+        $attr['data-image'] = $this->getValue();
 
         return '<mks-image-select ' . html_attr($attr) . '></mks-image-select>';
+    }
+
+    public function renderStaticInput(): string
+    {
+        if ($this->getValue()) {
+            $this->setAttribute('disabled', 'true');
+            return $this->renderInput();
+        }
+
+        return '';
     }
 }

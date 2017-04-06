@@ -11,6 +11,7 @@ namespace App\Services;
 use App\Contracts\SettingsScope;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Mikelmi\MksAdmin\Form\AdminForm;
 use Mikelmi\MksAdmin\Form\FormGroup;
 
@@ -67,6 +68,12 @@ class SettingsManager
     public function getForm($scope = null): AdminForm
     {
         $form = new AdminForm();
+
+        $canEdit = $this->canEdit();
+
+        if (!$canEdit) {
+            $form->setupViewMode();
+        }
 
         $scopes = $this->getScopes();
 
@@ -191,5 +198,13 @@ class SettingsManager
         }
 
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canEdit(): bool
+    {
+        return Gate::allows('admin.settings.edit');
     }
 }

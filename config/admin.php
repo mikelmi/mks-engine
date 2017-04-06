@@ -77,7 +77,7 @@ return [
             ]
         ],
         [
-            'title' => 'general.Users', 'hash'=>'user', 'icon'=>'user',
+            'title' => 'general.Users', 'href' => '#/user', 'hash'=>'user', 'icon'=>'user',
             'children' => [
                 ['title' => 'general.Users', 'href' => '#/user', 'hash' => 'user'],
                 ['title' => 'general.Roles', 'href' => '#/role', 'hash' => 'role'],

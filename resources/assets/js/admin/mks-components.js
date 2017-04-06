@@ -104,7 +104,8 @@
             url: '@',
             items: '=?',
             inputName: '@name',
-            pickMain: '@'
+            pickMain: '@',
+            disabled: '@'
         },
         controller: ['$http', 'UrlBuilder', '$element', function($http, UrlBuilder, $element) {
             var ctrl = this;
@@ -181,7 +182,8 @@
             image: '@',
             inputName: '@name',
             pickMain: '@',
-            id: '@'
+            id: '@',
+            disabled: '@'
         },
         controller: ['$http', 'UrlBuilder', '$element', function($http, UrlBuilder, $element) {
             var ctrl = this;

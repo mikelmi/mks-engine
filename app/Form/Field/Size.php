@@ -112,7 +112,14 @@ class Size extends Custom
 
     public function renderStaticInput(): string
     {
-        return $this->widthElement->renderStaticInput() .'&nbsp x &nbsp' . $this->heightElement->renderStaticInput();
+        $width = $this->widthElement->getValue();
+        $height = $this->heightElement->getValue();
+
+        if (!$width && !$height) {
+            return '';
+        }
+
+        return sprintf('<p class="form-control-static">%s x %s</p>', $width, $height);
     }
 
     public function setRequired(bool $required): FieldInterface
