@@ -128,6 +128,21 @@ class ShowForRoles extends Select
             'data-url' => route('admin::role.forModel', $this->model ? [get_class($this->model), $this->model->getKey()] : []),
         ];
 
+        if ($this->isDisabled()) {
+            $attr['disabled'] = 'true';
+        }
+
         return '<select'.html_attr($attr).'></select>';
+    }
+
+    public function renderStaticInput(): string
+    {
+        $this->setDisabled(true);
+
+        $result = parent::renderStaticInput();
+
+        $result .= $this->renderSelectRoles();
+
+        return $result;
     }
 }

@@ -61,7 +61,7 @@ class ColumnLanguage extends Column
         $v = 'row.'.$this->getKey();
 
         return sprintf(
-            '<img ng-if="%s" src="%s/{{%1$s}}" /> {{%1$s}}',
+            '<img ng-if="%s" ng-src="%s/{{%1$s}}" /> {{%1$s}}',
             $v,
             route('lang.icon')
         );

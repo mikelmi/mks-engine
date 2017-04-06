@@ -72,6 +72,7 @@ class WidgetController extends AdminController
         $canDelete = $this->canDelete();
         $canCreate = $this->canCreate();
         $canToggle = $this->canToggle();
+        $canMove = $canEdit || $this->canAction('move');
 
         $actions = [];
         $links = [];
@@ -106,7 +107,7 @@ class WidgetController extends AdminController
                 ],
                 ['key' => 'position', 'title' => __('general.Position'), 'sortable' => true, 'searchable' => true],
                 ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
-                ['key' => 'priority', 'title' => __('general.Priority'), 'type' => 'priority', 'url' => route('admin::widget.move'), 'sortable' => true, 'searchable' => true],
+                ['key' => 'priority', 'title' => __('general.Priority'), 'type' => $canMove ? 'priority' : '', 'url' => route('admin::widget.move'), 'sortable' => true, 'searchable' => true],
                 ['type' => 'actions', 'actions' => $actions],
             ],
             'rowAttributes' => [

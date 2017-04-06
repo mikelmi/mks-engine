@@ -24,4 +24,17 @@ class AssocArray extends Custom
 
         return '<mks-assoc-input ' . html_attr($attr) . '></mks-assoc-input>';
     }
+
+    public function renderStaticInput(): string
+    {
+        if (!is_array($this->value)) {
+            return '';
+        }
+
+        $result = array_map(function($v, $k) {
+            return sprintf('%s = %s', e($k), e($v));
+        }, $this->value, array_keys($this->value));
+
+        return implode('<br />', $result);
+    }
 }

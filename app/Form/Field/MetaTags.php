@@ -59,7 +59,12 @@ class MetaTags extends Field
 
         $result = '';
 
+        /** @var FieldInterface $field */
         foreach ($fields as $field) {
+            if ($this->isStatic()) {
+                $field->setStatic(true);
+            }
+
             $result .= "\n" . $field->render();
         }
 

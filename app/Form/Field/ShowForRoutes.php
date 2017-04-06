@@ -14,6 +14,10 @@ class ShowForRoutes extends Custom
 {
     public function render(): string
     {
+        if ($this->isStatic()) {
+            return $this->renderStatic();
+        }
+
         $attr = $this->getAttributes();
 
         unset($attr['class'], $attr['id']);
@@ -21,5 +25,10 @@ class ShowForRoutes extends Custom
         $attr['value'] = $this->getValue();
 
         return '<mks-routes-select '.html_attr($attr).'></mks-routes-select>';
+    }
+
+    public function renderStatic(): string
+    {
+        return '';
     }
 }
