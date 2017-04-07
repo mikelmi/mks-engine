@@ -6,7 +6,7 @@ return array(
 		'activate_parents' => true,
 		'active_class'     => 'active',
 		'restful'          => false,
-		'cascade_data'     => true,
+		'cascade_data'     => false,
 		'rest_base'        => '',      // string|array
 		'active_element'   => 'item',  // item|link
 	)

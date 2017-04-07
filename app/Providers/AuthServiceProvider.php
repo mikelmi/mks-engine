@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\Page;
 use App\Policies\PagePolicy;
-use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

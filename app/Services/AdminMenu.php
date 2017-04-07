@@ -6,6 +6,7 @@ use App\Contracts\AdminMenuBuilder;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
 use Mikelmi\MksAdmin\Contracts\MenuManagerContract;
+use Illuminate\Contracts\Auth\Access\Gate;
 
 class AdminMenu implements MenuManagerContract
 {
@@ -88,18 +89,59 @@ class AdminMenu implements MenuManagerContract
         return $items;
     }
 
+    /**
+     * @param Builder|Item $menu
+     * @param array $items
+     * @return Builder
+     */
     private function buildFromArray($menu, array $items) {
-        foreach ($items as $item) {
-            $title = $item['title'];
-            unset($item['title']);
+        /** @var Gate $gate */
+        $gate = resolve(Gate::class);
 
+        foreach ($items as $item) {
+            $can = $this->array_pull($item, 'can');
+
+            if ($can && $gate->denies($can)) {
+                if ($menu instanceof Item) {
+                    $menu->data('has-cannot-children', true);
+                }
+                continue;
+            }
+
+            $title = $this->array_pull($item, 'title');
+            $children = $this->array_pull($item, 'children');
+
+            /** @var Item $menuItem */
             $menuItem = $menu->add(__($title), $item);
 
-            if (isset($item['children']) && $item['children']) {
-                $this->buildFromArray($menuItem, $item['children']);
+            if ($children) {
+                $this->buildFromArray($menuItem, $children);
             }
         }
 
+        if ($menu instanceof Builder) {
+            return $menu->filter(function(Item $item){
+                if ($item->data('has-cannot-children') && !$item->hasChildren()) {
+                    return false;
+                }
+                return true;
+            });
+        }
+
         return $menu;
+    }
+
+    /**
+     * @param array $items
+     * @param $key
+     * @param null $default
+     * @return mixed|null
+     */
+    private function array_pull(array &$items, $key, $default = null)
+    {
+        $result = $items[$key] ?? $default;
+        unset($items[$key]);
+
+        return $result;
     }
 }

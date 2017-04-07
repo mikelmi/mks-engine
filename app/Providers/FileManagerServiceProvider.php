@@ -8,7 +8,6 @@ use App\Services\FileManagerAdapter;
 use App\Services\ImageService;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
 class FileManagerServiceProvider extends ServiceProvider
