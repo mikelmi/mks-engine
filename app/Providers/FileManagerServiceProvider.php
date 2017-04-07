@@ -45,7 +45,7 @@ class FileManagerServiceProvider extends ServiceProvider
             /** @var Gate $gate */
             $gate = $app[Gate::class];
 
-            if (!$gate->allows('filemanager.all')) {
+            if (!$gate->allows('files.all')) {
                 $prefix = DIRECTORY_SEPARATOR . 'users'. DIRECTORY_SEPARATOR . $userId;
                 $root .= $prefix;
                 $url_prefix .= str_replace_first('\\', '/', $prefix);

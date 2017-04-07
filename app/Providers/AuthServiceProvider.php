@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('upload', function (Authenticatable $user) {
+        Gate::define('files.upload', function (Authenticatable $user) {
             $mode = settings('files.upload');
 
             if ($mode == '1') {
@@ -37,6 +37,10 @@ class AuthServiceProvider extends ServiceProvider
             }
 
             return $user->can('files.upload');
+        });
+
+        Gate::define('files.view', function (Authenticatable $user) {
+            return Gate::allows('admin.access') || Gate::allows('files.upload');
         });
 
         Gate::define('admin.access', function (Authenticatable $user) {
