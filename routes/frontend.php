@@ -3,21 +3,29 @@
 /** @var \Illuminate\Routing\Router $router */
 $router = app('router');
 
-$router->get('/', ['as' => 'home', 'uses' => 'PageController@home']);
+$router->get('/', 'PageController@home')->name('home');
 
+//Auth
 \Illuminate\Support\Facades\Auth::routes();
 $router->get('auth/activation/{token}', 'Auth\RegisterController@activate');
 
+//Captcha
 $router->get('captcha.png', 'PageController@captchaImage')->name('captcha.image');
 
-$router->get('page/{id}', ['as' => 'page.id', 'uses' => 'PageController@getById'])->where('id', '\d+');
+//Page
+$router->get('page/{id}', 'PageController@getById')->name('page.id')
+    ->where('id', '\d+');
 
-$router->get('user/profile', 'UserController@profile')->name('user.profile');
-$router->get('user/profile/{id}', 'UserController@info')->name('user')->middleware(['permission:user.profile']);
-$router->get('user/edit', 'UserController@edit')->name('user.edit');
-$router->post('user/save', 'UserController@save')->name('user.save');
+//User
+$router->group(['prefix' => 'user', 'as' => 'user.'], function(\Illuminate\Routing\Router $router) {
+    $router->get('profile', 'UserController@profile')->name('profile');
+    $router->get('profile/{id}', 'UserController@info')->name('info')->middleware(['permission:user.profile']);
+    $router->get('edit', 'UserController@edit')->name('edit');
+    $router->post('save', 'UserController@save')->name('save');
+});
 
-//filemanager
+
+//FileManager
 $router->group(['prefix'=>'file-manager', 'middleware' => ['can:files.view']], function(\Illuminate\Routing\Router $router) {
     $router->get('/', 'FileManagerController@index')->name('filemanager');
     $router->post('upload', 'FileManagerController@upload')->name('filemanager.upload');
@@ -26,7 +34,7 @@ $router->group(['prefix'=>'file-manager', 'middleware' => ['can:files.view']], f
     $router->any('handler', 'FileManagerController@handle')->name('filemanager.handler');
 });
 
-//image thumbnail
+//Image thumbnail
 $router->get('thumbnail/{path?}', 'FileManagerController@thumbnail')
     ->where('path', '.+')
     ->name('thumbnail');

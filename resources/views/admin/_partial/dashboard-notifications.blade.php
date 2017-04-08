@@ -45,18 +45,6 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="notificationDetails" tabindex="-1" role="dialog" aria-labelledby="notificationDetailsLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="notificationDetailsLabel">@{{ $ctrl.currentItem.title }}</h4>
-            </div>
-            <div class="modal-body">
-                <div ng-bind-html="$ctrl.detailsHtml"></div>
-            </div>
-        </div>
-    </div>
-</div>
+@component('admin.components.modal', ['id'=>'notificationDetails','title' => '@{{ $ctrl.currentItem.title }}'])
+    <div ng-bind-html="$ctrl.detailsHtml"></div>
+@endcomponent

@@ -51,7 +51,7 @@ class GeneralRouteCollector implements RouteCollector
                 'group' => $users,
                 'priority' => -97
             ],
-            'user' => [
+            'user.info' => [
                 'text' => __('user.Profile'),
                 'group' => $users,
                 'priority' => -97,

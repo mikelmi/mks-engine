@@ -35,13 +35,15 @@
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-sm-9 offset-sm-3">
-            <a href="#/user/edit/{{$user->id}}" class="btn btn-primary">
-                <i class="fa fa-pencil"></i>
-                @lang('admin::messages.Edit')
-            </a>
+    @can('admin.users.edit')
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <a href="#/user/edit/{{$user->id}}" class="btn btn-primary">
+                    <i class="fa fa-pencil"></i>
+                    @lang('admin::messages.Edit')
+                </a>
+            </div>
         </div>
-    </div>
+    @endcan
 
 </div>
