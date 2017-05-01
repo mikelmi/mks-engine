@@ -61,6 +61,11 @@ return [
             'root'   => public_path('files'),
             'url_prefix' => 'files'
         ],
+        
+        'localFiles' => [
+            'driver' => 'local',
+            'root'   => public_path('files')
+        ],
 
         's3' => [
             'driver' => 's3',

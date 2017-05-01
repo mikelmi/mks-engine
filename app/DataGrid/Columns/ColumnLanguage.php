@@ -66,6 +66,4 @@ class ColumnLanguage extends Column
             route('lang.icon')
         );
     }
-
-
 }

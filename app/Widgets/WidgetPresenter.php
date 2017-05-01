@@ -20,6 +20,11 @@ abstract class WidgetPresenter implements \App\Contracts\WidgetPresenter
     protected $model;
 
     /**
+     * @var string
+     */
+    protected $viewPrefix = '';
+
+    /**
      * @var array
      */
     protected $attributes = [];
@@ -105,10 +110,10 @@ abstract class WidgetPresenter implements \App\Contracts\WidgetPresenter
             'title' => $this->model->param('show_title') ? $this->model->title : null,
         ];
 
-        if (($name = $this->model->name) && \View::exists('widget.named.' . $name)) {
-            $view = 'widget.named.' . $name;
+        if (($name = $this->model->name) && \View::exists($this->viewPrefix . 'widget.named.' . $name)) {
+            $view = $this->viewPrefix . 'widget.named.' . $name;
         } else {
-            $view = $path ? $path : 'widget.' . $this->alias();
+            $view = $path ? $path : $this->viewPrefix . 'widget.' . $this->alias();
         }
 
         $attr = $this->getAttributes();

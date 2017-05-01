@@ -96,6 +96,19 @@ class ModulesLoaderServiceProvider extends ServiceProvider
                         require $routePath;
                     });
                 }
+
+                if ($routes = $module->meta('admin_routes')) {
+                    $routePath = $module->getPath($routes);
+
+                    \Route::group([
+                        'middleware' => ['web'],
+                        'prefix' => config('admin.url', 'admin') . '/' . lcfirst($name),
+                        'as' => 'admin::' . lcfirst($name) . '.',
+                        'namespace' => 'Modules\\' . $name . '\\Http\\Controllers\Admin'
+                    ], function ($router) use ($routePath) {
+                        require $routePath;
+                    });
+                }
             }
 
             //event listeners

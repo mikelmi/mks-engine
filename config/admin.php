@@ -46,6 +46,7 @@ return [
             'routesShow' => \App\Form\Field\ShowForRoutes::class,
             'assoc' => \App\Form\Field\AssocArray::class,
             'image' => \App\Form\Field\ImagePicker::class,
+            'images' => \App\Form\Field\ImagesPicker::class,
             'size' => \App\Form\Field\Size::class,
             'category' => \App\Form\Field\CategorySelect::class,
             'tags' => \App\Form\Field\TagsSelect::class,
@@ -55,7 +56,9 @@ return [
 
     'datagrid' => [
         'columns' => [
-            'language' => \App\DataGrid\Columns\ColumnLanguage::class
+            'language' => \App\DataGrid\Columns\ColumnLanguage::class,
+            'thumbnail' => \App\DataGrid\Columns\ColumnThumbnail::class,
+            'list' => \App\DataGrid\Columns\ColumnList::class
         ],
         'actions' => [
             'toggleOne' => \App\DataGrid\Actions\ToggleOne::class
