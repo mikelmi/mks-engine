@@ -1,8 +1,8 @@
 {
   "/js/system.js": "/js/system.js",
+  "/js/system-light.js": "/js/system-light.js",
   "/admin/js/admin-app.js": "/admin/js/admin-app.js",
   "/filemanager/js/app.js": "/filemanager/js/app.js",
-  "/js/system-light.js": "/js/system-light.js",
   "/mix.js": "/mix.js",
   "/css/system-light.css": "/css/system-light.css",
   "/css/system.css": "/css/system.css",

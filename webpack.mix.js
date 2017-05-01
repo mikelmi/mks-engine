@@ -59,7 +59,7 @@ mix.js(asset('js/system-light.js'), public_path('js/system-light.js'));
 mix.js(asset('js/system.js'), public_path('js/system.js'));
 
 //TODO: move to combined version
-mix.copy(asset('js/system.js'), public_path('js/app.js'));
+//mix.copy(asset('js/system.js'), public_path('js/app.js'));
 
 //font-awesome
 mix.copy(path_node('font-awesome/fonts'), public_path('fonts'));
