@@ -14,7 +14,9 @@ return [
     */
 
     'files' => [
-        //
+        'app/Repositories/Breadcrumbs.php',
+        'app/Repositories/LanguageRepository.php',
+        'app/Services/Settings.php',
     ],
 
     /*
