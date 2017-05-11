@@ -487,7 +487,7 @@ class FileManager
         if ($extensions = $this->getTypeExtensions($type)) {
 
             $finder->filter(function(SplFileInfo $file) use ($extensions) {
-                return $file->isDir() || in_array($file->getExtension(), $extensions);
+                return $file->isDir() || in_array(strtolower($file->getExtension()), $extensions);
             });
         }
     }
