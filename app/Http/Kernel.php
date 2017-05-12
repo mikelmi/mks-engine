@@ -45,7 +45,7 @@ class Kernel extends HttpKernel
 
         'frontend' => [
             \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-            SetLocale::class,
+            SetLocale::class
         ]
     ];
 
@@ -66,5 +66,7 @@ class Kernel extends HttpKernel
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
         'auth.ability' => \App\Http\Middleware\AuthAbility::class,
         'register.ability' => \App\Http\Middleware\RegisterAbility::class,
+        'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
+        'cacheResponse' => \Spatie\ResponseCache\Middlewares\CacheResponse::class,
     ];
 }

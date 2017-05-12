@@ -10,7 +10,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Repositories\IconRepository;
 use Illuminate\Http\Request;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class HelperController extends AdminController
 {

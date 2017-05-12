@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Illuminate\Contracts\Console\Kernel;
 
 class ArtisanController extends AdminController
@@ -41,7 +40,8 @@ class ArtisanController extends AdminController
         'route:clear',
         'route:list',
         'vendor:publish',
-        'view:clear'
+        'view:clear',
+        'responsecache:flush'
     ];
 
     public function index()
@@ -143,6 +143,10 @@ class ArtisanController extends AdminController
         $kernel = app(Kernel::class);
 
         $kernel->call($command->getName(), $params);
+
+        if ($request->get('flash')) {
+            $this->flashInfo($kernel->output());
+        }
 
         return $kernel->output();
     }

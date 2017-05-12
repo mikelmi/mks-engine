@@ -9,7 +9,6 @@ use App\Services\Settings;
 use App\Traits\CrudPermissions;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\MksAdmin\Traits\ToggleRequests;
 use Mikelmi\SmartTable\SmartTable;
@@ -31,6 +30,8 @@ class LanguageController extends AdminController
 
     protected function init()
     {
+        parent::init();
+
         $this->langRepo = app(LanguageRepository::class);
     }
 
@@ -155,6 +156,8 @@ class LanguageController extends AdminController
 
         $this->flashSuccess(__('general.Saved'));
 
+        $this->triggerClearCache($request);
+
         return $this->redirect('/language');
     }
 
@@ -163,6 +166,8 @@ class LanguageController extends AdminController
         $keys = $iso ?: $request->get('id');
         
         $result = $this->langRepo->delete($keys);
+
+        $this->triggerClearCache($request);
         
         return response()->json($result);
     }
@@ -175,6 +180,8 @@ class LanguageController extends AdminController
         if (!$this->langRepo->setStatus($iso, $status)) {
             abort(500);
         }
+
+        $this->triggerClearCache();
 
         return [
             'model' => [
@@ -194,6 +201,8 @@ class LanguageController extends AdminController
         if (!$this->langRepo->setStatuses($id, (bool) $status)) {
             abort(500);
         }
+
+        $this->triggerClearCache($request);
 
         return [
             'models' => $this->langRepo->available()->whereIn('iso', $id)->toArray()
@@ -269,6 +278,8 @@ class LanguageController extends AdminController
 
         $this->flashSuccess(__('general.Saved'));
 
+        $this->triggerClearCache($request);
+
         return $this->redirect('/language');
     }
 
@@ -277,6 +288,8 @@ class LanguageController extends AdminController
         $language = $this->langRepo->get($iso);
         $settings->set('locale', $language->getIso());
         $settings->save();
+
+        $this->triggerClearCache();
 
         return $this->redirect('/language');
     }

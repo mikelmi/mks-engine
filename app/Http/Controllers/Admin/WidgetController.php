@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Form\AdminForm;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\MksAdmin\Traits\MoveRequests;
 use Mikelmi\MksAdmin\Traits\ToggleRequests;
@@ -38,6 +37,8 @@ class WidgetController extends AdminController
 
     protected function init()
     {
+        parent::init();
+
         $this->widgetManager = resolve(WidgetManager::class);
     }
 
@@ -289,6 +290,8 @@ class WidgetController extends AdminController
         \DB::commit();
 
         $this->flashSuccess(__('general.Saved'));
+
+        $this->triggerClearCache($request);
 
         return $this->redirect('/widget');
     }

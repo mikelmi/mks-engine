@@ -3,9 +3,6 @@
 namespace App\Settings;
 
 
-use Illuminate\Config\Repository;
-
-
 class SiteSettings extends SettingsScope
 {
     public function afterSave(array $old, array $new)

@@ -165,4 +165,9 @@ return [
     'Icons' => 'Иконки',
 
     'Simple' => 'Простой',
+
+    'Cache Pages' => 'Кешировать страницы',
+    'Cache Lifetime' => 'Время кеширования',
+    'In minutes' => 'В минутах',
+    'Clear Cache' => 'Очистить кеш',
 ];

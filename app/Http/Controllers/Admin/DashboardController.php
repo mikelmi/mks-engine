@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Page;
 use App\Models\Widget;
-use App\Notifications\ReadableNotification;
 use App\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class DashboardController extends AdminController
 {

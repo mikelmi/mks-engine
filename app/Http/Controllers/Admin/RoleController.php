@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\SmartTable\SmartTable;
 

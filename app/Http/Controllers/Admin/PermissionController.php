@@ -6,7 +6,6 @@ use App\Models\Permission;
 use App\Traits\CrudPermissions;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\SmartTable\SmartTable;
 

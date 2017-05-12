@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Events\UserActivated;
 use App\Events\UserRegistered;
 use App\Http\Controllers\SiteController;
-use App\Repositories\LanguageRepository;
 use App\Services\CaptchaManager;
-use App\Services\Settings;
 use App\User;
 use Illuminate\Http\Request;
 use Validator;
@@ -35,15 +33,10 @@ class RegisterController extends SiteController
      */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(Settings $settings, LanguageRepository $languageRepository)
-    {
-        parent::__construct($settings, $languageRepository);
+    protected $cacheable = false;
 
+    protected function init()
+    {
         $this->middleware('guest');
         $this->middleware('register.ability');
     }

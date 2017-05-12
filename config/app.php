@@ -175,6 +175,7 @@ return [
         Mikelmi\MksTheme\Providers\MksThemeServiceProvider::class,
         Intervention\Image\ImageServiceProviderLaravel5::class,
         Cviebrock\EloquentTaggable\ServiceProvider::class,
+        Spatie\ResponseCache\ResponseCacheServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -241,6 +242,7 @@ return [
         'Theme' => Mikelmi\MksTheme\Facades\Theme::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Entrust' => \Zizaco\Entrust\EntrustFacade::class,
+        'ResponseCache' => Spatie\ResponseCache\ResponseCacheFacade::class,
     ],
 
 ];

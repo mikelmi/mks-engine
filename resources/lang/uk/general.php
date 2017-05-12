@@ -165,4 +165,9 @@ return [
     'Icons' => 'Іконки',
 
     'Simple' => 'Простий',
+
+    'Cache Pages' => 'Кешувати сторінки',
+    'Cache Lifetime' => 'Час кешування',
+    'In minutes' => 'В хвилинах',
+    'Clear Cache' => 'Очистити кеш',
 ];

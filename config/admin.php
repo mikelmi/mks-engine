@@ -51,6 +51,7 @@ return [
             'category' => \App\Form\Field\CategorySelect::class,
             'tags' => \App\Form\Field\TagsSelect::class,
             'icon' => \App\Form\Field\IconPicker::class,
+            'button' => \App\Form\Field\Button::class,
         ]
     ],
 

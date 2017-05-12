@@ -7,7 +7,6 @@ use App\Models\Page;
 use App\Traits\CrudPermissions;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CountItemsResponse;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\MksAdmin\Traits\TrashRequests;
@@ -219,6 +218,8 @@ class PageController extends AdminController
 
         $this->flashSuccess(__('general.Saved'));
 
+        $this->triggerClearCache($request);
+
         return $this->redirect([
             '/page/scope' . ($model->trashed() ? '/trash' : ''),
             '/page/create',
@@ -234,5 +235,26 @@ class PageController extends AdminController
             ->setupViewMode()
             ->addBreadCrumb($model->title)
             ->response();
+    }
+
+    protected function afterDelete($response)
+    {
+        $this->triggerClearCache();
+
+        return $this->setItemsCount($response);
+    }
+
+    protected function afterTrash($response)
+    {
+        $this->triggerClearCache();
+
+        return $this->setItemsCount($response);
+    }
+
+    protected function afterRestore($response)
+    {
+        $this->triggerClearCache();
+
+        return $this->setItemsCount($response);
     }
 }

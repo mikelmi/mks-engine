@@ -16,6 +16,13 @@ class SiteController extends Controller
 {
     use SEOTools;
 
+    /**
+     * Enable caching full response
+     *
+     * @var bool
+     */
+    protected $cacheable = true;
+
     public function __construct(Settings $settings, LanguageRepository $languageRepository)
     {
         $title = $settings->get('site.title');
@@ -33,6 +40,14 @@ class SiteController extends Controller
         $this->seo()->metatags()->setTitleDefault($title);
         $this->seo()->setDescription($description);
         $this->seo()->metatags()->setKeywords($keywords);
+
+        if ($this->cacheable && $settings->get('system.cache')) {
+            if ($lifetime = $settings->get('system.cache_lifetime')) {
+                config()->set('responsecache.cache_lifetime_in_minutes', $lifetime);
+            }
+
+            $this->middleware('cacheResponse');
+        }
 
         $this->init();
     }

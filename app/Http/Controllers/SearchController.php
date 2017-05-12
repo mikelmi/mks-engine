@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class SearchController extends SiteController
 {
+    protected $cacheable = false;
+
     public function index(Request $request)
     {
         return view('search.index', [

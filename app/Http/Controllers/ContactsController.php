@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 
 class ContactsController extends SiteController
 {
+    protected $cacheable = false;
+
     public function send(Request $request, CaptchaManager $captchaManager)
     {
         $rules = [

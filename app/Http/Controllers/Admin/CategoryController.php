@@ -8,7 +8,6 @@ use App\Models\Section;
 use App\Services\CategoryManager;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class CategoryController extends AdminController
 {
@@ -39,12 +38,18 @@ class CategoryController extends AdminController
         $model->type = $request->input('type');
         $model->save();
 
+        $this->triggerClearCache($request);
+
         return $model;
     }
 
     public function deleteSection(Request $request)
     {
-        return Section::destroy($request->input('id'));
+        $result = Section::destroy($request->input('id'));
+
+        $this->triggerClearCache($request);
+
+        return $result;
     }
 
     public function categories($scope)
@@ -85,6 +90,8 @@ class CategoryController extends AdminController
             }
         }
 
+        $this->triggerClearCache($request);
+
         return $item;
     }
 
@@ -92,8 +99,12 @@ class CategoryController extends AdminController
     {
         $item = Category::find($id);
 
+        $result = $item->delete();
+
+        $this->triggerClearCache();
+
         return [
-            'result' => $item->delete()
+            'result' => $result
         ];
     }
 
@@ -161,6 +172,8 @@ class CategoryController extends AdminController
         $model->save();
 
         $this->flashSuccess(__('general.Saved'));
+
+        $this->triggerClearCache($request);
 
         return $this->redirect([
             '/category/' . $scope,

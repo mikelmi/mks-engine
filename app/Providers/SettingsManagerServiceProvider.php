@@ -15,6 +15,7 @@ use App\Settings\CaptchaSettings;
 use App\Settings\FilesSettings;
 use App\Settings\PageSettings;
 use App\Settings\SiteSettings;
+use App\Settings\SystemSettings;
 use App\Settings\UserSettings;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,7 +28,8 @@ class SettingsManagerServiceProvider extends ServiceProvider
         UserSettings::class,
         PageSettings::class,
         CaptchaSettings::class,
-        FilesSettings::class
+        FilesSettings::class,
+        SystemSettings::class
     ];
 
     public function register()

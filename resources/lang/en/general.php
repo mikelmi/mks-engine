@@ -165,4 +165,9 @@ return [
     'Icons' => 'Icons',
 
     'Simple' => 'Simple',
+
+    'Cache Pages' => 'Cache Pages',
+    'Cache Lifetime' => 'Cache Lifetime',
+    'In minutes' => 'In minutes',
+    'Clear Cache' => 'Clear Cache',
 ];

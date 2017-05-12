@@ -7,7 +7,6 @@ use App\Models\Menu;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class MenuController extends AdminController
 {
@@ -34,12 +33,18 @@ class MenuController extends AdminController
         $model->name = $request->input('name');
         $model->save();
 
+        $this->triggerClearCache($request);
+
         return $model;
     }
 
     public function delete(Request $request)
     {
-        return Menu::destroy($request->input('id'));
+        $result = Menu::destroy($request->input('id'));
+
+        $this->triggerClearCache($request);
+
+        return $result;
     }
 
     public function items($scope)
@@ -80,15 +85,20 @@ class MenuController extends AdminController
             }
         }
 
+        $this->triggerClearCache($request);
+
         return $item;
     }
 
     public function deleteItem($id)
     {
         $item = MenuItem::find($id);
+        $result = $item->delete();
+
+        $this->triggerClearCache();
 
         return [
-            'result' => $item->delete()
+            'result' => $result
         ];
     }
 
@@ -168,6 +178,8 @@ class MenuController extends AdminController
         $model->save();
 
         $this->flashSuccess(__('general.Saved'));
+
+        $this->triggerClearCache($request);
 
         return $this->redirect([
             '/menuman/' . $scope,

@@ -13,7 +13,6 @@ use App\Traits\CrudPermissions;
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Illuminate\Http\Request;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 use Mikelmi\MksAdmin\Traits\CrudRequests;
 use Mikelmi\SmartTable\SmartTable;
 
@@ -33,6 +32,8 @@ class TagController extends AdminController
 
     public function init()
     {
+        parent::init();
+
         $this->tagService = resolve(TagService::class);
     }
 
@@ -168,6 +169,8 @@ class TagController extends AdminController
 
         $this->flashSuccess(__('general.Saved'));
 
+        $this->triggerClearCache($request);
+
         return $this->redirect('/tags');
     }
 
@@ -182,6 +185,8 @@ class TagController extends AdminController
         if (!$result) {
             app()->abort(422);
         }
+
+        $this->triggerClearCache($request);
 
         return response()->json($result);
     }

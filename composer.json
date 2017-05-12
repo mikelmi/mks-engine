@@ -21,6 +21,7 @@
         "mikelmi/mks-admin": "^3.1",
         "mikelmi/mks-smart-table": "^2.1",
         "mikelmi/mks-theme": "^2.1",
+        "spatie/laravel-responsecache": "^3.1",
         "zizaco/entrust": "dev-master"
     },
     "require-dev": {

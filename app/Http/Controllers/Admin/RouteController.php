@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Services\RouteManager;
 use Illuminate\Http\Request;
-use Mikelmi\MksAdmin\Http\Controllers\AdminController;
 
 class RouteController extends AdminController
 {
@@ -16,6 +15,8 @@ class RouteController extends AdminController
 
     protected function init()
     {
+        parent::init();
+
         $this->routeManager = resolve(RouteManager::class);
     }
 
