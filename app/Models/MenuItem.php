@@ -74,10 +74,7 @@ class MenuItem extends Model implements NestedMenuInterface
     }
 
     /**
-     * Build valid url
-     * Return false if route not found
-     *
-     * @return bool|string
+     * @return bool|\Illuminate\Contracts\Routing\UrlGenerator|string
      */
     public function getUrl()
     {
@@ -88,10 +85,10 @@ class MenuItem extends Model implements NestedMenuInterface
                 $params = $this->params->all();
                 try {
                     $url = route($this->route, $params);
-                } catch (\InvalidArgumentException $e) {
-                    if (config('app.debug')) {
+                } catch (\Exception $e) {
+                    /*if (config('app.debug')) {
                         throw $e;
-                    }
+                    }*/
                     $url = false;
                 }
             } elseif ($url && !starts_with($url, ['#', 'http:', 'https:', 'mailto:', 'javascript:'])) {
