@@ -2,10 +2,10 @@
 
 namespace App\Widgets;
 
+
 use App\Models\Language;
 use App\Repositories\LanguageRepository;
 use Illuminate\Support\Collection;
-
 
 class LanguagesWidget extends WidgetPresenter
 {

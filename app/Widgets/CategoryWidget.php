@@ -8,7 +8,6 @@ use App\Models\Section;
 use Illuminate\Support\Collection;
 use Mikelmi\MksAdmin\Form\AdminModelForm;
 
-
 class CategoryWidget extends NavPresenter
 {
 

@@ -8,8 +8,6 @@
 namespace App\Contracts;
 
 
-use Illuminate\Support\Collection;
-
 interface RouteCollector
 {
     /**

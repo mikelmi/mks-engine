@@ -3,8 +3,6 @@
 namespace App\Notifications;
 
 
-use Illuminate\Database\Eloquent\Model;
-
 interface ReadableNotification
 {
     /**

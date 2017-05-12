@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+
 use App\Services\TagService;
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Illuminate\Support\Collection;

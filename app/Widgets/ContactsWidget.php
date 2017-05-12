@@ -2,8 +2,8 @@
 
 namespace App\Widgets;
 
-use Mikelmi\MksAdmin\Form\AdminModelForm;
 
+use Mikelmi\MksAdmin\Form\AdminModelForm;
 
 class ContactsWidget extends WidgetPresenter
 {

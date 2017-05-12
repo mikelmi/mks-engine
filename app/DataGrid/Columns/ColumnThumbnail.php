@@ -3,7 +3,6 @@
 namespace App\DataGrid\Columns;
 
 
-use App\Repositories\LanguageRepository;
 use Mikelmi\MksAdmin\DataGrid\Columns\Column;
 
 class ColumnThumbnail extends Column

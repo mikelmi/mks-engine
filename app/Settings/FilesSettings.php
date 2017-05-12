@@ -6,7 +6,6 @@ namespace App\Settings;
 use Illuminate\Config\Repository;
 use Illuminate\Validation\Rule;
 
-
 class FilesSettings extends SettingsScope
 {
     public function rules(): array

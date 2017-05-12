@@ -7,6 +7,7 @@
 
 namespace App\Widgets;
 
+
 abstract class CachedWidget extends WidgetPresenter
 {
     protected $lifetime = 60;
