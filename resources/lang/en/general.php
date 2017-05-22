@@ -172,4 +172,7 @@ return [
     'Clear Cache' => 'Clear Cache',
 
     'Published' => 'Published',
+    'Photo' => 'Photo',
+    'Photos' => 'Photos',
+    'Images' => 'Images',
 ];
