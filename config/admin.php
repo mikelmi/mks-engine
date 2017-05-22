@@ -52,6 +52,7 @@ return [
             'tags' => \App\Form\Field\TagsSelect::class,
             'icon' => \App\Form\Field\IconPicker::class,
             'button' => \App\Form\Field\Button::class,
+            'author' => \App\Form\Field\Author::class
         ]
     ],
 
@@ -61,6 +62,7 @@ return [
             'thumbnail' => \App\DataGrid\Columns\ColumnThumbnail::class,
             'list' => \App\DataGrid\Columns\ColumnList::class,
             'category' => \App\DataGrid\Columns\ColumnCategory::class,
+            'user' => \App\DataGrid\Columns\ColumnUser::class,
         ],
         'actions' => [
             'toggleOne' => \App\DataGrid\Actions\ToggleOne::class

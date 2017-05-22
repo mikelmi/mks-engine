@@ -170,4 +170,6 @@ return [
     'Cache Lifetime' => 'Время кеширования',
     'In minutes' => 'В минутах',
     'Clear Cache' => 'Очистить кеш',
+
+    'Published' => 'Опубликовано',
 ];

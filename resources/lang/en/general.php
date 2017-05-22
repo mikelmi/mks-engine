@@ -170,4 +170,6 @@ return [
     'Cache Lifetime' => 'Cache Lifetime',
     'In minutes' => 'In minutes',
     'Clear Cache' => 'Clear Cache',
+
+    'Published' => 'Published',
 ];
