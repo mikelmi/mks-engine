@@ -59,7 +59,8 @@ return [
         'columns' => [
             'language' => \App\DataGrid\Columns\ColumnLanguage::class,
             'thumbnail' => \App\DataGrid\Columns\ColumnThumbnail::class,
-            'list' => \App\DataGrid\Columns\ColumnList::class
+            'list' => \App\DataGrid\Columns\ColumnList::class,
+            'category' => \App\DataGrid\Columns\ColumnCategory::class,
         ],
         'actions' => [
             'toggleOne' => \App\DataGrid\Actions\ToggleOne::class

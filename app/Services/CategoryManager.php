@@ -102,7 +102,7 @@ class CategoryManager
 
         foreach ($sections->get() as $section) {
             $group = $section->title;
-            $result = Category::getFlatTree($section['id'])->map(function($item) use ($selected, $group) {
+            $result[$group] = Category::getFlatTree($section['id'])->map(function($item) use ($selected, $group) {
                 return [
                     'id' => $item->id,
                     'text' => str_repeat('-', $item->depth) . $item->title,

@@ -10,6 +10,12 @@ namespace App\Traits;
 
 use App\Models\Role;
 
+/**
+ * Trait HasRoles
+ * @package App\Traits
+ *
+ * @property Role[] $roles
+ */
 trait HasRoles
 {
     /**

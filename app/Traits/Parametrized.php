@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
  * Class Parametrized
  * @package App\Traits
  *
- * @property string|array $params
+ * @property Collection $params
  */
 trait Parametrized
 {

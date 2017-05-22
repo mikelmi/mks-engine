@@ -102,8 +102,8 @@ class ModulesLoaderServiceProvider extends ServiceProvider
 
                     \Route::group([
                         'middleware' => ['web'],
-                        'prefix' => config('admin.url', 'admin') . '/' . lcfirst($name),
-                        'as' => 'admin::' . lcfirst($name) . '.',
+                        'prefix' => config('admin.url', 'admin'),
+                        'as' => 'admin::',
                         'namespace' => 'Modules\\' . $name . '\\Http\\Controllers\Admin'
                     ], function ($router) use ($routePath) {
                         require $routePath;
