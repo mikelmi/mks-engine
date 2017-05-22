@@ -8,6 +8,7 @@
 namespace App\Form\Field;
 
 
+use App\Models\Category;
 use Mikelmi\MksAdmin\Form\Field;
 use Mikelmi\MksAdmin\Form\FieldInterface;
 
@@ -198,5 +199,22 @@ class CategorySelect extends Field
         $attr = $this->getAttributes();
 
         return '<mks-category-select ' . html_attr($attr) . '></mks-category-select>';
+    }
+
+    public function renderStaticInput(): string
+    {
+        $category = $this->value;
+
+        if ($category instanceof Category) {
+            $result = e($category->title);
+
+            if ($section = $category->section) {
+                $result .= sprintf(' <small class="text-muted">(%s: %s)</small>', __('general.Section'), e($section->title));
+            }
+
+            return $result;
+        }
+
+        return '';
     }
 }
