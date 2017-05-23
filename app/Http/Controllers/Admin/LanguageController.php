@@ -72,7 +72,7 @@ class LanguageController extends AdminController
         }
 
         if ($canToggle) {
-            $actions[] = ['type' => 'toggleOne', 'url' => route('admin::language.setDefault'), 'key' => 'default'];
+            $actions[] = ['type' => 'toggleOne', 'url' => route('admin::language.setDefault'), 'key' => 'default', 'title' => __('general.Default')];
         }
 
         if ($canDelete) {

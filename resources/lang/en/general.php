@@ -175,4 +175,6 @@ return [
     'Photo' => 'Photo',
     'Photos' => 'Photos',
     'Images' => 'Images',
+
+    'Featured' => 'Featured',
 ];

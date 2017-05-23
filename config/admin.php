@@ -63,6 +63,7 @@ return [
             'list' => \App\DataGrid\Columns\ColumnList::class,
             'category' => \App\DataGrid\Columns\ColumnCategory::class,
             'user' => \App\DataGrid\Columns\ColumnUser::class,
+            'featured' => \App\DataGrid\Columns\ColumnFeatured::class,
         ],
         'actions' => [
             'toggleOne' => \App\DataGrid\Actions\ToggleOne::class

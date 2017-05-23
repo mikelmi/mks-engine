@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
  *
  * @property bool $active
  * @method static Builder active()
+ * @method static Builder inactive()
  */
 trait HasActive
 {
