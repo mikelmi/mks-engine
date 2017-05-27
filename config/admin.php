@@ -52,7 +52,8 @@ return [
             'tags' => \App\Form\Field\TagsSelect::class,
             'icon' => \App\Form\Field\IconPicker::class,
             'button' => \App\Form\Field\Button::class,
-            'author' => \App\Form\Field\Author::class
+            'author' => \App\Form\Field\Author::class,
+            'toggleDefault' => \App\Form\Field\ToggleDefault::class,
         ]
     ],
 
