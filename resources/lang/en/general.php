@@ -51,6 +51,7 @@ return [
     'TextWidget' => 'Text/Code',
     'HtmlWidget' => 'HTML',
     'SearchWidget' => 'Search',
+    'SliderWidget' => 'Slider',
     'Showing' => 'Showing',
     'Show on all' => 'Show on all pages',
     'Show for' => 'Show for',
@@ -177,4 +178,7 @@ return [
     'Images' => 'Images',
 
     'Featured' => 'Featured',
+
+    'Slide' => 'Slide',
+    'Slides' => 'Slides',
 ];

@@ -51,6 +51,7 @@ return [
     'TextWidget' => 'Текст/Код',
     'HtmlWidget' => 'HTML',
     'SearchWidget' => 'Поиск',
+    'SliderWidget' => 'Слайдер',
     'Parent Item' => 'Родительский элемент',
     'Showing' => 'Показ',
     'Show on all' => 'Показывать на всех страницах',
@@ -177,4 +178,7 @@ return [
     'Images' => 'Изображения',
 
     'Featured' => 'Закрепить',
+
+    'Slide' => 'Слайд',
+    'Slides' => 'Слайды',
 ];
