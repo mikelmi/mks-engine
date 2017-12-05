@@ -11,4 +11,6 @@ return [
     'feedback_subject' => 'Сообщение с сайта',
     'From' => 'От',
     'sent_success' => 'Ваше сообщение успешно отправлено',
+
+    'we_in_facebook' => 'Мы в facebook',
 ];

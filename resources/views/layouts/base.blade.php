@@ -16,6 +16,8 @@
         <link href="{{ asset('css/system.css') }}" rel="stylesheet">
         {!! body_background() !!}
     @show
+
+    @widgets(head)
 </head>
 
 <body @yield('bodyAttr')>
@@ -25,6 +27,8 @@
 
         @yield('body')
     @show
+
+    @widgets(body)
 
     @section('js')
         <script src="{{ asset('js/system.js') }}"></script>

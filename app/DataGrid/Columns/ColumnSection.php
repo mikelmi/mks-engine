@@ -10,23 +10,8 @@ namespace App\DataGrid\Columns;
 
 use App\Services\CategoryManager;
 
-class ColumnCategory extends ColumnList
+class ColumnSection extends ColumnCategory
 {
-    /**
-     * @var string
-     */
-    protected $categoryType = '';
-
-    /**
-     * @param string $categoryType
-     * @return ColumnCategory
-     */
-    public function setCategoryType(string $categoryType): ColumnCategory
-    {
-        $this->categoryType = $categoryType;
-        return $this;
-    }
-
     public function renderSearch(): string
     {
         if ($this->searchType) {
@@ -49,16 +34,10 @@ class ColumnCategory extends ColumnList
             /** @var CategoryManager $cm */
             $cm = resolve(CategoryManager::class);
 
-            $options = $cm->getSelectOptionsFlat($this->categoryType);
+            $options = $cm->getSelectSections($this->categoryType);
 
-            foreach ($options as $section => $categories) {
-                $input .= '<optgroup label="' . e($section) . '">';
-
-                foreach($categories as $category) {
-                    $input .= '<option value="' . $category['id'] . '">' . e($category['text']) . '</option>';
-                }
-
-                $input .= '</optgroup>';
+            foreach ($options as $section) {
+                $input .= '<option value="' . $section['id'] . '">' . e($section['text']) . '</option>';
             }
 
 

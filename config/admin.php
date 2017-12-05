@@ -7,7 +7,7 @@ return [
     'username' => 'email',
     'reset_enable' => true,
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('ADMIN_LOCALE', 'en'),
     'locales' => [
         'uk' => 'Українська',
         'ru' => 'Русский',
@@ -53,7 +53,7 @@ return [
             'icon' => \App\Form\Field\IconPicker::class,
             'button' => \App\Form\Field\Button::class,
             'author' => \App\Form\Field\Author::class,
-            'toggleDefault' => \App\Form\Field\ToggleDefault::class,
+            'toggleDefault' => \App\Form\Field\ToggleDefault::class
         ]
     ],
 
@@ -62,6 +62,7 @@ return [
             'language' => \App\DataGrid\Columns\ColumnLanguage::class,
             'thumbnail' => \App\DataGrid\Columns\ColumnThumbnail::class,
             'list' => \App\DataGrid\Columns\ColumnList::class,
+            'section' => \App\DataGrid\Columns\ColumnSection::class,
             'category' => \App\DataGrid\Columns\ColumnCategory::class,
             'user' => \App\DataGrid\Columns\ColumnUser::class,
             'featured' => \App\DataGrid\Columns\ColumnFeatured::class,

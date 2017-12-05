@@ -35,7 +35,12 @@ class Page extends Model
 
     public function getUrlAttribute()
     {
-        return url($this->path);
+        $path = $this->path;
+
+        if ($this->lang) {
+            $path = $this->lang . '/' . $path;
+        }
+        return url($path);
     }
 
     public function getDefaultMeta(): array

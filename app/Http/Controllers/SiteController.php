@@ -29,7 +29,10 @@ class SiteController extends Controller
         $description = $settings->get('site.description');
         $keywords = $settings->get('site.keywords');
 
-        if ($locale = app()->getLocale()) {
+        $request = app('request');
+        $locale = $request->attributes->get('language', $request->cookie('locale'));
+
+        if ($locale) {
             if ($language = $languageRepository->get($locale)) {
                 $title = $language->get('site.title', $title);
                 $description = $language->get('site.description', $description);

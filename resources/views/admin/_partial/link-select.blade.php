@@ -54,10 +54,13 @@
                         <tbody>
                         <tr ng-repeat="item in modal.data.items" ng-click="modal.select(item)" style="cursor:pointer">
                             <td ng-repeat="(key, title) in modal.data.columns">
-                                <span ng-if="key != 'lang'">
+                                <span ng-if="key == 'lang'">
+                                    @verbatim
+                                    <img ng-if="item['lang']" ng-src="{{'<?php echo route('lang.icon') ?>/' + item[key]}}" />
+                                    @endverbatim
                                     @{{ item[key] }}
                                 </span>
-                                <span ng-if="key == 'lang'" ng-bind-html="item[key]"></span>
+                                <span ng-if="key != 'lang'">@{{ item[key] }}</span>
                             </td>
                         </tr>
                         </tbody>

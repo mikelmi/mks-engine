@@ -11,4 +11,6 @@ return [
     'feedback_subject' => 'Повідомлення з сайту',
     'From' => 'Від',
     'sent_success' => 'Ваше повідомлення успішно відправлено',
+
+    'we_in_facebook' => 'Ми у facebook',
 ];

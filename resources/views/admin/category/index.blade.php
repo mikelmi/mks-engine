@@ -11,7 +11,7 @@
 @section('tools')
     @can('admin.category.edit')
         @can('admin.category.edit')
-            <a class="btn btn-secondary" ng-href="#/category/edit/@{{currentSection.id}}">
+            <a ng-if="currentSection.id" class="btn btn-secondary" ng-href="#/category/edit/@{{currentSection.id}}">
                 <i class="fa fa-plus"></i>
                 @lang('general.Add Category')
             </a>

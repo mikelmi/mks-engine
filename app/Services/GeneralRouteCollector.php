@@ -102,20 +102,6 @@ class GeneralRouteCollector implements RouteCollector
 
         $pagination = $pages->paginate(10)->toArray();
 
-        //set lang icons
-        if (in_array('lang', $columns)) {
-            $iconRoute = route('lang.icon');
-
-            foreach ($pagination['data'] as &$item) {
-                if (!$item['lang']) {
-                    continue;
-                }
-                $item['lang'] = sprintf('<img src="%s" alt=""> %s', $iconRoute . '/' .$item['lang'], $item['lang']);
-            }
-
-            $data->put('html_columns', ['lang']);
-        }
-
         $data->put('items', $pagination['data']);
 
         unset($pagination['data']);

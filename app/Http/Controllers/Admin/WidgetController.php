@@ -311,4 +311,11 @@ class WidgetController extends AdminController
             ];
         });
     }
+
+    public function photos($id = null)
+    {
+        $model = $id ? Widget::findOrFail($id) : new Widget();
+
+        return json_decode($model->param('photos'), true);
+    }
 }

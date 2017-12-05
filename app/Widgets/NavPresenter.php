@@ -41,6 +41,15 @@ abstract class NavPresenter extends WidgetPresenter
 
         $attr = (array) $this->model->param('nav_attr');
 
+        if ($template = array_get($attr, 'template')) {
+            $view = 'widget.nav.'.$template;
+            if (view()->exists($view)) {
+                unset($attr['template']);
+                $attr['class'] = $this->getNavClass();
+                return $this->view($view, compact('items', 'attr'))->render();
+            }
+        }
+
         if ($this->model->param('nav_type') == 's') {
             $items = $this->renderSimpleItems($items);
         } else {

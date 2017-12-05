@@ -173,7 +173,13 @@ class Language implements Arrayable
             return $this->$method();
         }
 
-        return array_get($this->params, $name, $default);
+        $result = array_get($this->params, $name, $default);
+
+        if ($result === '' && $default) {
+            return $default;
+        }
+
+        return $result;
     }
 
     public function __isset($name)

@@ -26,7 +26,7 @@ $router->group(['prefix' => 'user', 'as' => 'user.'], function(\Illuminate\Routi
 
 
 //FileManager
-$router->group(['prefix'=>'file-manager', 'middleware' => ['can:files.view']], function(\Illuminate\Routing\Router $router) {
+$router->group(['prefix'=>'file-manager', 'middleware' => ['can:files.view', 'admin.locale']], function(\Illuminate\Routing\Router $router) {
     $router->get('/', 'FileManagerController@index')->name('filemanager');
     $router->post('upload', 'FileManagerController@upload')->name('filemanager.upload');
     $router->get('download', 'FileManagerController@download')->name('filemanager.download');

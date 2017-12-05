@@ -254,4 +254,24 @@ class WidgetManager
         }
 
     }
+
+    /**
+     * @param $position
+     * @return bool
+     */
+    public function has($position)
+    {
+        $items = $this->load()->get($position);
+
+        return $items && $items->count() > 0;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function existsByName($name)
+    {
+        return $this->getByName($name) != null;
+    }
 }

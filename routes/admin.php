@@ -96,6 +96,7 @@ $router->group(['prefix'=>'menuman', 'as' => 'menu.', 'middleware' => ['permissi
     $router->get('create/{class}', 'WidgetController@create')->name('create')
         ->middleware('permission:admin.widgets.create')
         ->where('class', '.+');
+    $router->get('photos/{id?}', 'WidgetController@photos')->name('photos');
 });
 
 //File Manager

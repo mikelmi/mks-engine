@@ -10,6 +10,45 @@ use Illuminate\Validation\ValidationException;
 
 class FileManagerController extends Controller
 {
+    /**
+     * @var FileManager
+     */
+    protected $fm;
+
+    protected $viewIndex = 'filemanager.index';
+
+    /**
+     * @return FileManager|\Illuminate\Foundation\Application|mixed
+     */
+    protected function fm()
+    {
+        if (!$this->fm) {
+            $this->fm = app(FileManager::class);
+        }
+
+        return $this->fm;
+    }
+
+    protected function getHandlerUrl($params = null)
+    {
+        return route('filemanager.handler', $params);
+    }
+
+    protected function getUploadUrl($params = null)
+    {
+        return route('filemanager.upload', $params);
+    }
+
+    protected function getDownloadUrl($params = null)
+    {
+        return route('filemanager.download', $params);
+    }
+
+    protected function getDownloadMultipleUrl($params = null)
+    {
+        return route('filemanager.downloadMulti', $params);
+    }
+
     public function index(Request $request)
     {
         $params = $request->only(['type']);
@@ -18,17 +57,22 @@ class FileManagerController extends Controller
             app()->setLocale($lang);
         }
 
-        return view('filemanager.index', compact('params'));
+        $handlerUrl = $this->getHandlerUrl($params);
+        $uploadUrl = $this->getUploadUrl($params);
+        $downloadUrl = $this->getDownloadUrl();
+        $downloadMultipleUrl = $this->getDownloadMultipleUrl();
+
+        return view($this->viewIndex, compact(
+            'params', 'handlerUrl', 'uploadUrl', 'downloadUrl', 'downloadMultipleUrl'));
     }
 
     /**
      * Handle angular-filemanager api
      * 
      * @param Request $request
-     * @param FileManager $fm
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle(Request $request, FileManager $fm)
+    public function handle(Request $request)
     {
         $this->validate($request, [
             'action' => 'required|alpha_dash'
@@ -40,34 +84,32 @@ class FileManagerController extends Controller
             abort(500, 'Method ' . $method . ' not found');
         }
 
-        return $this->callAction($method, [$request, $fm]);
+        return $this->callAction($method, [$request, $this->fm]);
     }
 
     /**
      * List files
      * 
      * @param Request $request
-     * @param FileManager $fm
      * @return \Illuminate\Http\JsonResponse
      * @throws \League\Flysystem\FileNotFoundException
      */
-    public function postList(Request $request, FileManager $fm)
+    public function postList(Request $request)
     {
         $this->validate($request, [
             'path' => 'required'
         ]);
 
-        return $this->resultResponse($fm->getList($request->get('path'), $request->get('type')));
+        return $this->resultResponse($this->fm()->getList($request->get('path'), $request->get('type')));
     }
 
     /**
      * Create new folder
      * 
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postCreateFolder(Request $request, FileManager $fileManager)
+    public function postCreateFolder(Request $request)
     {
         $this->validate($request, [
             'newPath' => 'required'
@@ -75,11 +117,11 @@ class FileManagerController extends Controller
 
         $path = $request->get('newPath');
 
-        if ($fileManager->exists($path)) {
+        if ($this->fm()->exists($path)) {
            return $this->errorResponse($this->t('Folder already exists'));
         }
 
-        if (!$fileManager->makeDirectory($path)) {
+        if (!$this->fm()->makeDirectory($path)) {
             return $this->errorResponse($this->t('Folder creation failed'));
         }
 
@@ -90,10 +132,9 @@ class FileManagerController extends Controller
      * Remove files
      * 
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postRemove(Request $request, FileManager $fileManager)
+    public function postRemove(Request $request)
     {
         $this->validate($request, [
             'items' => 'required|array',
@@ -101,7 +142,7 @@ class FileManagerController extends Controller
 
         $items = $request->get('items');
 
-        if (!$fileManager->remove($items)) {
+        if (!$this->fm()->remove($items)) {
             return $this->errorResponse($this->t('Removing failed'));
         }
 
@@ -112,10 +153,9 @@ class FileManagerController extends Controller
      * Rename file
      *
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postRename(Request $request, FileManager $fileManager)
+    public function postRename(Request $request)
     {
         $this->validate($request, [
             'item' => 'required',
@@ -129,11 +169,11 @@ class FileManagerController extends Controller
             return $error;
         }
 
-        if (!$fileManager->exists($old)) {
+        if (!$this->fm()->exists($old)) {
             return $this->errorResponse($this->t('File not found'));
         }
 
-        if (!$fileManager->rename($old, $new)) {
+        if (!$this->fm()->rename($old, $new)) {
             return $this->errorResponse($this->t('Renaming failed'));
         }
 
@@ -144,10 +184,9 @@ class FileManagerController extends Controller
      * Move files
      *
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postMove(Request $request, FileManager $fileManager)
+    public function postMove(Request $request)
     {
         $this->validate($request, [
             'items' => 'required|array',
@@ -158,11 +197,11 @@ class FileManagerController extends Controller
         $newPath = $request->get('newPath');
 
         foreach ($items as $item) {
-            if (!$fileManager->exists($item)) {
+            if (!$this->fm()->exists($item)) {
                 continue;
             }
 
-            if (!$fileManager->move($item, $newPath)) {
+            if (!$this->fm()->move($item, $newPath)) {
                 return $this->errorResponse($this->t('Moving failed'));
             }
         }
@@ -174,10 +213,9 @@ class FileManagerController extends Controller
      * Copy files
      *
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postCopy(Request $request, FileManager $fileManager)
+    public function postCopy(Request $request)
     {
         $this->validate($request, [
             'items' => 'required|array',
@@ -193,11 +231,11 @@ class FileManagerController extends Controller
         }
 
         foreach ($items as $item) {
-            if (!$fileManager->exists($item)) {
+            if (!$this->fm()->exists($item)) {
                 continue;
             }
 
-            if (!$fileManager->copy($item, $newPath, $singleFilename)) {
+            if (!$this->fm()->copy($item, $newPath, $singleFilename)) {
                 return $this->errorResponse($this->t('Copying failed'));
             }
         }
@@ -209,10 +247,9 @@ class FileManagerController extends Controller
      * Change permissions
      *
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postChangePermissions(Request $request, FileManager $fileManager)
+    public function postChangePermissions(Request $request)
     {
         $this->validate($request, [
             'items' => 'required|array',
@@ -223,7 +260,7 @@ class FileManagerController extends Controller
         $permissions = octdec($request->get('permsCode'));
         $recursive = $request->get('recursive', false);
 
-        if (!$fileManager->chmod($items, $permissions, $recursive)) {
+        if (!$this->fm()->chmod($items, $permissions, $recursive)) {
             return $this->errorResponse($this->t('Permissions change failed'));
         }
 
@@ -234,10 +271,9 @@ class FileManagerController extends Controller
      * Compress files
      * 
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postCompress(Request $request, FileManager $fileManager)
+    public function postCompress(Request $request)
     {
         $this->validate($request, [
             'items' => 'required|array',
@@ -248,7 +284,7 @@ class FileManagerController extends Controller
         $items = $request->get('items');
         $destination = $request->get('destination') . DIRECTORY_SEPARATOR . $request->get('compressedFilename');
 
-        if (!$fileManager->compress($items, $destination)) {
+        if (!$this->fm()->compress($items, $destination)) {
             return $this->errorResponse($this->t('Compression failed'));
         }
 
@@ -259,11 +295,10 @@ class FileManagerController extends Controller
      * Extract files
      *
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      * @throws \League\Flysystem\FileNotFoundException
      */
-    public function postExtract(Request $request, FileManager $fileManager)
+    public function postExtract(Request $request)
     {
         $this->validate($request, [
             'destination' => 'required',
@@ -274,7 +309,7 @@ class FileManagerController extends Controller
         $destination = $request->get('destination') . DIRECTORY_SEPARATOR . $request->get('folderName');
         $item = $request->get('item');
 
-        if (!$fileManager->extract($item, $destination)) {
+        if (!$this->fm()->extract($item, $destination)) {
             return $this->errorResponse($this->t('Extraction failed'));
         }
 
@@ -283,10 +318,9 @@ class FileManagerController extends Controller
 
     /**
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request, FileManager $fileManager)
+    public function upload(Request $request)
     {
         $rules = [
             'destination' => 'required',
@@ -294,7 +328,7 @@ class FileManagerController extends Controller
 
         $type = $request->get('type');
 
-        $extensions = $type ? $fileManager->getTypeExtensions($type, []) : [];
+        $extensions = $type ? $this->fm()->getTypeExtensions($type, []) : [];
         $maxSize = null;
 
         if (!$request->user()->isSuperAdmin()) {
@@ -336,7 +370,7 @@ class FileManagerController extends Controller
 
         /** @var \Illuminate\Http\UploadedFile $file */
         foreach ($request->allFiles() as $file) {
-            $fileManager->upload($file, $destination, $file->getClientOriginalName());
+            $this->fm()->upload($file, $destination, $file->getClientOriginalName());
         }
 
         return $this->successResponse();
@@ -346,10 +380,9 @@ class FileManagerController extends Controller
      * Get file content
      * 
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postGetContent(Request $request, FileManager $fileManager)
+    public function postGetContent(Request $request)
     {
         $this->validate($request, [
             'item' => 'required',
@@ -357,21 +390,20 @@ class FileManagerController extends Controller
 
         $item = $request->get('item');
 
-        if (!$fileManager->isFile($item)) {
+        if (!$this->fm()->isFile($item)) {
             return $this->errorResponse($this->t('File not found'));
         }
 
-        return $this->resultResponse($fileManager->get($item));
+        return $this->resultResponse($this->fm()->get($item));
     }
 
     /**
      * Save file content
      * 
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postEdit(Request $request, FileManager $fileManager)
+    public function postEdit(Request $request)
     {
         $this->validate($request, [
             'item' => 'required',
@@ -379,11 +411,11 @@ class FileManagerController extends Controller
 
         $item = $request->get('item');
 
-        if (!$fileManager->isFile($item)) {
+        if (!$this->fm()->isFile($item)) {
             return $this->errorResponse($this->t('File not found'));
         }
 
-        if (!$fileManager->put($item, $request->get('content'))) {
+        if (!$this->fm()->put($item, $request->get('content'))) {
             return $this->errorResponse($this->t('Saving failed'));
         }
 
@@ -394,10 +426,9 @@ class FileManagerController extends Controller
      * Download file
      *
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function download(Request $request, FileManager $fileManager)
+    public function download(Request $request)
     {
         $this->validate($request, [
             'path' => 'required'
@@ -405,17 +436,16 @@ class FileManagerController extends Controller
 
         $file = $request->get('path');
 
-        return response()->download($fileManager->getFile($file));
+        return response()->download($this->fm()->getFile($file));
     }
 
     /**
      * Download multiple files
      *
      * @param Request $request
-     * @param FileManager $fileManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function downloadMulti(Request $request, FileManager $fileManager)
+    public function downloadMulti(Request $request)
     {
         $this->validate($request, [
             'items' => 'required|array',
@@ -425,7 +455,7 @@ class FileManagerController extends Controller
         $items = $request->get('items');
         $filename = basename($request->get('toFilename'));
 
-        $file = $fileManager->compress($items);
+        $file = $this->fm()->compress($items);
 
         if (!$file) {
             return $this->errorResponse($this->t('Compression failed'));
@@ -434,8 +464,10 @@ class FileManagerController extends Controller
         return response()->download($file, $filename)->deleteFileAfterSend(true);
     }
 
-    public function thumbnail(Request $request, ImageService $image, $path)
+    public function thumbnail(Request $request, $path)
     {
+        $image = app(ImageService::class);
+
         $preset = $request->get('p', 'filemanager');
         if (!$preset) {
             $preset = 'filemanager';

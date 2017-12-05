@@ -90,9 +90,8 @@ class RouteServiceProvider extends ServiceProvider
             $app->instance('routes', $routes);
 
             $url = new UrlGenerator(
-                $app['routes'], $app->rebinding(
-                'request', $this->requestRebinder()
-            )
+                $routes,
+                $app->rebinding('request', $this->requestRebinder())
             );
 
             $url->setSessionResolver(function () {

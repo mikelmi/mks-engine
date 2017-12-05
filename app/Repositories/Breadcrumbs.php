@@ -21,4 +21,9 @@ class Breadcrumbs
     {
         return count($this->items);
     }
+
+    public function last()
+    {
+        return array_last($this->items);
+    }
 }

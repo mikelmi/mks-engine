@@ -43,7 +43,7 @@
             window.localStorage.setItem('language', '{{ app()->getLocale() }}');
         }
 
-        var handler_url = '{{ route('filemanager.handler', $params) }}';
+        var handler_url = '{{ $handlerUrl }}';
 
         window.FM_CONFIG = {
             appName: '@lang('filemanager.app_name')',
@@ -56,11 +56,11 @@
             permissionsUrl: handler_url,
             compressUrl: handler_url,
             extractUrl: handler_url,
-            uploadUrl: '{{ route('filemanager.upload', $params) }}',
+            uploadUrl: '{{ $uploadUrl }}',
             getContentUrl: handler_url,
             editUrl: handler_url,
-            downloadFileUrl: '{{ route('filemanager.download') }}',
-            downloadMultipleUrl: '{{ route('filemanager.downloadMulti') }}',
+            downloadFileUrl: '{{ $downloadUrl }}',
+            downloadMultipleUrl: '{{ $downloadMultipleUrl }}',
             multipleDownloadFileName: 'files.zip',
             pickCallback: function (item) {
                 if (!window.opener) {
@@ -105,7 +105,8 @@
         window.FM_ACTIONS = {
             pickFiles: typeof window.opener != 'undefined' && window.opener !== null,
             pickFolders: false,
-            compress: getUrlParam('type') != 'images'
+            compress: getUrlParam('type') != 'images',
+            changePermissions: false
         }
     </script>
 

@@ -29,7 +29,7 @@ class TagService extends BaseTagService
     {
         $sql = 'SELECT t.tag_id as id, tt.tag_id as tid, t.name, t.normalized, COUNT(tt.tag_id) as count
                   FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id
-                  GROUP BY t.tag_id, tt.tag_id';
+                  GROUP BY t.tag_id, tt.tag_id, t.name, t.normalized';
 
         return Tag::fromQuery($sql);
     }

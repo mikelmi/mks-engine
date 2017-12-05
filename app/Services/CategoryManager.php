@@ -142,4 +142,41 @@ class CategoryManager
             ];
         })->toArray();
     }
+
+    /**
+     * @param null $type
+     * @param null $selected
+     * @return array
+     */
+    public function getSelectOptionsFlatten($type = null, $selected = null)
+    {
+        $sections = Section::select(['id', 'title']);
+
+        if ($type) {
+            $sections->where('type', $type);
+        }
+
+        if ($selected) {
+            $selected = (array) $selected;
+        }
+
+        $result = [];
+
+        foreach ($sections->get() as $section) {
+            $group = $section->title;
+            $children = Category::getFlatTree($section['id'])->map(function($item) use ($selected, $group) {
+                return [
+                    'id' => $item->id,
+                    'text' => str_repeat('-', $item->depth) . $item->title,
+                    'slug' => $item->slug,
+                    'selected' => $selected && in_array($item->id, $selected),
+                    'group' => $group
+                ];
+            })->toArray();
+
+            $result = array_merge($result, $children);
+        }
+
+        return $result;
+    }
 }

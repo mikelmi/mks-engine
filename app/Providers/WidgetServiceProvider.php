@@ -15,6 +15,7 @@ use App\Widgets\ContactsWidget;
 use App\Widgets\HtmlWidget;
 use App\Widgets\LanguagesWidget;
 use App\Widgets\MenuWidget;
+use App\Widgets\PhotoGalleryWidget;
 use App\Widgets\SearchWidget;
 use App\Widgets\SliderWidget;
 use App\Widgets\TextWidget;
@@ -32,6 +33,7 @@ class WidgetServiceProvider extends ServiceProvider
         CategoryWidget::class,
         SearchWidget::class,
         ContactsWidget::class,
+        PhotoGalleryWidget::class,
         SliderWidget::class
     ];
 
@@ -46,6 +48,7 @@ class WidgetServiceProvider extends ServiceProvider
 
     public function provides()
     {
+        //TODO: check if $this->presenters needed here
         return [WidgetManager::class];
     }
 }

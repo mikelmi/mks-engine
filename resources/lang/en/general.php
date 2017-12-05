@@ -51,7 +51,6 @@ return [
     'TextWidget' => 'Text/Code',
     'HtmlWidget' => 'HTML',
     'SearchWidget' => 'Search',
-    'SliderWidget' => 'Slider',
     'Showing' => 'Showing',
     'Show on all' => 'Show on all pages',
     'Show for' => 'Show for',
@@ -118,6 +117,7 @@ return [
     
     'Image' => 'Image',
     'Tags' => 'Tags',
+    'Tag' => 'Tag',
     'Amount' => 'Amount',
 
     'ContactsWidget' => 'Contacts',
@@ -152,6 +152,10 @@ return [
     'Priority' => 'Priority',
     'In Block' => 'In Block',
 
+    'Ico' => 'Icon',
+
+    'PhotoGalleryWidget' => 'Photo Gallery',
+
     'Align' => 'Align',
     'align_left' => 'Left',
     'align_center' => 'Center',
@@ -178,7 +182,10 @@ return [
     'Images' => 'Images',
 
     'Featured' => 'Featured',
-
-    'Slide' => 'Slide',
+    'View' => 'View',
+    'SliderWidget' => 'Slider',
+    'Slider' => 'Slider',
     'Slides' => 'Slides',
+    'Slide' => 'Slide',
+    'Add Slide' => 'Add Slide',
 ];

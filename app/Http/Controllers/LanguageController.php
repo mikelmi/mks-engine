@@ -35,10 +35,9 @@ class LanguageController extends Controller
         $root = $request->root();
 
         $path = ltrim(str_replace_first($root, '', $prev), '/');
-        $path = ltrim(str_replace_first(app()->getLocale(), '', $path), '/');
 
-        if (!$path) {
-            return redirect($iso);
+        foreach($languageRepository->locales() as $locale) {
+            $path = ltrim(str_replace_first($locale, '', $path), '/');
         }
 
         $url = $root . '/' . $iso;
@@ -47,6 +46,6 @@ class LanguageController extends Controller
             $url .= '/' . $path;
         }
 
-        return redirect()->away($url);
+        return redirect()->away($url)->withCookie(cookie('locale', $iso, 43200));
     }
 }

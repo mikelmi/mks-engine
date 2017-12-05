@@ -37,9 +37,9 @@ class PageController extends AdminController
         $conn = \DB::getName();
 
         if ($conn == 'sqlite') {
-            $path = 'coalesce({table}.lang||"/"||{table}.path, {table}.path) as path';
+            $path = 'coalesce({table}.lang||"/"||{table}.path, {table}.path) as path_url';
         } else {
-            $path = 'CONCAT_WS("/", {table}.lang, {table}.path) as path';
+            $path = 'CONCAT_WS("/", {table}.lang, {table}.path) as path_url';
         }
 
         $path = \DB::raw(str_replace('{table}', \DB::getTablePrefix().'pages', $path));
@@ -49,6 +49,7 @@ class PageController extends AdminController
             'title',
             'lang',
             $path,
+            'path',
             'created_at',
         ]);
 
@@ -99,7 +100,7 @@ class PageController extends AdminController
                 ['key' => 'id', 'title' => 'ID', 'sortable' => true, 'searchable' => true],
                 ['key' => 'title', 'type' => 'link',  'title'=> __('general.Title'), 'sortable' => true, 'searchable' => true, 'url' => hash_url('page/show/{{row.id}}')],
                 ['key' => 'lang', 'title' => __('general.Language'), 'type' => 'language', 'sortable' => true, 'searchable' => true],
-                ['key' => 'path', 'type' => $scope == 'trash' ? '':'link', 'title' => 'URL', 'target' => '_blank', 'url' => '{{row.url}}'],
+                ['key' => 'path_url', 'type' => $scope == 'trash' ? '':'link', 'title' => 'URL', 'target' => '_blank', 'url' => '{{row.url}}'],
                 ['key' => 'created_at', 'type' => 'date', 'title' => __('general.Created at')],
                 ['type' => 'actions', 'actions' => $actions],
             ],
@@ -145,6 +146,15 @@ class PageController extends AdminController
             $pathField = ['name' => 'path', 'label' => 'URL', 'type' => 'link', 'value' => $model->url, 'target' => '_blank'];
         } else {
             $pathField = ['name' => 'path', 'label' => 'URL', 'type' => 'checkedInput'];
+        }
+
+        if (!$model->trashed() && $model->id) {
+            $form->addField([
+                'type' => 'link',
+                'label' => __('general.View'),
+                'url' => $model->url,
+                'target' => '_blank'
+            ]);
         }
 
         $form->addGroup('general', [

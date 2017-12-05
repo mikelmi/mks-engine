@@ -12,6 +12,7 @@ use App\Services\TagService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191); //Prevent mysql error 1071 on migrations
+
         require_once __DIR__.'/../helpers.php';
 
         \Blade::directive('widgets', function($expression) {
@@ -60,6 +63,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if ($publicPath = env('PUBLIC_PATH')) {
+            $this->app->bind('path.public', function () use ($publicPath) {
+                return realpath($publicPath);
+            });
+        }
+
         if ($this->app->environment() === 'local') {
             $this->app->register(IdeHelperServiceProvider::class);
             if (config('app.debug')) {

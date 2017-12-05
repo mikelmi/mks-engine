@@ -2,41 +2,35 @@
 
 namespace App\Http;
 
+use App\Repositories\LanguageRepository;
+use Illuminate\Http\Request;
+use Illuminate\Routing\RouteCollection;
 
 class UrlGenerator extends \Illuminate\Routing\UrlGenerator
 {
+    /**
+     * @var string
+     */
     private $language;
 
-    protected function getRouteRoot($route, $domain)
+    public function __construct(RouteCollection $routes, Request $request)
     {
-        return $this->getRootUrl($this->getRouteScheme($route), $domain, true);
+        parent::__construct($routes, $request);
     }
 
-    protected function toRoute($route, $parameters, $absolute)
+    /**
+     * @return RouteUrlGenerator
+     */
+    protected function routeUrl()
     {
-        $result = parent::toRoute($route, $parameters, $absolute);
-
-        if (!$absolute && $locale = $this->getLanguage())
-        {
-            $result = $locale . '/' . $result;
+        if (!$this->routeGenerator) {
+            $this->routeGenerator = new RouteUrlGenerator($this, $this->request);
         }
 
-        return $result;
+        return $this->routeGenerator;
     }
 
-    protected function getRootUrl($scheme, $root = null, $withLocale = false)
-    {
-        $result = parent::getRootUrl($scheme, $root);
-
-        if ($withLocale && $locale = $this->getLanguage())
-        {
-            $result .= '/' . $locale;
-        }
-
-        return $result;
-    }
-
-    protected function getLanguage()
+    public function getLanguage()
     {
         if ($this->language === null) {
             $this->language = $this->request->attributes->get('language', false);

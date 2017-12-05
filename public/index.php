@@ -19,7 +19,9 @@
 |
 */
 
-require __DIR__.'/../bootstrap/autoload.php';
+define('APP_DIR', __DIR__.'/..');
+
+require APP_DIR.'/bootstrap/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +35,11 @@ require __DIR__.'/../bootstrap/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+$app = require_once APP_DIR.'/bootstrap/app.php';
+
+$app->bind('path.public', function() {
+    return __DIR__;
+});
 
 /*
 |--------------------------------------------------------------------------

@@ -51,7 +51,6 @@ return [
     'TextWidget' => 'Текст/Код',
     'HtmlWidget' => 'HTML',
     'SearchWidget' => 'Пошук',
-    'SliderWidget' => 'Слайдер',
     'Parent Item' => 'Батьківський елемент',
     'Showing' => 'Показ',
     'Show on all' => 'Показувати на всіх сторінках',
@@ -118,6 +117,7 @@ return [
 
     'Image' => 'Зображення',
     'Tags' => 'Теги',
+    'Tag' => 'Тег',
     'Amount' => 'Кількість',
 
     'ContactsWidget' => 'Контакти',
@@ -149,9 +149,11 @@ return [
 
     'Empty Template' => 'Порожній шаблон',
 
+    'Ico' => 'Іконка',
     'Priority' => 'Пріоритет',
     'In Block' => 'В блоці',
 
+    'PhotoGalleryWidget' => 'Фотогалерея',
     'Align' => 'Вирівнювання',
     'align_left' => 'Зліва',
     'align_center' => 'По центру',
@@ -178,7 +180,10 @@ return [
     'Images' => 'Зображення',
 
     'Featured' => 'Закріпити',
-
-    'Slide' => 'Слайд',
+    'View' => 'Перегляд',
+    'SliderWidget' => 'Слайдер',
+    'Slider' => 'Слайдер',
     'Slides' => 'Слайди',
+    'Slide' => 'Слайд',
+    'Add Slide' => 'Додати слайд',
 ];

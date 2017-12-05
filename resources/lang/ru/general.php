@@ -51,7 +51,6 @@ return [
     'TextWidget' => 'Текст/Код',
     'HtmlWidget' => 'HTML',
     'SearchWidget' => 'Поиск',
-    'SliderWidget' => 'Слайдер',
     'Parent Item' => 'Родительский элемент',
     'Showing' => 'Показ',
     'Show on all' => 'Показывать на всех страницах',
@@ -118,6 +117,7 @@ return [
 
     'Image' => 'Изображение',
     'Tags' => 'Теги',
+    'Tag' => 'Тег',
     'Amount' => 'Количество',
 
     'ContactsWidget' => 'Контакты',
@@ -151,7 +151,9 @@ return [
 
     'Priority' => 'Приоритет',
     'In Block' => 'В блоке',
+    'Ico' => 'Иконка',
 
+    'PhotoGalleryWidget' => 'Фотогалерея',
     'Align' => 'Выравнивание',
     'align_left' => 'Слева',
     'align_center' => 'По центру',
@@ -178,7 +180,10 @@ return [
     'Images' => 'Изображения',
 
     'Featured' => 'Закрепить',
-
-    'Slide' => 'Слайд',
+    'View' => 'Посмотреть',
+    'SliderWidget' => 'Слайдер',
+    'Slider' => 'Слайдер',
     'Slides' => 'Слайды',
+    'Slide' => 'Слайд',
+    'Add Slide' => 'Добавить слайд',
 ];
